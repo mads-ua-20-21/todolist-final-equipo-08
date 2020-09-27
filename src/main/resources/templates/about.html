@@ -12,21 +12,26 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav mr-auto" th:if="${session.idUsuarioLogeado != NullPointerException}">
             <li class="nav-item">
-                <a class="nav-link" href="/tareas">Tareas <span class="sr-only">(current)</span></a>
+                <a class="nav-link" th:href="@{/usuarios/{id}/tareas(id=${session.idUsuarioLogeado})}">Tareas <span class="sr-only">(current)</span></a>
             </li>
         </ul>
-        <div class="nav-item dropdown my-2 my-lg-0">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Nombre Usuario
+        <ul class="navbar-nav mr-auto" th:if="${session.idUsuarioLogeado == NullPointerException }">
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <!--div class="nav-item dropdown my-2 my-lg-0 " th:if="${session.idUsuarioLogeado != NullPointerException}">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+               th:text="${session.idUsuarioLogeado}">
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="#">Cuenta</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Cerrar Sesión</a>
+                <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
             </div>
-        </div>
+        </div-->
     </div>
 </nav>
 
