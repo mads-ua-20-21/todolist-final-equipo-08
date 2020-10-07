@@ -21,7 +21,7 @@ También puedes generar un `jar` y ejecutarlo:
 
 ```
 $ ./mvnw package
-$ java -jar target/mads-todolist-atm64-1.0.2-SNAPSHOT.jar 
+$ java -jar target/mads-todolist-atm64-1.1.0-SNAPSHOT.jar 
 ```
 
 Una vez lanzada la aplicación puedes abrir un navegador y probar la página de inicio accediendo a:
