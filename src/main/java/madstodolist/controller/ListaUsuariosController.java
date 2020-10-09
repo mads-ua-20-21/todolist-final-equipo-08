@@ -25,17 +25,13 @@ public class ListaUsuariosController {
     ManagerUserSesion managerUserSesion;
 
     @GetMapping("/usuarios")
-    public String listadoUsuarios(/*@PathVariable(value="id") Long idUsuario,*/ Model model, HttpSession session){
+    public String listadoUsuarios(Model model, HttpSession session){
 
-        /*managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
-
-        Usuario usuario = usuarioService.findById(idUsuario);
-        if (usuario == null) {
-            throw new UsuarioNotFoundException();
-        }*/
 
         if(session.getAttribute("idUsuarioLogeado") != null){
-            Usuario usuario = usuarioService.findById((Long) session.getAttribute("idUsuarioLogeado"));
+            //Usuario usuario = usuarioService.findById((Long) session.getAttribute("idUsuarioLogeado"));
+            managerUserSesion.comprobarUsuarioLogeado(session, (Long) session.getAttribute("idUsuarioLogeado"));
+            Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
             model.addAttribute("usuario", usuario);
         }
         else {
@@ -43,7 +39,6 @@ public class ListaUsuariosController {
         }
 
         List<Usuario> usuarios = usuarioService.allUsuarios();
-        //model.addAttribute("usuario", usuario);
         model.addAttribute("usuarios", usuarios);
         return "listaUsuarios";
     }

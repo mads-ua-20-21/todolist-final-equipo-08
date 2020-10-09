@@ -1,19 +1,29 @@
 package madstodolist;
 
+import madstodolist.authentication.ManagerUserSesion;
 import madstodolist.model.Usuario;
 import madstodolist.model.UsuarioRepository;
 import madstodolist.service.UsuarioService;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.web.context.WebApplicationContext;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -38,62 +48,16 @@ public class ListaUsuariosWebTest {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @MockBean
+    private ManagerUserSesion managerUserSesion;
+
     @Test
-    //@Transactional
     public void accesoSinLogin() throws Exception {
 
-        // GIVEN
-        /*Usuario usuario = new Usuario("atm64@alu");
-        usuario.setNombre("Andres Tebar");
-        usuario.setPassword("1234");
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        usuario.setFechaNacimiento(sdf.parse("1996-12-19"));*/
-
-        // WHEN
-
-        //usuarioRepository.save(usuario);
-
-        this.mockMvc.perform(get("/usuarios"));
-                //.andExpect(result -> assertEquals("resource not found", result.getResolvedException().getMessage()));
-                //.andDo(print())
-                //.andExpect(content().string(containsString("Usuario no autorizado")));
-
-    }
-
-    @Test
-    @Transactional
-    public void mostrarUsuarios() throws Exception{
-        // GIVEN
-        Usuario usuario = new Usuario("atm64@alu");
-        usuario.setNombre("Andres Tebar");
-        usuario.setPassword("1234");
-        usuario.setId(2L);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        usuario.setFechaNacimiento(sdf.parse("1996-12-19"));
-
-        // WHEN
-
-        usuarioRepository.save(usuario);
-
-        // THEN
-        this.mockMvc.perform(post("/login")
-                .param("eMail", "atm64@alu")
-                .param("password", "1234"))
-                .andDo(print());
-                //.andExpect(content().string(containsString("Listado de tareas de Andres")));
-                //.andExpect(status().is3xxRedirection())
-                //.andExpect(redirectedUrl("/usuarios/1/tareas"));
-
         this.mockMvc.perform(get("/usuarios"))
-                .andDo(print())
-                .andExpect(content().string(containsString("Andres Tebar")));
+                .andExpect(status().isUnauthorized())
+                .andExpect(status().reason(containsString("Usuario no autorizado")));
+
     }
 
-    /*@Test
-    @Transactional
-    public void registroYMostrarUsuarios(){
-
-    }*/
 }
