@@ -24,6 +24,7 @@
                     <th>Id</th>
                     <th>Nombre</th>
                     <th>Correo</th>
+                    <th>Acción</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -31,10 +32,10 @@
                     <td th:text="${user.getId()}"></td>
                     <td th:text="${user.getNombre()}"></td>
                     <td th:text="${user.getEmail()}"></td>
-                    <!--td><a class="btn btn-primary btn-xs" th:href="@{/tareas/{id}/editar(id=${tarea.id})}"/>editar</a>
-                        <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">borrar</button>
-                    </td-->
+                    <td><a class="btn btn-primary btn-xs" th:href="@{/usuarios/{id}(id=${user.getId()})}"/>Detalles</a>
+                        <!-- button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">borrar</button-->
+                    </td>
                 </tr>
                 </tbody>
             </table>

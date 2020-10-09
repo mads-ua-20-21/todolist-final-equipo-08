@@ -5,6 +5,7 @@ import madstodolist.authentication.UsuarioNoLogeadoException;
 import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
+import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,10 +17,13 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-public class ListaUsuariosController {
+public class UsuariosController {
 
     @Autowired
     UsuarioService usuarioService;
+
+    @Autowired
+    TareaService tareaService;
 
     @Autowired
     ManagerUserSesion managerUserSesion;
@@ -41,5 +45,28 @@ public class ListaUsuariosController {
         List<Usuario> usuarios = usuarioService.allUsuarios();
         model.addAttribute("usuarios", usuarios);
         return "listaUsuarios";
+    }
+
+    @GetMapping("/usuarios/{id}")
+    public String descripcionUsuario(@PathVariable(value="id") Long idUsuario, Model model, HttpSession session){
+
+        if(session.getAttribute("idUsuarioLogeado") != null){
+            managerUserSesion.comprobarUsuarioLogeado(session, (Long) session.getAttribute("idUsuarioLogeado"));
+            Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+            model.addAttribute("usuario", usuario);
+        }
+        else {
+            throw new UsuarioNoLogeadoException();
+        }
+        Usuario usuarioDescrito = usuarioService.findById(idUsuario);
+
+        if (usuarioDescrito == null) {
+            throw new UsuarioNotFoundException();
+        }
+        List<Tarea> tareasUsuarioDescrito = tareaService.allTareasUsuario(idUsuario);
+        model.addAttribute("usuarioDescrito", usuarioDescrito);
+        model.addAttribute("tareasUsuarioDescrito", tareasUsuarioDescrito);
+
+        return"descripcionUsuario";
     }
 }
