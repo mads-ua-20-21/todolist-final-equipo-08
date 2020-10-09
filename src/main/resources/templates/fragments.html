@@ -14,4 +14,49 @@
     <span th:text="${scripts}"></span>
 </div>
 
-/html>
+
+<nav th:fragment="barra-menu (pagina)" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/about">ToDoList</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto" th:if="${session.idUsuarioLogeado != NullPointerException}">
+
+            <li class="nav-item" th:if="${pagina} != 'editarTarea'">
+                <a class="nav-link" th:href="@{/usuarios/{id}/tareas(id=${usuario.getId()})}">Tareas <span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item" th:if="${pagina} == 'editarTarea'">
+                <a class="nav-link" th:href="@{/usuarios/{id}/tareas(id=${tarea.usuario.id})}">Tareas <span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/usuarios}">Lista de Usuarios <span class="sr-only">(current)</span></a>
+            </li>
+
+        </ul>
+        <ul class="navbar-nav mr-auto" th:if="${session.idUsuarioLogeado == NullPointerException }">
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+
+        <div class="nav-item dropdown my-2 my-lg-0 " th:if="${session.idUsuarioLogeado != NullPointerException}">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+               th:if="${pagina} != 'editarTarea'" th:text="${usuario.getNombre()}">
+            </a>
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+               th:if="${pagina} == 'editarTarea'"  th:text="${tarea.usuario.getNombre()}">
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Cuenta</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+</html>
