@@ -32,15 +32,12 @@ public class UsuariosController {
     public String listadoUsuarios(Model model, HttpSession session){
 
 
-        if(session.getAttribute("idUsuarioLogeado") != null){
-            //Usuario usuario = usuarioService.findById((Long) session.getAttribute("idUsuarioLogeado"));
-            managerUserSesion.comprobarUsuarioLogeado(session, (Long) session.getAttribute("idUsuarioLogeado"));
-            Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
-            model.addAttribute("usuario", usuario);
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
         }
-        else {
-            throw new UsuarioNoLogeadoException();
-        }
+        model.addAttribute("usuario", usuario);
 
         List<Usuario> usuarios = usuarioService.allUsuarios();
         model.addAttribute("usuarios", usuarios);
@@ -50,22 +47,20 @@ public class UsuariosController {
     @GetMapping("/usuarios/{id}")
     public String descripcionUsuario(@PathVariable(value="id") Long idUsuario, Model model, HttpSession session){
 
-        if(session.getAttribute("idUsuarioLogeado") != null){
-            managerUserSesion.comprobarUsuarioLogeado(session, (Long) session.getAttribute("idUsuarioLogeado"));
-            Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
-            model.addAttribute("usuario", usuario);
-        }
-        else {
-            throw new UsuarioNoLogeadoException();
-        }
-        Usuario usuarioDescrito = usuarioService.findById(idUsuario);
 
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Usuario usuarioDescrito = usuarioService.findById(idUsuario);
         if (usuarioDescrito == null) {
             throw new UsuarioNotFoundException();
         }
-        List<Tarea> tareasUsuarioDescrito = tareaService.allTareasUsuario(idUsuario);
         model.addAttribute("usuarioDescrito", usuarioDescrito);
-        model.addAttribute("tareasUsuarioDescrito", tareasUsuarioDescrito);
+
 
         return"descripcionUsuario";
     }

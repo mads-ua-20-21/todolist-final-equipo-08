@@ -86,6 +86,12 @@ public class TareaController {
 
         managerUserSesion.comprobarUsuarioLogeado(session, tarea.getUsuario().getId());
 
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
         model.addAttribute("tarea", tarea);
         tareaData.setTitulo(tarea.getTitulo());
         return "formEditarTarea";
