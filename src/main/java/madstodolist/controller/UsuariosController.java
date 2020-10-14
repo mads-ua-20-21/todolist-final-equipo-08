@@ -32,7 +32,9 @@ public class UsuariosController {
     public String listadoUsuarios(Model model, HttpSession session){
 
 
+
         managerUserSesion.usuarioLogueado(session);
+
         Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
         if (usuario == null) {
             throw new UsuarioNotFoundException();
