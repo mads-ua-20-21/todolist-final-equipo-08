@@ -43,7 +43,7 @@
                 <a class="btn btn-link" href="/logout">Salir</a></p-->
         </div>
     </div>
-    <div class="row mt-2">
+    <!--div class="row mt-2">
         <div class="col">
             <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(mensaje)}">
                 <span th:text="${mensaje}"></span>
@@ -52,9 +52,10 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div-->
 </div>
 
+<div th:replace="fragments::javascript"/>
 
 </body>
 </html>
