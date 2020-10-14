@@ -27,7 +27,7 @@ public class ListarUsuariosServiceTest {
 
     @Test
     @Transactional
-    public void CrearBorrarYListarNuevoUsuario() throws Exception {
+    public void CrearListarBorrarYListarNuevoUsuario() throws Exception {
         // GIVEN
         Usuario usuario = new Usuario("atm64@alu");
         usuario.setNombre("Andres Tebar");

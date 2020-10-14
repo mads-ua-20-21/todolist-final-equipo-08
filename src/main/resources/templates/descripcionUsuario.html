@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head (titulo='Login')"></head>
+
+<body>
+
+<nav th:replace="fragments :: barra-menu"></nav>
+
+<div class="container-fluid">
+
+    <div class="row mt-3">
+        <div class="col">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Valor</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><h4>Id</h4></td>
+                    <td><h4 th:text="${usuarioDescrito.getId()}"></h4></td>
+
+                </tr>
+                <tr>
+                    <td><h4>Nombre</h4></td>
+                    <td><h4 th:text="${usuarioDescrito.getNombre()}"></h4></td>
+
+                </tr>
+                <tr>
+                    <td><h4>Email</h4></td>
+                    <td><h4 th:text="${usuarioDescrito.getEmail()}"></h4></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments::javascript"/>
+
+</body>
+</html>

@@ -5,7 +5,7 @@
 
 <body>
 
-<nav th:replace="fragments :: barra-menu(pagina='listarUsuarios')"></nav>
+<nav th:replace="fragments :: barra-menu"></nav>
 
 
 <div class="container-fluid">
@@ -24,6 +24,7 @@
                     <th>Id</th>
                     <th>Nombre</th>
                     <th>Correo</th>
+                    <th>Acción</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -31,10 +32,10 @@
                     <td th:text="${user.getId()}"></td>
                     <td th:text="${user.getNombre()}"></td>
                     <td th:text="${user.getEmail()}"></td>
-                    <!--td><a class="btn btn-primary btn-xs" th:href="@{/tareas/{id}/editar(id=${tarea.id})}"/>editar</a>
-                        <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">borrar</button>
-                    </td-->
+                    <td><a class="btn btn-primary btn-xs" th:href="@{/usuarios/{id}(id=${user.getId()})}"/>Detalles</a>
+                        <!-- button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                                th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">borrar</button-->
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -42,7 +43,7 @@
                 <a class="btn btn-link" href="/logout">Salir</a></p-->
         </div>
     </div>
-    <div class="row mt-2">
+    <!--div class="row mt-2">
         <div class="col">
             <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(mensaje)}">
                 <span th:text="${mensaje}"></span>
@@ -51,9 +52,10 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div-->
 </div>
 
+<div th:replace="fragments::javascript"/>
 
 </body>
 </html>

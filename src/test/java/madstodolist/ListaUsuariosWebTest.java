@@ -48,8 +48,6 @@ public class ListaUsuariosWebTest {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @MockBean
-    private ManagerUserSesion managerUserSesion;
 
     @Test
     public void accesoSinLogin() throws Exception {
