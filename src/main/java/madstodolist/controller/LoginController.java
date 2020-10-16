@@ -60,6 +60,7 @@ public class LoginController {
     @GetMapping("/registro")
     public String registroForm(Model model) {
         model.addAttribute("registroData", new RegistroData());
+        model.addAttribute("existeAdminstrador", usuarioService.existeAdmin());
         return "formRegistro";
     }
 
@@ -72,6 +73,7 @@ public class LoginController {
 
         if (usuarioService.findByEmail(registroData.geteMail()) != null) {
             model.addAttribute("registroData", registroData);
+            model.addAttribute("existeAdminstrador", usuarioService.existeAdmin());
             model.addAttribute("error", "El usuario " + registroData.geteMail() + " ya existe");
             return "formRegistro";
         }
@@ -80,8 +82,13 @@ public class LoginController {
         usuario.setPassword(registroData.getPassword());
         usuario.setFechaNacimiento(registroData.getFechaNacimiento());
         usuario.setNombre(registroData.getNombre());
+        if (!usuarioService.existeAdmin()) usuario.setAdministrador(registroData.getAdministrador());
+        else usuario.setAdministrador(false);
+       //usuario.setAdministrador(registroData.getAdministrador());
+
 
         usuarioService.registrar(usuario);
+
         return "redirect:/login";
    }
 
