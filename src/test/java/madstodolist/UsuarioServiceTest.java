@@ -78,7 +78,7 @@ public class UsuarioServiceTest {
         Usuario usuarioBaseDatos = usuarioService.findByEmail("usuario.prueba2@gmail.com");
         assertThat(usuarioBaseDatos).isNotNull();
         assertThat(usuarioBaseDatos.getPassword()).isEqualTo(usuario.getPassword());
-        
+
         Boolean existeAdministrador = usuarioService.existeAdmin();
         assertThat(existeAdministrador).isEqualTo(usuario.getAdministrador());
     }
