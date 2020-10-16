@@ -60,6 +60,29 @@ public class UsuarioServiceTest {
         assertThat(usuarioBaseDatos.getPassword()).isEqualTo(usuario.getPassword());
     }
 
+    @Test
+    @Transactional
+    public void servicioRegistroUsuarioAdministrador() {
+        // GIVEN
+
+        Usuario usuario = new Usuario("usuario.prueba2@gmail.com");
+        usuario.setPassword("12345678");
+        usuario.setAdministrador(true);
+
+        // WHEN
+
+        usuarioService.registrar(usuario);
+
+        // THEN
+
+        Usuario usuarioBaseDatos = usuarioService.findByEmail("usuario.prueba2@gmail.com");
+        assertThat(usuarioBaseDatos).isNotNull();
+        assertThat(usuarioBaseDatos.getPassword()).isEqualTo(usuario.getPassword());
+        
+        Boolean existeAdministrador = usuarioService.existeAdmin();
+        assertThat(existeAdministrador).isEqualTo(usuario.getAdministrador());
+    }
+
     @Test(expected = UsuarioServiceException.class)
     public void servicioRegistroUsuarioExcepcionConNullPassword() {
         // Pasamos como argumento un usario sin contraseña
