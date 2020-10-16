@@ -35,6 +35,11 @@
                     <td><h4 th:text="${usuarioDescrito.getEmail()}"></h4></td>
 
                 </tr>
+                <tr>
+                    <td><h4>Fecha de Nacimiento</h4></td>
+                    <td><h4 th:text="${usuarioDescrito.getFechaNacimiento()}"></h4></td>
+
+                </tr>
                 <tr th:if="${usuarioDescrito.getAdministrador()}">
                     <td><h4>Administrador</h4></td>
 
