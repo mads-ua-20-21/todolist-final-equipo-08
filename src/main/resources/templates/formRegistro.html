@@ -39,8 +39,17 @@
                                    placeholder="01-12-2019" type="datetime-local" th:field="*{fechaNacimiento}"/>
                         </div>
 
+                        <div class="form-group" th:unless="${existeAdminstrador}">
+                            <label for="administrador">Administrador</label>
+                            <input id="administrador" class="form-control" name="administrador" placeholder="Administrador"
+                                   type="checkbox" th:field="*{administrador}"/>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Registro</button>
                         <a class="btn btn-link" href="/login">Ir a login</a>
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>
