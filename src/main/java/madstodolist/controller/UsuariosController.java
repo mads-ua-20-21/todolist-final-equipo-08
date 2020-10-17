@@ -1,6 +1,7 @@
 package madstodolist.controller;
 
 import madstodolist.authentication.ManagerUserSesion;
+import madstodolist.authentication.UsuarioNoAdminException;
 import madstodolist.authentication.UsuarioNoLogeadoException;
 import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.Tarea;
@@ -31,14 +32,13 @@ public class UsuariosController {
     @GetMapping("/usuarios")
     public String listadoUsuarios(Model model, HttpSession session){
 
-
-
         managerUserSesion.usuarioLogueado(session);
 
         Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
         if (usuario == null) {
             throw new UsuarioNotFoundException();
         }
+        managerUserSesion.comprobarUsuarioAdministrador(session, usuario.getAdministrador());
         model.addAttribute("usuario", usuario);
 
         List<Usuario> usuarios = usuarioService.allUsuarios();
@@ -55,6 +55,10 @@ public class UsuariosController {
         if (usuario == null) {
             throw new UsuarioNotFoundException();
         }
+
+        //Una vez se ha comprobado que hay un usuario logueado se siguen dos caminos,
+        //comprobar que coincide con el usuario descrito o que el usuario es admin
+
         model.addAttribute("usuario", usuario);
 
         Usuario usuarioDescrito = usuarioService.findById(idUsuario);
@@ -63,6 +67,9 @@ public class UsuariosController {
         }
         model.addAttribute("usuarioDescrito", usuarioDescrito);
 
+        if (!usuario.equals(usuarioDescrito) && !usuario.getAdministrador()){
+            throw new UsuarioNoAdminException();
+        }
 
         return"descripcionUsuario";
     }
