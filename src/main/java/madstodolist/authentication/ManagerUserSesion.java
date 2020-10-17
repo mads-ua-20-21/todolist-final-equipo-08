@@ -30,4 +30,10 @@ public class ManagerUserSesion {
     public void logearAdmin(HttpSession session, Boolean administrador){
         session.setAttribute("administrador", administrador);
     }
+
+    public void comprobarUsuarioAdministrador(HttpSession session, Boolean administrador){
+        if (!(Boolean) session.getAttribute("administrador")){
+            throw new UsuarioNoAdminException();
+        }
+    }
 }

@@ -38,9 +38,7 @@ public class UsuariosController {
         if (usuario == null) {
             throw new UsuarioNotFoundException();
         }
-        if (!(Boolean) session.getAttribute("administrador")){
-            throw new UsuarioNoAdminException();
-        }
+        managerUserSesion.comprobarUsuarioAdministrador(session, usuario.getAdministrador());
         model.addAttribute("usuario", usuario);
 
         List<Usuario> usuarios = usuarioService.allUsuarios();
@@ -57,6 +55,10 @@ public class UsuariosController {
         if (usuario == null) {
             throw new UsuarioNotFoundException();
         }
+
+        //Una vez se ha comprobado que hay un usuario logueado se siguen dos caminos,
+        //comprobar que coincide con el usuario descrito o que el usuario es admin
+
         model.addAttribute("usuario", usuario);
 
         Usuario usuarioDescrito = usuarioService.findById(idUsuario);
@@ -65,6 +67,9 @@ public class UsuariosController {
         }
         model.addAttribute("usuarioDescrito", usuarioDescrito);
 
+        if (!usuario.equals(usuarioDescrito) && !usuario.getAdministrador()){
+            throw new UsuarioNoAdminException();
+        }
 
         return"descripcionUsuario";
     }
