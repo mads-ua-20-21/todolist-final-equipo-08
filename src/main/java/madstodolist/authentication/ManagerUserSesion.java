@@ -32,7 +32,8 @@ public class ManagerUserSesion {
     }
 
     public void comprobarUsuarioAdministrador(HttpSession session, Boolean administrador){
-        if (!(Boolean) session.getAttribute("administrador")){
+        Boolean adminUsuarioLogueado = (Boolean) session.getAttribute("administrador");
+        if (!adminUsuarioLogueado || adminUsuarioLogueado != administrador){
             throw new UsuarioNoAdminException();
         }
     }
