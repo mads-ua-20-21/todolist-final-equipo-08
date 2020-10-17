@@ -1,6 +1,5 @@
 package madstodolist.authentication;
 
-import madstodolist.model.Usuario;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
@@ -26,5 +25,9 @@ public class ManagerUserSesion {
         if(session.getAttribute("idUsuarioLogeado") == null){
             throw new UsuarioNoLogeadoException();
         }
+    }
+
+    public void logearAdmin(HttpSession session, Boolean administrador){
+        session.setAttribute("administrador", administrador);
     }
 }
