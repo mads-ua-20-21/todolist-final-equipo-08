@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: head (titulo='Login')"></head>
+<head th:replace="fragments :: head (titulo='descripcionUsuario')"></head>
 
 <body>
 
@@ -40,11 +40,17 @@
                     <td><h4 th:text="${usuarioDescrito.getFechaNacimiento()}"></h4></td>
 
                 </tr>
+                <tr th:if="${usuario.getAdministrador()}" th:unless="${usuarioDescrito.getAdministrador()}">
+                    <td><h4>Estado </h4></td>
+                    <td th:unless="${usuarioDescrito.getBloqueado()}"><h4>Habilitado</h4></td>
+                    <td th:if="${usuarioDescrito.getBloqueado()}"><h4>Bloqueado</h4></td>
+
+                </tr>
                 <tr th:if="${usuarioDescrito.getAdministrador()}">
                     <td><h4>Administrador</h4></td>
 
-
                 </tr>
+
                 </tbody>
             </table>
         </div>

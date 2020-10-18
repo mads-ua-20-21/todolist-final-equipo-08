@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -72,5 +75,28 @@ public class UsuariosController {
         }
 
         return"descripcionUsuario";
+    }
+
+    @PostMapping("/usuarios/{id}/editar")
+    public String bloquearUsuario(@PathVariable(value="id") Long idUsuario,
+                                  Model model, RedirectAttributes flash, HttpSession session){
+
+        managerUserSesion.usuarioLogueado(session);
+        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+
+        Usuario usuario = usuarioService.findById(idUsuario);
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        usuarioService.modificaEstadoUsuario(idUsuario, !usuario.getBloqueado());
+
+        model.addAttribute("usuario", usuario);
+
+        List<Usuario> usuarios = usuarioService.allUsuarios();
+        model.addAttribute("usuarios", usuarios);
+        if (usuario.getBloqueado()) flash.addFlashAttribute("mensaje", "Usuario bloqueado");
+        else flash.addFlashAttribute("mensaje", "Usuario habilitado");
+
+        return "redirect:/usuarios";
     }
 }

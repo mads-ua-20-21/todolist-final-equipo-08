@@ -87,7 +87,7 @@ public class LoginController {
         usuario.setNombre(registroData.getNombre());
         if (!usuarioService.existeAdmin()) usuario.setAdministrador(registroData.getAdministrador());
         else usuario.setAdministrador(false);
-
+        usuario.setBloqueado(false);
 
         usuarioService.registrar(usuario);
 

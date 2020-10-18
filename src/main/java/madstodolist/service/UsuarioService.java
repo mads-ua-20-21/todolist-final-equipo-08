@@ -1,5 +1,6 @@
 package madstodolist.service;
 
+import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import madstodolist.model.UsuarioRepository;
@@ -80,5 +81,17 @@ public class UsuarioService {
         }
 
         return existe;
+    }
+
+    @Transactional
+    public Usuario modificaEstadoUsuario(Long idUsuario, Boolean nuevoEstado) {
+
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+        usuario.setBloqueado(nuevoEstado);
+        usuarioRepository.save(usuario);
+        return usuario;
     }
 }
