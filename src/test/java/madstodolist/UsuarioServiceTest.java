@@ -1,5 +1,6 @@
 package madstodolist;
 
+import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import madstodolist.service.UsuarioService;
 import madstodolist.service.UsuarioServiceException;
@@ -39,6 +40,26 @@ public class UsuarioServiceTest {
         assertThat(loginStatusOK).isEqualTo(UsuarioService.LoginStatus.LOGIN_OK);
         assertThat(loginStatusErrorPassword).isEqualTo(UsuarioService.LoginStatus.ERROR_PASSWORD);
         assertThat(loginStatusNoUsuario).isEqualTo(UsuarioService.LoginStatus.USER_NOT_FOUND);
+    }
+
+    @Test
+    @Transactional
+    public void loginUsuarioBloqueado(){
+        // GIVEN
+
+        Usuario usuario = new Usuario("usuario.prueba2@gmail.com");
+        usuario.setPassword("12345678");
+        usuario.setBloqueado(true);
+
+        // WHEN
+
+        usuarioService.registrar(usuario);
+
+        UsuarioService.LoginStatus loginStatusUsuarioBloqueado = usuarioService.login("usuario.prueba2@gmail.com", "12345678");
+
+        // THEN
+
+        assertThat(loginStatusUsuarioBloqueado).isEqualTo(UsuarioService.LoginStatus.USUARIO_BLOQUEADO);
     }
 
     @Test
@@ -135,5 +156,28 @@ public class UsuarioServiceTest {
         // THEN
 
         assertThat(usuario.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    @Transactional
+    public void testBloquearUsuario() {
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Long idUsuarioABloquear = 1L;
+
+
+        // WHEN
+
+
+        Usuario usuarioModificado = usuarioService.modificaEstadoUsuario(idUsuarioABloquear, true);
+        Usuario usuarioBD = usuarioService.findById(idUsuarioABloquear);
+
+
+        // THEN
+
+        assertThat(usuarioModificado.getBloqueado()).isEqualTo(true);
+        assertThat(usuarioBD.getBloqueado()).isEqualTo(true);
+
     }
 }
