@@ -33,14 +33,7 @@
                     <td th:text="${user.getId()}"></td>
                     <td th:text="${user.getNombre()}"></td>
                     <td th:text="${user.getEmail()}"></td>
-                    <td><a class="btn btn-primary btn-xs" th:href="@{/usuarios/{id}(id=${user.getId()})}"/>Detalles</a>
-                        <!-- button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">Bloquear</button-->
-                        <!--button th:unless="${user.getBloqueado()}" class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                th:onclick="'post()'">Bloquear</button>
-                        <button th:if="${user.getBloqueado()}" class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                                th:onclick="''">Habilitar</button-->
-                    </td>
+                    <td><a class="btn btn-primary btn-xs" th:href="@{/usuarios/{id}(id=${user.getId()})}"/>Detalles</a></td>
                     <td>
                         <form method="post" th:action="@{/usuarios/{id}/editar(id=${user.getId()})}" th:object="${usuario}">
                             <button th:unless="${user.getBloqueado()}" class="btn btn-danger" type="submit">Bloquear</button>
@@ -50,8 +43,6 @@
                 </tr>
                 </tbody>
             </table>
-            <!--p><a class="btn btn-primary" th:href="@{/usuarios/{id}/tareas/nueva(id=${usuario.id})}"> Nueva tarea</a>
-                <a class="btn btn-link" href="/logout">Salir</a></p-->
         </div>
     </div>
     <div class="row mt-2">

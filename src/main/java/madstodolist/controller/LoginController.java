@@ -56,6 +56,9 @@ public class LoginController {
         } else if (loginStatus == UsuarioService.LoginStatus.ERROR_PASSWORD) {
             model.addAttribute("error", "Contraseña incorrecta");
             return "formLogin";
+        } else if (loginStatus == UsuarioService.LoginStatus.USUARIO_BLOQUEADO){
+            model.addAttribute("error", "El usuario ha sido bloqueado");
+            return "formLogin";
         }
         return "formLogin";
     }
