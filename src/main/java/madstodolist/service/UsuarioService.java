@@ -1,5 +1,6 @@
 package madstodolist.service;
 
+import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import madstodolist.model.UsuarioRepository;
@@ -16,7 +17,7 @@ public class UsuarioService {
 
     Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
-    public enum LoginStatus {LOGIN_OK, USER_NOT_FOUND, ERROR_PASSWORD}
+    public enum LoginStatus {LOGIN_OK, USER_NOT_FOUND, ERROR_PASSWORD, USUARIO_BLOQUEADO}
 
     private UsuarioRepository usuarioRepository;
 
@@ -32,6 +33,8 @@ public class UsuarioService {
             return LoginStatus.USER_NOT_FOUND;
         } else if (!usuario.get().getPassword().equals(password)) {
             return LoginStatus.ERROR_PASSWORD;
+        } else if (usuario.get().getBloqueado()){
+            return LoginStatus.USUARIO_BLOQUEADO;
         } else {
             return LoginStatus.LOGIN_OK;
         }
@@ -80,5 +83,17 @@ public class UsuarioService {
         }
 
         return existe;
+    }
+
+    @Transactional
+    public Usuario modificaEstadoUsuario(Long idUsuario, Boolean nuevoEstado) {
+
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+        usuario.setBloqueado(nuevoEstado);
+        usuarioRepository.save(usuario);
+        return usuario;
     }
 }
