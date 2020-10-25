@@ -43,7 +43,7 @@ public class ListarUsuariosServiceTest {
 
         // THEN
         assertThat(usuarios.size()).isEqualTo(2);
-        assertThat(usuarios.get(0).getNombre()).isEqualTo("Ana García");
+        assertThat(usuarios.get(0).getNombre()).isEqualTo("Ana García Error");
         assertThat(usuarios.get(1).getNombre()).isEqualTo(usuario.getNombre());
 
         //AND
