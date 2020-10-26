@@ -20,8 +20,6 @@ public class Equipo implements Serializable{
     @NotNull
     private String nombre;
 
-    @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER)
-    Set<Usuario> usuarios = new HashSet<>();
 
     public Equipo(String nombre){ this.nombre = nombre;}
 
