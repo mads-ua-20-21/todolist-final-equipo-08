@@ -19,7 +19,8 @@ public class EquipoService {
     public EquipoService(EquipoRepository equipoRepository){ this.equipoRepository = equipoRepository;}
 
     @Transactional(readOnly = true)
-    public Equipo findById(Long id) {
-        return equipoRepository.findById(id).orElse(null);
+    public Equipo findById(Long equipoId) {
+        return equipoRepository.findById(equipoId).orElse(null);
     }
+
 }

@@ -21,6 +21,8 @@ public class Equipo implements Serializable{
     private String nombre;
 
 
+    private Equipo(){}
+
     public Equipo(String nombre){ this.nombre = nombre;}
 
     public Long getId() { return id; }
