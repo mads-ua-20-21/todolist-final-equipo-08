@@ -20,6 +20,9 @@ public class Equipo implements Serializable{
     @NotNull
     private String nombre;
 
+    @ManyToMany
+    Set<Usuario> usuarios = new HashSet<>();
+
 
     private Equipo(){}
 
@@ -30,6 +33,8 @@ public class Equipo implements Serializable{
     public void setId(Long id) { this.id = id; }
 
     public String getNombre() { return nombre; }
+
+    public Set<Usuario> getUsuarios() { return usuarios; }
 
     @Override
     public boolean equals(Object o) {
