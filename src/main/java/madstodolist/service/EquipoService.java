@@ -32,8 +32,8 @@ public class EquipoService {
 
     @Transactional(readOnly = true)
     public List<Equipo> findAllOrderedByName(){
-        List<Equipo> equipos = new ArrayList<Equipo>();
-        equipoRepository.findAll().forEach(equipos::add);
+
+        List<Equipo> equipos = equipoRepository.findAll();
         equipos.sort(Comparator.comparing(Equipo::getNombre).reversed());
         return equipos;
     }
