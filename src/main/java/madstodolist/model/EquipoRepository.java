@@ -6,6 +6,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EquipoRepository extends CrudRepository<Equipo, Long> {
-    Optional<Equipo> findById(Long l);
-    List<Equipo> findAll();
+    public List<Equipo> findAll();
 }
