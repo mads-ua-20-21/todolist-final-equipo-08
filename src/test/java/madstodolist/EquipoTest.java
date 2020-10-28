@@ -3,6 +3,7 @@ package madstodolist;
 import madstodolist.model.Equipo;
 import madstodolist.model.EquipoRepository;
 import madstodolist.model.Usuario;
+import madstodolist.model.UsuarioRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class EquipoTest {
 
     @Autowired
     private EquipoRepository equipoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
 
     @Test
@@ -92,5 +96,24 @@ public class EquipoTest {
 
         assertThat(equipo.getUsuarios()).isEmpty();
         assertThat(usuario.getEquipos()).isEmpty();
+    }
+
+
+    @Test
+    @Transactional
+    public void comprobarRelacionBaseDatos() {
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        // WHEN
+        Equipo equipo = equipoRepository.findById(1L).orElse(null);
+        Usuario usuario = usuarioRepository.findById(1L).orElse(null);
+
+        // THEN
+
+        assertThat(equipo.getUsuarios()).hasSize(1);
+        assertThat(equipo.getUsuarios()).contains(usuario);
+        assertThat(usuario.getEquipos()).hasSize(1);
+        assertThat(usuario.getEquipos()).contains(equipo);
     }
 }

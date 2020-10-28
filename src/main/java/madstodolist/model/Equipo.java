@@ -21,6 +21,9 @@ public class Equipo implements Serializable{
     private String nombre;
 
     @ManyToMany
+    @JoinTable(name = "equipo_usuario",
+            joinColumns = { @JoinColumn(name = "fk_equipo") },
+            inverseJoinColumns = {@JoinColumn(name = "fk_usuario")})
     Set<Usuario> usuarios = new HashSet<>();
 
 
