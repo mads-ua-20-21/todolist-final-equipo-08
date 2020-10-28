@@ -8,4 +8,8 @@ INSERT INTO tareas (id, titulo, usuario_id) VALUES('3', 'Lavar coche', '2');
 INSERT INTO tareas (id, titulo, usuario_id) VALUES('4', 'Renovar DNI', '2');
 
 INSERT INTO equipos (id, nombre) VALUES('1', 'Proyecto P1');
+INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('1', '1');
+INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('1', '2');
+
 INSERT INTO equipos (id, nombre) VALUES('2', 'Proyecto P3');
+INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('2', '2');
