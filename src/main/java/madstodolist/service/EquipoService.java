@@ -48,4 +48,11 @@ public class EquipoService {
         List<Usuario> usuarios = new ArrayList(equipo.getUsuarios());
         return usuarios;
     }
+
+    @Transactional
+    public Equipo nuevoEquipo(String tituloEquipo){
+        Equipo equipo = new Equipo(tituloEquipo);
+        equipoRepository.save(equipo);
+        return equipo;
+    }
 }
