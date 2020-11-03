@@ -89,4 +89,17 @@ public class EquipoController {
         flash.addFlashAttribute("mensaje", "Equipo creada correctamente");
         return "redirect:/equipos";
     }
+
+    @PostMapping("/equipos/{id}")
+    public String unirmeAEquipo(@PathVariable(value="id") Long idEquipo,Model model,
+                                RedirectAttributes flash, HttpSession session){
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        equipoService.anyadirUsuarioAEquipo(usuario.getId(), idEquipo);
+        flash.addFlashAttribute("mensaje", "Te has unido al equipo correctamente");
+        return "redirect:/equipos/" + idEquipo;
+    }
 }
