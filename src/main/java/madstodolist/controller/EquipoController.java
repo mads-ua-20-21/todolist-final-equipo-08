@@ -104,4 +104,21 @@ public class EquipoController {
         else flash.addFlashAttribute("mensaje", "Ya perteneces al equipo");
         return "redirect:/equipos/" + idEquipo;
     }
+
+    @PostMapping("/equipos/{id}/salir")
+    public String salirDeEquipo(@PathVariable(value="id") Long idEquipo,Model model,
+                                RedirectAttributes flash, HttpSession session){
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        if (equipoService.eliminarUsuarioDeEquipo(usuario.getId(), idEquipo)){
+            flash.addFlashAttribute("mensaje", "Has dejado el equipo");
+        }
+        else flash.addFlashAttribute("mensaje", "No perteneces al equipo");
+        return "redirect:/equipos/" + idEquipo;
+    }
+
+
 }
