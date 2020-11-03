@@ -1,6 +1,5 @@
 package madstodolist.service;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import madstodolist.model.Equipo;
 import madstodolist.model.EquipoRepository;
 import madstodolist.model.Usuario;
@@ -11,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -77,6 +73,9 @@ public class EquipoService {
             throw new UsuarioServiceException("Usuario " + idUsuario + " no existe ");
         }
 
-        equipo.getUsuarios().add(usuario);
+        List<Usuario> usuarios = usuariosEquipo(idEquipo);
+        if (!usuarios.contains(usuario)){
+            equipo.getUsuarios().add(usuario);
+        }
     }
 }

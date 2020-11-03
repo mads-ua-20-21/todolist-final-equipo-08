@@ -116,6 +116,8 @@ public class EquipoServiceTest {
         Usuario usuario = usuarioService.findById(1L);
 
         equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
+        //2a inserción, que no debe realizarse
+        equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
 
         // THEN
         assertThat(equipo.getUsuarios().size()).isEqualTo(1);
