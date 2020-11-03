@@ -104,4 +104,23 @@ public class EquipoServiceTest {
         assertThat(equipos).hasSize(3);
         assertThat(equipos.get(2).getNombre()).isEqualTo("EquipoTest");
     }
+
+    @Test
+    @Transactional
+    public void anyadirUsuarioANuevoEquipo(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        // WHEN
+        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
+        Usuario usuario = usuarioService.findById(1L);
+
+        equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
+
+        // THEN
+        assertThat(equipo.getUsuarios().size()).isEqualTo(1);
+        assertThat(equipo.getUsuarios().contains(usuario));
+        assertThat(usuario.getEquipos().contains(equipo));
+    }
+
 }
