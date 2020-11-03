@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -88,4 +89,65 @@ public class EquipoServiceTest {
         // Y después que el elemento es el equipo Proyecto P1
         assertThat(usuarios.get(0).getEquipos().stream().findFirst().get().getNombre()).isEqualTo("Proyecto P1");
     }
+
+    @Test
+    @Transactional
+    public void testNuevoEquipo(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        // WHEN
+        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
+        List<Equipo> equipos = equipoService.findAllOrderedByName();
+
+        // THEN
+        assertThat(equipos).hasSize(3);
+        assertThat(equipos.get(2).getNombre()).isEqualTo("EquipoTest");
+    }
+
+    @Test
+    @Transactional
+    public void testAnyadirUsuarioANuevoEquipo(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        // WHEN
+        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
+        Usuario usuario = usuarioService.findById(1L);
+
+        equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
+        //2a inserción, que no debe realizarse
+        equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
+
+        // THEN
+        assertThat(equipo.getUsuarios().size()).isEqualTo(1);
+        assertThat(equipo.getUsuarios().contains(usuario));
+        assertThat(usuario.getEquipos().contains(equipo));
+    }
+
+    @Test
+    @Transactional
+    public void testEliminarUsuarioDeEquipo(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Equipo equipo = equipoService.findById(1L);
+        Usuario usuario = usuarioService.findById(1L);
+
+        assertThat(equipo.getUsuarios().size()).isEqualTo(1);
+        assertThat(equipo.getUsuarios().contains(usuario));
+        assertThat(usuario.getEquipos().contains(equipo));
+
+        // WHEN
+
+        equipoService.eliminarUsuarioDeEquipo(usuario.getId(), equipo.getId());
+        //2o borrado, que no debe realizarse
+        equipoService.eliminarUsuarioDeEquipo(usuario.getId(), equipo.getId());
+
+        // THEN
+        assertThat(equipo.getUsuarios().size()).isEqualTo(0);
+        assertThat(!equipo.getUsuarios().contains(usuario));
+        assertThat(!usuario.getEquipos().contains(equipo));
+    }
+
 }
