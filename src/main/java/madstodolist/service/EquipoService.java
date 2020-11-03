@@ -60,8 +60,8 @@ public class EquipoService {
         return equipo;
     }
 
-    @Transactional
-    public void anyadirUsuarioAEquipo(Long idUsuario, Long idEquipo){
+    @Transactional(readOnly = true)
+    public Boolean usuarioPerteneceAEquipo(Long idUsuario, Long idEquipo){
 
         Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
         if (equipo == null){
@@ -74,27 +74,40 @@ public class EquipoService {
         }
 
         List<Usuario> usuarios = usuariosEquipo(idEquipo);
-        if (!usuarios.contains(usuario)){
-            equipo.getUsuarios().add(usuario);
-        }
+         return  usuarios.contains(usuario);
     }
 
     @Transactional
-    public void eliminarUsuarioDeEquipo(Long idUsuario, Long idEquipo){
+    public Boolean anyadirUsuarioAEquipo(Long idUsuario, Long idEquipo){
 
-        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
-        if (equipo == null){
-            throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
+        Boolean anyadido = false;
+
+
+        if (!usuarioPerteneceAEquipo(idUsuario, idEquipo)){
+            Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
+
+            Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+
+            equipo.getUsuarios().add(usuario);
+            anyadido = true;
         }
+        return anyadido;
+    }
 
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
-        if (usuario == null) {
-            throw new UsuarioServiceException("Usuario " + idUsuario + " no existe ");
-        }
+    @Transactional
+    public Boolean eliminarUsuarioDeEquipo(Long idUsuario, Long idEquipo){
 
-        List<Usuario> usuarios = usuariosEquipo(idEquipo);
-        if (usuarios.contains(usuario)){
+        Boolean eliminado = false;
+
+        if (usuarioPerteneceAEquipo(idUsuario, idEquipo)){
+            Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
+
+            Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+
             equipo.getUsuarios().remove(usuario);
+            eliminado = true;
         }
+
+        return eliminado;
     }
 }

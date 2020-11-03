@@ -32,7 +32,7 @@
                 </tr>
                 </tbody>
             </table>
-            <form method="post" th:action="@{/equipos/{id}(id=${equipo.getId()})}" th:object="${equipo}">
+            <form method="post" th:action="@{/equipos/{id}(id=${equipo.getId()})}">
                 <button class="btn btn-primary" type="submit">Unirme a equipo</button>
                 <a class="btn btn-link" href="/equipos">Volver a equipos</a>
             </form>

@@ -98,8 +98,10 @@ public class EquipoController {
         if (usuario == null) {
             throw new UsuarioNotFoundException();
         }
-        equipoService.anyadirUsuarioAEquipo(usuario.getId(), idEquipo);
-        flash.addFlashAttribute("mensaje", "Te has unido al equipo correctamente");
+        if (equipoService.anyadirUsuarioAEquipo(usuario.getId(), idEquipo)){
+            flash.addFlashAttribute("mensaje", "Te has unido al equipo correctamente");
+        }
+        else flash.addFlashAttribute("mensaje", "Ya perteneces al equipo");
         return "redirect:/equipos/" + idEquipo;
     }
 }
