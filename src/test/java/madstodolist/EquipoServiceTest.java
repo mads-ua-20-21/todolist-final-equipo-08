@@ -107,7 +107,7 @@ public class EquipoServiceTest {
 
     @Test
     @Transactional
-    public void anyadirUsuarioANuevoEquipo(){
+    public void testAnyadirUsuarioANuevoEquipo(){
         // GIVEN
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
 
@@ -123,6 +123,31 @@ public class EquipoServiceTest {
         assertThat(equipo.getUsuarios().size()).isEqualTo(1);
         assertThat(equipo.getUsuarios().contains(usuario));
         assertThat(usuario.getEquipos().contains(equipo));
+    }
+
+    @Test
+    @Transactional
+    public void testEliminarUsuarioDeEquipo(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Equipo equipo = equipoService.findById(1L);
+        Usuario usuario = usuarioService.findById(1L);
+
+        assertThat(equipo.getUsuarios().size()).isEqualTo(1);
+        assertThat(equipo.getUsuarios().contains(usuario));
+        assertThat(usuario.getEquipos().contains(equipo));
+
+        // WHEN
+
+        equipoService.eliminarUsuarioDeEquipo(usuario.getId(), equipo.getId());
+        //2o borrado, que no debe realizarse
+        equipoService.eliminarUsuarioDeEquipo(usuario.getId(), equipo.getId());
+
+        // THEN
+        assertThat(equipo.getUsuarios().size()).isEqualTo(0);
+        assertThat(!equipo.getUsuarios().contains(usuario));
+        assertThat(!usuario.getEquipos().contains(equipo));
     }
 
 }
