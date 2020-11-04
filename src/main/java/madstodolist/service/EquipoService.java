@@ -38,7 +38,7 @@ public class EquipoService {
     public List<Equipo> findAllOrderedByName(){
 
         List<Equipo> equipos = equipoRepository.findAll();
-        equipos.sort(Comparator.comparing(Equipo::getNombre).reversed());
+        equipos.sort(Comparator.comparing(Equipo::getNombre));
         return equipos;
     }
 
