@@ -37,8 +37,8 @@ public class EquipoServiceTest {
 
         // THEN
         assertThat(equipos).hasSize(2);
-        assertThat(equipos.get(0).getNombre()).isEqualTo("Proyecto P3");
-        assertThat(equipos.get(1).getNombre()).isEqualTo("Proyecto P1");
+        assertThat(equipos.get(0).getNombre()).isEqualTo("Proyecto P1");
+        assertThat(equipos.get(1).getNombre()).isEqualTo("Proyecto P3");
     }
 
     @Test
@@ -102,7 +102,7 @@ public class EquipoServiceTest {
 
         // THEN
         assertThat(equipos).hasSize(3);
-        assertThat(equipos.get(2).getNombre()).isEqualTo("EquipoTest");
+        assertThat(equipos.get(0).getNombre()).isEqualTo("EquipoTest");
     }
 
     @Test
@@ -115,11 +115,13 @@ public class EquipoServiceTest {
         Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
         Usuario usuario = usuarioService.findById(1L);
 
-        equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
+        Boolean resultadoPrimeraOperacion = equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
         //2a inserción, que no debe realizarse
-        equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
+        Boolean resultadoSegundaOperacion = equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
 
         // THEN
+        assertThat(resultadoPrimeraOperacion).isTrue();
+        assertThat(resultadoSegundaOperacion).isFalse();
         assertThat(equipo.getUsuarios().size()).isEqualTo(1);
         assertThat(equipo.getUsuarios().contains(usuario));
         assertThat(usuario.getEquipos().contains(equipo));
@@ -140,11 +142,13 @@ public class EquipoServiceTest {
 
         // WHEN
 
-        equipoService.eliminarUsuarioDeEquipo(usuario.getId(), equipo.getId());
+        Boolean resultadoPrimeraOperacion = equipoService.eliminarUsuarioDeEquipo(usuario.getId(), equipo.getId());
         //2o borrado, que no debe realizarse
-        equipoService.eliminarUsuarioDeEquipo(usuario.getId(), equipo.getId());
+        Boolean resultadoSegundaOperacion = equipoService.eliminarUsuarioDeEquipo(usuario.getId(), equipo.getId());
 
         // THEN
+        assertThat(resultadoPrimeraOperacion).isTrue();
+        assertThat(resultadoSegundaOperacion).isFalse();
         assertThat(equipo.getUsuarios().size()).isEqualTo(0);
         assertThat(!equipo.getUsuarios().contains(usuario));
         assertThat(!usuario.getEquipos().contains(equipo));

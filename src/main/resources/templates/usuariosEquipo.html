@@ -32,7 +32,25 @@
                 </tr>
                 </tbody>
             </table>
-            <a class="btn btn-link" href="/equipos">Volver a equipos</a>
+            <form method="post" th:unless="${equipo.getUsuarios().contains(usuario)}" th:action="@{/equipos/{id}(id=${equipo.getId()})}">
+                <button class="btn btn-success" type="submit">Unirme a equipo</button>
+                <a class="btn btn-link" href="/equipos">Volver a equipos</a>
+            </form>
+            <form method="post" th:if="${equipo.getUsuarios().contains(usuario)}" th:action="@{/equipos/{id}/salir(id=${equipo.getId()})}">
+                <button class="btn btn-danger" type="submit">Salir del equipo</button>
+                <a class="btn btn-link" href="/equipos">Volver a equipos</a>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(mensaje)}">
+                <span th:text="${mensaje}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         </div>
     </div>
 
