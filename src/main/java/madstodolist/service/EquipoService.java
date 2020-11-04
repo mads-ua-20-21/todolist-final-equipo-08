@@ -112,4 +112,18 @@ public class EquipoService {
 
         return eliminado;
     }
+
+    @Transactional
+    public void eliminarEquipo(Long idEquipo){
+
+        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
+        if (equipo == null){
+            throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
+        }
+
+        equipo.getUsuarios().removeAll(usuariosEquipo(idEquipo));
+
+        equipoRepository.delete(equipo);
+
+    }
 }

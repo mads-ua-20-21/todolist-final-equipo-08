@@ -154,4 +154,24 @@ public class EquipoServiceTest {
         assertThat(!usuario.getEquipos().contains(equipo));
     }
 
+    @Test
+    @Transactional
+    public void testEliminarEquipo(){
+
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Equipo equipo = equipoService.findById(1L);
+        assertThat(equipoService.findAllOrderedByName().size()).isEqualTo(2);
+        assertThat(equipoService.findAllOrderedByName().contains(equipo));
+
+        // WHEN
+        equipoService.eliminarEquipo(equipo.getId());
+
+
+        // THEN
+        assertThat(equipoService.findAllOrderedByName().size()).isEqualTo(1);
+        assertThat(!equipoService.findAllOrderedByName().contains(equipo));
+    }
+
 }
