@@ -101,7 +101,7 @@ public class EquipoController {
         if (equipoService.anyadirUsuarioAEquipo(usuario.getId(), idEquipo)){
             flash.addFlashAttribute("mensaje", "Te has unido al equipo correctamente");
         }
-        else flash.addFlashAttribute("mensaje", "Ya perteneces al equipo");
+        else flash.addFlashAttribute("mensaje", "Error al unirse al equipo");
         return "redirect:/equipos/" + idEquipo;
     }
 
@@ -116,7 +116,7 @@ public class EquipoController {
         if (equipoService.eliminarUsuarioDeEquipo(usuario.getId(), idEquipo)){
             flash.addFlashAttribute("mensaje", "Has dejado el equipo");
         }
-        else flash.addFlashAttribute("mensaje", "No perteneces al equipo");
+        else flash.addFlashAttribute("mensaje", "Error al dejar el equipo");
         return "redirect:/equipos/" + idEquipo;
     }
 

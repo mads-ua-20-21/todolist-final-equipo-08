@@ -89,6 +89,7 @@ public class EquipoService {
             Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
 
             equipo.getUsuarios().add(usuario);
+            usuario.getEquipos().add(equipo);
             anyadido = true;
         }
         return anyadido;
@@ -105,6 +106,7 @@ public class EquipoService {
             Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
 
             equipo.getUsuarios().remove(usuario);
+            usuario.getEquipos().remove(equipo);
             eliminado = true;
         }
 
