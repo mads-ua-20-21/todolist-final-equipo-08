@@ -126,4 +126,17 @@ public class EquipoService {
         equipoRepository.delete(equipo);
 
     }
+
+    @Transactional
+    public Equipo editarNombreEquipo(Long idEquipo, String nuevoNombre){
+
+        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
+        if (equipo == null){
+            throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
+        }
+        equipo.setNombre(nuevoNombre);
+        equipoRepository.save(equipo);
+
+        return equipo;
+    }
 }
