@@ -154,4 +154,43 @@ public class EquipoServiceTest {
         assertThat(!usuario.getEquipos().contains(equipo));
     }
 
+    @Test
+    @Transactional
+    public void testEliminarEquipo(){
+
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Equipo equipo = equipoService.findById(1L);
+        assertThat(equipoService.findAllOrderedByName().size()).isEqualTo(2);
+        assertThat(equipoService.findAllOrderedByName().contains(equipo));
+
+        // WHEN
+        equipoService.eliminarEquipo(equipo.getId());
+
+
+        // THEN
+        assertThat(equipoService.findAllOrderedByName().size()).isEqualTo(1);
+        assertThat(!equipoService.findAllOrderedByName().contains(equipo));
+    }
+
+    @Test
+    @Transactional
+    public void testCambiarNombreEquipo(){
+
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
+        Long idEquipoAModificar = 1L;
+        equipo.setId(idEquipoAModificar);
+
+        // WHEN
+        Equipo equipoNuevoNombre = equipoService.editarNombreEquipo(idEquipoAModificar, "EquipoTestNuevoNombre");
+        Equipo equipoBD = equipoService.findById(idEquipoAModificar);
+
+        // THEN
+        assertThat(equipoNuevoNombre.getNombre()).isEqualTo("EquipoTestNuevoNombre");
+        assertThat(equipoBD.getNombre()).isEqualTo("EquipoTestNuevoNombre");
+    }
+
 }
