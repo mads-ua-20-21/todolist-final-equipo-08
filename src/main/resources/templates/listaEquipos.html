@@ -24,6 +24,7 @@
                     <th>Id</th>
                     <th>Nombre</th>
                     <th>Unirme/Salir</th>
+                    <th th:if="${usuario.getAdministrador()}">Cambiar Nombre</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,6 +41,7 @@
                         </form>
 
                     </td>
+                    <td th:if="${usuario.getAdministrador()}"><a class="btn btn-primary" th:href="@{/equipos/{id}/editar(id=${equipo.getId()})}">Editar</a></td>
                 </tr>
                 </tbody>
             </table>
