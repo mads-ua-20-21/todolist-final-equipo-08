@@ -5,6 +5,7 @@ import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.Equipo;
 import madstodolist.model.Usuario;
 import madstodolist.service.EquipoService;
+import madstodolist.service.EquipoServiceException;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -120,5 +121,53 @@ public class EquipoController {
         return "redirect:/equipos/" + idEquipo;
     }
 
+    @GetMapping("/equipos/{id}/editar")
+    public String mostrarFormNuevoEquipo(@PathVariable(value="id") Long idEquipo, Model model, HttpSession session){
+
+        managerUserSesion.usuarioLogueado(session);
+        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Equipo equipo = equipoService.findById(idEquipo);
+        model.addAttribute("equipo", equipo);
+
+        return "formEditarEquipo";
+    }
+
+    @PostMapping("/equipos/{id}/editar")
+    public String formNuevoEquipo(@PathVariable(value="id") Long idEquipo, @ModelAttribute Equipo equipo,
+                                  Model model, HttpSession session){
+        managerUserSesion.usuarioLogueado(session);
+        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+
+        equipoService.editarNombreEquipo(idEquipo, equipo.getNombre());
+
+        return "redirect:/equipos";
+    }
+
+    @PostMapping("/equipos/{id}/eliminar")
+    public String eliminarEquipo(@PathVariable(value="id") Long idEquipo, Model model,
+                                 RedirectAttributes flash, HttpSession session){
+
+        managerUserSesion.usuarioLogueado(session);
+        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+
+        equipoService.eliminarEquipo(idEquipo);
+        flash.addFlashAttribute("mensaje", "Equipo eliminado");
+
+        return "redirect:/equipos";
+    }
 
 }

@@ -142,4 +142,58 @@ public class EquipoWebTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/equipos/1"));
     }
+
+    @Test
+    public void testMostrarEditarForm() throws Exception{
+        Usuario usuario = new Usuario("andres@ua.es");
+        usuario.setId(1L);
+        usuario.setAdministrador(true);
+
+        Equipo equipo = new Equipo("EquipoTest");
+        equipo.setId(1L);
+
+        when(usuarioService.findById(null)).thenReturn(usuario);
+        when(equipoService.findById(1L)).thenReturn(equipo);
+
+        this.mockMvc.perform(get("/equipos/1/editar"))
+                .andDo(print())
+                .andExpect(content().string(containsString("Editar nombre del Equipo: EquipoTest")));
+
+    }
+
+    @Test
+    public void testEditarEquipo() throws Exception{
+
+        Usuario usuario = new Usuario("andres@ua.es");
+        usuario.setId(1L);
+        usuario.setAdministrador(true);
+
+        Equipo equipo = new Equipo("EquipoTest");
+        equipo.setId(1L);
+
+        when(usuarioService.findById(null)).thenReturn(usuario);
+
+        this.mockMvc.perform(post("/equipos/1/editar"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/equipos"));
+    }
+
+    @Test
+    public void testEliminarEquipo() throws Exception{
+
+        Usuario usuario = new Usuario("andres@ua.es");
+        usuario.setId(1L);
+        usuario.setAdministrador(true);
+
+        Equipo equipo = new Equipo("EquipoTest");
+        equipo.setId(1L);
+
+        when(usuarioService.findById(null)).thenReturn(usuario);
+
+        this.mockMvc.perform(post("/equipos/1/eliminar"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/equipos"));
+    }
 }
