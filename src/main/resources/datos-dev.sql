@@ -7,6 +7,8 @@ INSERT INTO usuarios (id, email, nombre, password, fecha_nacimiento, administrad
 INSERT INTO tareas (id, titulo, usuario_id) VALUES('3', 'Lavar coche', '2');
 INSERT INTO tareas (id, titulo, usuario_id) VALUES('4', 'Renovar DNI', '2');
 
+INSERT INTO usuarios (id, email, nombre, password, fecha_nacimiento, administrador, bloqueado) VALUES('3', 'admin@admin', 'Admin', 'admin', '1900-01-01', 'true', 'false');
+
 INSERT INTO equipos (id, nombre) VALUES('1', 'Proyecto P1');
 INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('1', '1');
 INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('1', '2');
