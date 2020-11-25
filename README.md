@@ -21,7 +21,7 @@ También puedes generar un `jar` y ejecutarlo:
 
 ```
 $ ./mvnw package
-$ java -jar target/todolist-final-equipo-08-1.4.0-SNAPSHOT.jar 
+$ java -jar target/todolist-final-equipo-08-1.3.1.jar 
 ```
 
 Una vez lanzada la aplicación puedes abrir un navegador y probar la página de inicio accediendo a:
