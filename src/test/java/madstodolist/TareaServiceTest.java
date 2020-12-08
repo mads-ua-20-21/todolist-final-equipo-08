@@ -114,4 +114,20 @@ public class TareaServiceTest {
 
         assertThat(tareaService.findById(tarea.getId())).isNull();
     }
+
+    @Test
+    @Transactional
+    public void testAsignarEditarPrioridadEnTarea() {
+        // GIVEN
+
+        Tarea tarea = tareaService.nuevaTareaUsuario(1L, "Estudiar MADS");
+
+        // WHEN
+
+        tareaService.asignarEditarPrioridad(tarea.getId(), 3);
+
+        // THEN
+
+        assertThat(tareaService.findById(tarea.getId()).getPrioridad()).isEqualTo(3);
+    }
 }
