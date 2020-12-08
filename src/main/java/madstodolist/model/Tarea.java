@@ -42,6 +42,13 @@ public class Tarea implements Serializable {
         usuario.getTareas().add(this);
     }
 
+    public Tarea(Usuario usuario, String titulo, Integer prioridad) {
+        this.usuario = usuario;
+        this.titulo = titulo;
+        this.prioridad = prioridad;
+        usuario.getTareas().add(this);
+    }
+
     public Long getId() {
         return id;
     }

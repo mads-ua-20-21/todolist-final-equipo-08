@@ -47,6 +47,21 @@ public class TareaTest {
     }
 
     @Test
+    public void crearTareaConPrioridad() throws Exception {
+        // GIVEN
+        Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
+
+        // WHEN
+
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", 1);
+
+        // THEN
+
+        assertThat(tarea.getTitulo()).isEqualTo("Práctica 1 de MADS");
+        assertThat(tarea.getUsuario()).isEqualTo(usuario);
+    }
+
+    @Test
     public void comprobarIgualdadSinId() {
         // GIVEN
 
@@ -158,7 +173,7 @@ public class TareaTest {
     }
 
     @Test
-    public void crearTareaConPrioridad() throws Exception {
+    public void asignarEditarTareaConPrioridad() throws Exception {
         // GIVEN
         Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
 
