@@ -16,6 +16,12 @@
         <div class="form-group">
             <label for="titulo">Título de la tarea:</label>
             <input class="form-control" id="titulo" name="titulo" required th:field="*{titulo}" type="text"/>
+            <br>
+            <select class="custom-select" id="prioridad" name="prioridad" required th:field="*{prioridad}" type="integer">
+                <option value=1>Nivel 1</option>
+                <option value=2>Nivel 2</option>
+                <option value=3>Nivel 3</option>
+            </select>
         </div>
         <button class="btn btn-primary" type="submit">Crear tarea</button>
         <a class="btn btn-link" th:href="@{/usuarios/{id}/tareas(id=${usuario.id})}">Cancelar</a>
