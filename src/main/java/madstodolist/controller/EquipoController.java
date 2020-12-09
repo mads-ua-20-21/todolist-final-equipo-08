@@ -129,7 +129,22 @@ public class EquipoController {
             throw new UsuarioNotFoundException();
         }
         if (equipoService.eliminarUsuarioDeEquipo(usuario.getId(), idEquipo)){
-            flash.addFlashAttribute("mensaje", "Has dejado el equipo");
+            flash.addFlashAttribute("mensaje", "Has salido del equipo");
+        }
+        else flash.addFlashAttribute("mensaje", "Error al dejar el equipo");
+        return "redirect:/equipos/" + idEquipo;
+    }
+
+    @PostMapping("/equipos/{id}/quitar/{idUsuario}")
+    public String quitarDeEquipo(@PathVariable(value="id") Long idEquipo, @PathVariable(value = "idUsuario") Long idUsuario,Model model,
+                                RedirectAttributes flash, HttpSession session){
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        if (equipoService.eliminarUsuarioDeEquipo(idUsuario, idEquipo)){
+            flash.addFlashAttribute("mensaje", "Usuario fuera del equipo");
         }
         else flash.addFlashAttribute("mensaje", "Error al dejar el equipo");
         return "redirect:/equipos/" + idEquipo;

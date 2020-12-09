@@ -23,12 +23,18 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Email</th>
+                    <th th:if="${usuario.getAdministrador() || usuario.getId()==equipo.getUsuarioAdministrador().getId()}">Acción</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="user: ${usuarios}">
                     <td th:text="${user.getNombre()}"></td>
                     <td th:text="${user.getEmail()}"></td>
+                    <td th:if="${ usuario.getAdministrador() || usuario.getId()==equipo.getUsuarioAdministrador().getId()}">
+                        <form method="post" th:unless="${usuario.getId()==user.getId()}" th:action="@{/equipos/{id}/quitar/{idUsuario}(id=${equipo.getId()}, idUsuario=${user.getId()})}">
+                            <button class="btn btn-danger" type="submit">Eliminar del equipo</button>
+                        </form>
+                    </td>
                 </tr>
                 </tbody>
             </table>
