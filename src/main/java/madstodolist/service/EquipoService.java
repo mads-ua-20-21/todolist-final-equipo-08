@@ -51,13 +51,6 @@ public class EquipoService {
     }
 
     @Transactional
-    public Equipo nuevoEquipo(String tituloEquipo){
-        Equipo equipo = new Equipo(tituloEquipo);
-        equipoRepository.save(equipo);
-        return equipo;
-    }
-
-    @Transactional
     public Equipo nuevoEquipoConAdmin(String tituloEquipo, Usuario admin){
         Equipo equipo = new Equipo(tituloEquipo, admin);
         equipoRepository.save(equipo);
@@ -144,8 +137,6 @@ public class EquipoService {
 
         Equipo equipo = comprobarIdEquipo(idEquipo);
 
-        //if (usuarioAdministraEquipo())
-
         equipo.getUsuarios().removeAll(usuariosEquipo(idEquipo));
 
         equipoRepository.delete(equipo);
@@ -156,8 +147,6 @@ public class EquipoService {
     public Equipo editarNombreEquipo(Long idEquipo, String nuevoNombre){
 
         Equipo equipo = comprobarIdEquipo(idEquipo);
-
-        //if (usuarioAdministraEquipo())
 
         equipo.setNombre(nuevoNombre);
         equipoRepository.save(equipo);

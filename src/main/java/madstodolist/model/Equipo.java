@@ -28,14 +28,12 @@ public class Equipo implements Serializable{
     @NotNull
     @ManyToOne
     // Nombre de la columna en la BD que guarda físicamente
-    // el ID del usuario con el que está asociado una tarea
+    // el ID del usuario asociado como administrador del equipo
     @JoinColumn(name = "administrador_id")
     private Usuario usuarioAdministrador;
 
 
     private Equipo(){}
-
-    public Equipo(String nombre){ this.nombre = nombre;}
 
     public Equipo(String nombre, Usuario administrador){
         this.nombre = nombre;
