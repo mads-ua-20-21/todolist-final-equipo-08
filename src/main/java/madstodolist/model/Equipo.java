@@ -25,10 +25,22 @@ public class Equipo implements Serializable{
             inverseJoinColumns = {@JoinColumn(name = "fk_usuario")})
     Set<Usuario> usuarios = new HashSet<>();
 
+    //@NotNull
+    @ManyToOne
+    // Nombre de la columna en la BD que guarda físicamente
+    // el ID del usuario con el que está asociado una tarea
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuarioAdministrador;
+
 
     private Equipo(){}
 
     public Equipo(String nombre){ this.nombre = nombre;}
+
+    public Equipo(String nombre, Usuario administrador){
+        this.nombre = nombre;
+        this.usuarioAdministrador = administrador;
+    }
 
     public Long getId() { return id; }
 
@@ -37,6 +49,10 @@ public class Equipo implements Serializable{
     public String getNombre() { return nombre; }
 
     public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public void setUsuarioAdministrador(Usuario usuarioAdministrador) { this.usuarioAdministrador = usuarioAdministrador; }
+
+    public Usuario getUsuarioAdministrador() { return usuarioAdministrador; }
 
     public Set<Usuario> getUsuarios() { return usuarios; }
 

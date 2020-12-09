@@ -60,18 +60,47 @@ public class EquipoService {
         return equipo;
     }
 
-    @Transactional(readOnly = true)
-    public Boolean usuarioPerteneceAEquipo(Long idUsuario, Long idEquipo){
+    @Transactional
+    public Equipo nuevoEquipoConAdmin(String tituloEquipo, Usuario admin){
+        Equipo equipo = new Equipo(tituloEquipo, admin);
+        equipoRepository.save(equipo);
 
+        return equipo;
+    }
+
+    @Transactional(readOnly = true)
+    public Equipo comprobarIdEquipo(Long idEquipo){
         Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
         if (equipo == null){
             throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
         }
+        return  equipo;
+    }
 
+    @Transactional(readOnly = true)
+    public Usuario comprobarIdUsuario(Long idUsuario){
         Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
         if (usuario == null) {
             throw new UsuarioServiceException("Usuario " + idUsuario + " no existe ");
         }
+        return usuario;
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean usuarioAdministraEquipo(Long idAdministrador, Long idEquipo){
+
+        Equipo equipo = comprobarIdEquipo(idEquipo);
+        Usuario administrador = comprobarIdUsuario(idAdministrador);
+
+        return (administrador.getId() == equipo.getUsuarioAdministrador().getId());
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean usuarioPerteneceAEquipo(Long idUsuario, Long idEquipo){
+
+        Equipo equipo = comprobarIdEquipo(idEquipo);
+
+        Usuario usuario = comprobarIdUsuario(idUsuario);
 
         List<Usuario> usuarios = usuariosEquipo(idEquipo);
          return  usuarios.contains(usuario);
@@ -121,6 +150,8 @@ public class EquipoService {
             throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
         }
 
+        //if (usuarioAdministraEquipo())
+
         equipo.getUsuarios().removeAll(usuariosEquipo(idEquipo));
 
         equipoRepository.delete(equipo);
@@ -134,6 +165,9 @@ public class EquipoService {
         if (equipo == null){
             throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
         }
+
+        //if (usuarioAdministraEquipo())
+
         equipo.setNombre(nuevoNombre);
         equipoRepository.save(equipo);
 

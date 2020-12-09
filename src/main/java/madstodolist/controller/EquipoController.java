@@ -77,7 +77,7 @@ public class EquipoController {
         return "formNuevoEquipo";
     }
 
-    @PostMapping("/equipos/nuevo")
+    /*@PostMapping("/equipos/nuevo")
     public String nuevoEquipo(@ModelAttribute Equipo equipo, Model model, RedirectAttributes flash,
                               HttpSession session){
 
@@ -87,6 +87,20 @@ public class EquipoController {
             throw new UsuarioNotFoundException();
         }
         equipoService.nuevoEquipo(equipo.getNombre());
+        flash.addFlashAttribute("mensaje", "Equipo creada correctamente");
+        return "redirect:/equipos";
+    }*/
+
+    @PostMapping("/equipos/nuevo")
+    public String nuevoEquipoConAdmin(@ModelAttribute Equipo equipo, Model model, RedirectAttributes flash,
+                              HttpSession session){
+
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        equipoService.nuevoEquipoConAdmin(equipo.getNombre(), usuario);
         flash.addFlashAttribute("mensaje", "Equipo creada correctamente");
         return "redirect:/equipos";
     }
