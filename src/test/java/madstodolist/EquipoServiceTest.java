@@ -97,7 +97,8 @@ public class EquipoServiceTest {
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
 
         // WHEN
-        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
+        Usuario usuario = usuarioService.findById(1L);
+        Equipo equipo = equipoService.nuevoEquipoConAdmin("EquipoTest", usuario);
         List<Equipo> equipos = equipoService.findAllOrderedByName();
 
         // THEN
@@ -112,8 +113,9 @@ public class EquipoServiceTest {
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
 
         // WHEN
-        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
         Usuario usuario = usuarioService.findById(1L);
+        Equipo equipo = equipoService.nuevoEquipoConAdmin("EquipoTest", usuario);
+
 
         Boolean resultadoPrimeraOperacion = equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
         //2a inserción, que no debe realizarse
@@ -180,7 +182,8 @@ public class EquipoServiceTest {
 
         // GIVEN
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
-        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
+        Usuario usuario = usuarioService.findById(1L);
+        Equipo equipo = equipoService.nuevoEquipoConAdmin("EquipoTest", usuario);
         Long idEquipoAModificar = 1L;
         equipo.setId(idEquipoAModificar);
 

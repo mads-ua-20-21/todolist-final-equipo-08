@@ -139,12 +139,16 @@ public class EquipoController {
     public String mostrarFormNuevoEquipo(@PathVariable(value="id") Long idEquipo, Model model, HttpSession session){
 
         managerUserSesion.usuarioLogueado(session);
-        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+        //managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
         Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
         if (usuario == null) {
             throw new UsuarioNotFoundException();
         }
         model.addAttribute("usuario", usuario);
+
+        if (!equipoService.usuarioAdministraEquipo(usuario.getId(), idEquipo)) {
+            managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+        }
 
         Equipo equipo = equipoService.findById(idEquipo);
         model.addAttribute("equipo", equipo);
@@ -156,10 +160,14 @@ public class EquipoController {
     public String formNuevoEquipo(@PathVariable(value="id") Long idEquipo, @ModelAttribute Equipo equipo,
                                   Model model, HttpSession session){
         managerUserSesion.usuarioLogueado(session);
-        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+        //managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
         Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
         if (usuario == null) {
             throw new UsuarioNotFoundException();
+        }
+
+        if (!equipoService.usuarioAdministraEquipo(usuario.getId(), idEquipo)) {
+            managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
         }
 
         equipoService.editarNombreEquipo(idEquipo, equipo.getNombre());
@@ -172,10 +180,13 @@ public class EquipoController {
                                  RedirectAttributes flash, HttpSession session){
 
         managerUserSesion.usuarioLogueado(session);
-        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+
         Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
         if (usuario == null) {
             throw new UsuarioNotFoundException();
+        }
+        if (!equipoService.usuarioAdministraEquipo(usuario.getId(), idEquipo)) {
+            managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
         }
 
         equipoService.eliminarEquipo(idEquipo);

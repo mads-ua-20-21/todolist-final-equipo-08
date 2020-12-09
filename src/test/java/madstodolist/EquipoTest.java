@@ -37,7 +37,8 @@ public class EquipoTest {
     @Transactional
     public void grabarEquipo() {
         // GIVEN
-        Equipo equipo = new Equipo("Proyecto P1");
+        Usuario usuario = usuarioRepository.findById(1L).orElse(null);
+        Equipo equipo = new Equipo("Proyecto P1", usuario);
 
         // WHEN
         equipoRepository.save(equipo);

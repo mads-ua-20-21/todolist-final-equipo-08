@@ -45,10 +45,7 @@ public class EquipoService {
     @Transactional(readOnly = true)
     public List<Usuario> usuariosEquipo(Long idEquipo){
 
-        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
-        if (equipo == null){
-            throw new EquipoServiceException("Equipo " + idEquipo + " no existe al listar equipos ");
-        }
+        Equipo equipo = comprobarIdEquipo(idEquipo);
         List<Usuario> usuarios = new ArrayList(equipo.getUsuarios());
         return usuarios;
     }
@@ -145,10 +142,7 @@ public class EquipoService {
     @Transactional
     public void eliminarEquipo(Long idEquipo){
 
-        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
-        if (equipo == null){
-            throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
-        }
+        Equipo equipo = comprobarIdEquipo(idEquipo);
 
         //if (usuarioAdministraEquipo())
 
@@ -161,10 +155,7 @@ public class EquipoService {
     @Transactional
     public Equipo editarNombreEquipo(Long idEquipo, String nuevoNombre){
 
-        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
-        if (equipo == null){
-            throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
-        }
+        Equipo equipo = comprobarIdEquipo(idEquipo);
 
         //if (usuarioAdministraEquipo())
 

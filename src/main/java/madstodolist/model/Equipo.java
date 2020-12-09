@@ -25,11 +25,11 @@ public class Equipo implements Serializable{
             inverseJoinColumns = {@JoinColumn(name = "fk_usuario")})
     Set<Usuario> usuarios = new HashSet<>();
 
-    //@NotNull
+    @NotNull
     @ManyToOne
     // Nombre de la columna en la BD que guarda físicamente
     // el ID del usuario con el que está asociado una tarea
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "administrador_id")
     private Usuario usuarioAdministrador;
 
 
