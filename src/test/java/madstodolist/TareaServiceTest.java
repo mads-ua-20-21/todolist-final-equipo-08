@@ -44,6 +44,21 @@ public class TareaServiceTest {
     }
 
     @Test
+    @Transactional
+    public void testNuevaTareaUsuarioConPrioridad() {
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        // WHEN
+        Tarea tarea = tareaService.nuevaTareaUsuario(1L, "Práctica 1 de MADS", 1);
+
+        // THEN
+
+        Usuario usuario = usuarioService.findByEmail("ana.garcia@gmail.com");
+        assertThat(usuario.getTareas()).contains(tarea);
+    }
+
+    @Test
     public void testListadoTareas() {
         // GIVEN
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
@@ -113,5 +128,21 @@ public class TareaServiceTest {
         // THEN
 
         assertThat(tareaService.findById(tarea.getId())).isNull();
+    }
+
+    @Test
+    @Transactional
+    public void testAsignarEditarPrioridadEnTarea() {
+        // GIVEN
+
+        Tarea tarea = tareaService.nuevaTareaUsuario(1L, "Estudiar MADS");
+
+        // WHEN
+
+        tareaService.asignarEditarPrioridad(tarea.getId(), 3);
+
+        // THEN
+
+        assertThat(tareaService.findById(tarea.getId()).getPrioridad()).isEqualTo(3);
     }
 }

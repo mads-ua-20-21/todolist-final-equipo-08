@@ -16,6 +16,8 @@ public class Tarea implements Serializable {
     private Long id;
     @NotNull
     private String titulo;
+    //@NotNull
+    private Integer prioridad;
 
     @NotNull
     // Relación muchos-a-uno entre tareas y usuario
@@ -40,6 +42,13 @@ public class Tarea implements Serializable {
         usuario.getTareas().add(this);
     }
 
+    public Tarea(Usuario usuario, String titulo, Integer prioridad) {
+        this.usuario = usuario;
+        this.titulo = titulo;
+        this.prioridad = prioridad;
+        usuario.getTareas().add(this);
+    }
+
     public Long getId() {
         return id;
     }
@@ -54,6 +63,14 @@ public class Tarea implements Serializable {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public Integer getPrioridad() {
+        return prioridad;
+    }
+
+    public void setPrioridad(Integer prioridad) {
+        this.prioridad = prioridad;
     }
 
     public Usuario getUsuario() {
