@@ -45,33 +45,52 @@ public class EquipoService {
     @Transactional(readOnly = true)
     public List<Usuario> usuariosEquipo(Long idEquipo){
 
-        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
-        if (equipo == null){
-            throw new EquipoServiceException("Equipo " + idEquipo + " no existe al listar equipos ");
-        }
+        Equipo equipo = comprobarIdEquipo(idEquipo);
         List<Usuario> usuarios = new ArrayList(equipo.getUsuarios());
         return usuarios;
     }
 
     @Transactional
-    public Equipo nuevoEquipo(String tituloEquipo){
-        Equipo equipo = new Equipo(tituloEquipo);
+    public Equipo nuevoEquipoConAdmin(String tituloEquipo, Usuario admin){
+        Equipo equipo = new Equipo(tituloEquipo, admin);
         equipoRepository.save(equipo);
+
         return equipo;
+    }
+
+    @Transactional(readOnly = true)
+    public Equipo comprobarIdEquipo(Long idEquipo){
+        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
+        if (equipo == null){
+            throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
+        }
+        return  equipo;
+    }
+
+    @Transactional(readOnly = true)
+    public Usuario comprobarIdUsuario(Long idUsuario){
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("Usuario " + idUsuario + " no existe ");
+        }
+        return usuario;
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean usuarioAdministraEquipo(Long idAdministrador, Long idEquipo){
+
+        Equipo equipo = comprobarIdEquipo(idEquipo);
+        Usuario administrador = comprobarIdUsuario(idAdministrador);
+
+        return (administrador.getId() == equipo.getUsuarioAdministrador().getId());
     }
 
     @Transactional(readOnly = true)
     public Boolean usuarioPerteneceAEquipo(Long idUsuario, Long idEquipo){
 
-        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
-        if (equipo == null){
-            throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
-        }
+        Equipo equipo = comprobarIdEquipo(idEquipo);
 
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
-        if (usuario == null) {
-            throw new UsuarioServiceException("Usuario " + idUsuario + " no existe ");
-        }
+        Usuario usuario = comprobarIdUsuario(idUsuario);
 
         List<Usuario> usuarios = usuariosEquipo(idEquipo);
          return  usuarios.contains(usuario);
@@ -116,10 +135,7 @@ public class EquipoService {
     @Transactional
     public void eliminarEquipo(Long idEquipo){
 
-        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
-        if (equipo == null){
-            throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
-        }
+        Equipo equipo = comprobarIdEquipo(idEquipo);
 
         equipo.getUsuarios().removeAll(usuariosEquipo(idEquipo));
 
@@ -130,10 +146,8 @@ public class EquipoService {
     @Transactional
     public Equipo editarNombreEquipo(Long idEquipo, String nuevoNombre){
 
-        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
-        if (equipo == null){
-            throw new EquipoServiceException("Equipo " + idEquipo + " no existe ");
-        }
+        Equipo equipo = comprobarIdEquipo(idEquipo);
+
         equipo.setNombre(nuevoNombre);
         equipoRepository.save(equipo);
 

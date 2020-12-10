@@ -77,7 +77,7 @@ public class EquipoController {
         return "formNuevoEquipo";
     }
 
-    @PostMapping("/equipos/nuevo")
+    /*@PostMapping("/equipos/nuevo")
     public String nuevoEquipo(@ModelAttribute Equipo equipo, Model model, RedirectAttributes flash,
                               HttpSession session){
 
@@ -87,6 +87,20 @@ public class EquipoController {
             throw new UsuarioNotFoundException();
         }
         equipoService.nuevoEquipo(equipo.getNombre());
+        flash.addFlashAttribute("mensaje", "Equipo creada correctamente");
+        return "redirect:/equipos";
+    }*/
+
+    @PostMapping("/equipos/nuevo")
+    public String nuevoEquipoConAdmin(@ModelAttribute Equipo equipo, Model model, RedirectAttributes flash,
+                              HttpSession session){
+
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        equipoService.nuevoEquipoConAdmin(equipo.getNombre(), usuario);
         flash.addFlashAttribute("mensaje", "Equipo creada correctamente");
         return "redirect:/equipos";
     }
@@ -115,7 +129,22 @@ public class EquipoController {
             throw new UsuarioNotFoundException();
         }
         if (equipoService.eliminarUsuarioDeEquipo(usuario.getId(), idEquipo)){
-            flash.addFlashAttribute("mensaje", "Has dejado el equipo");
+            flash.addFlashAttribute("mensaje", "Has salido del equipo");
+        }
+        else flash.addFlashAttribute("mensaje", "Error al dejar el equipo");
+        return "redirect:/equipos/" + idEquipo;
+    }
+
+    @PostMapping("/equipos/{id}/quitar/{idUsuario}")
+    public String quitarDeEquipo(@PathVariable(value="id") Long idEquipo, @PathVariable(value = "idUsuario") Long idUsuario,Model model,
+                                RedirectAttributes flash, HttpSession session){
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        if (equipoService.eliminarUsuarioDeEquipo(idUsuario, idEquipo)){
+            flash.addFlashAttribute("mensaje", "Usuario fuera del equipo");
         }
         else flash.addFlashAttribute("mensaje", "Error al dejar el equipo");
         return "redirect:/equipos/" + idEquipo;
@@ -125,12 +154,16 @@ public class EquipoController {
     public String mostrarFormNuevoEquipo(@PathVariable(value="id") Long idEquipo, Model model, HttpSession session){
 
         managerUserSesion.usuarioLogueado(session);
-        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+        //managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
         Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
         if (usuario == null) {
             throw new UsuarioNotFoundException();
         }
         model.addAttribute("usuario", usuario);
+
+        if (!equipoService.usuarioAdministraEquipo(usuario.getId(), idEquipo)) {
+            managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+        }
 
         Equipo equipo = equipoService.findById(idEquipo);
         model.addAttribute("equipo", equipo);
@@ -142,10 +175,14 @@ public class EquipoController {
     public String formNuevoEquipo(@PathVariable(value="id") Long idEquipo, @ModelAttribute Equipo equipo,
                                   Model model, HttpSession session){
         managerUserSesion.usuarioLogueado(session);
-        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+        //managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
         Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
         if (usuario == null) {
             throw new UsuarioNotFoundException();
+        }
+
+        if (!equipoService.usuarioAdministraEquipo(usuario.getId(), idEquipo)) {
+            managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
         }
 
         equipoService.editarNombreEquipo(idEquipo, equipo.getNombre());
@@ -158,10 +195,13 @@ public class EquipoController {
                                  RedirectAttributes flash, HttpSession session){
 
         managerUserSesion.usuarioLogueado(session);
-        managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
+
         Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
         if (usuario == null) {
             throw new UsuarioNotFoundException();
+        }
+        if (!equipoService.usuarioAdministraEquipo(usuario.getId(), idEquipo)) {
+            managerUserSesion.comprobarUsuarioAdministrador(session, (Boolean) session.getAttribute("administrador"));
         }
 
         equipoService.eliminarEquipo(idEquipo);

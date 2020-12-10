@@ -29,7 +29,8 @@ public class EquipoTest {
 
     @Test
     public void crearEquipo() {
-        Equipo equipo = new Equipo("Proyecto P1");
+        Usuario usuario = usuarioRepository.findById(1L).orElse(null);
+        Equipo equipo = new Equipo("Proyecto P1", usuario);
         assertThat(equipo.getNombre()).isEqualTo("Proyecto P1");
     }
 
@@ -37,7 +38,8 @@ public class EquipoTest {
     @Transactional
     public void grabarEquipo() {
         // GIVEN
-        Equipo equipo = new Equipo("Proyecto P1");
+        Usuario usuario = usuarioRepository.findById(1L).orElse(null);
+        Equipo equipo = new Equipo("Proyecto P1", usuario);
 
         // WHEN
         equipoRepository.save(equipo);
@@ -49,10 +51,11 @@ public class EquipoTest {
     @Test
     public void comprobarIgualdadEquipos() {
         // GIVEN
-        // Creamos tres equipos sin id, sólo con el nombre
-        Equipo equipo1 = new Equipo("Proyecto P1");
-        Equipo equipo2 = new Equipo("Proyecto P2");
-        Equipo equipo3 = new Equipo("Proyecto P2");
+        Usuario usuario = usuarioRepository.findById(1L).orElse(null);
+        // Creamos tres equipos sin id, sólo con el nombre y administrador
+        Equipo equipo1 = new Equipo("Proyecto P1", usuario);
+        Equipo equipo2 = new Equipo("Proyecto P2", usuario);
+        Equipo equipo3 = new Equipo("Proyecto P2", usuario);
 
         // THEN
         // Comprobamos igualdad basada en el atributo nombre
@@ -90,7 +93,8 @@ public class EquipoTest {
     public void relaciónMuchosAMuchosVacia() {
         // GIVEN
 
-        Equipo equipo = new Equipo("Proyecto P1");
+        Usuario administrador= usuarioRepository.findById(1L).orElse(null);
+        Equipo equipo = new Equipo("Proyecto P1", administrador);
         Usuario usuario = new Usuario("prueba@gmail.com");
 
         // WHEN
