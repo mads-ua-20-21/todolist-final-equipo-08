@@ -32,6 +32,8 @@ public class Equipo implements Serializable{
     @JoinColumn(name = "administrador_id")
     private Usuario usuarioAdministrador;
 
+    @OneToMany(mappedBy = "equipos", fetch = FetchType.EAGER)
+    Set<Proyecto> proyectos = new HashSet<>();
 
     private Equipo(){}
 
@@ -53,6 +55,10 @@ public class Equipo implements Serializable{
     public Usuario getUsuarioAdministrador() { return usuarioAdministrador; }
 
     public Set<Usuario> getUsuarios() { return usuarios; }
+
+    public Set<Proyecto> getProyectos() { return proyectos; }
+
+    public void setProyectos(Set<Proyecto> proyectos) { this.proyectos = proyectos; }
 
     @Override
     public boolean equals(Object o) {

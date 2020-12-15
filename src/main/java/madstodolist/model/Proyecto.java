@@ -18,7 +18,15 @@ public class Proyecto implements Serializable {
     @NotNull
     private String nombre;
 
+    @ManyToOne
+    @JoinColumn(name = "equipo_id")
+    private Equipo equipo;
+
     private Proyecto(){}
+
+    public Proyecto(String nombre){
+        this.nombre = nombre;
+    }
 
     public Long getId() { return id; }
 
@@ -27,6 +35,10 @@ public class Proyecto implements Serializable {
     public String getNombre() { return nombre; }
 
     public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public Equipo getEquipo() { return this.equipo; }
+
+    public void setEquipo(Equipo equipo) { this.equipo = equipo; }
 
     @Override
     public boolean equals(Object o) {
