@@ -3,7 +3,9 @@ package madstodolist.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "proyectos")
@@ -22,6 +24,9 @@ public class Proyecto implements Serializable {
     @JoinColumn(name = "equipo_id")
     private Equipo equipo;
 
+    @OneToMany(mappedBy = "proyectos", fetch = FetchType.EAGER)
+    Set<Tarea> tareas = new HashSet<>();
+
     private Proyecto(){}
 
     public Proyecto(String nombre){
@@ -39,6 +44,10 @@ public class Proyecto implements Serializable {
     public Equipo getEquipo() { return this.equipo; }
 
     public void setEquipo(Equipo equipo) { this.equipo = equipo; }
+
+    public Set<Tarea> getTareas() { return this.tareas; }
+
+    public void setTareas(Set<Tarea> tareas) { this.tareas = tareas; }
 
     @Override
     public boolean equals(Object o) {
