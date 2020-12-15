@@ -32,7 +32,7 @@ public class Equipo implements Serializable{
     @JoinColumn(name = "administrador_id")
     private Usuario usuarioAdministrador;
 
-    @OneToMany(mappedBy = "equipos", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER)
     Set<Proyecto> proyectos = new HashSet<>();
 
     private Equipo(){}

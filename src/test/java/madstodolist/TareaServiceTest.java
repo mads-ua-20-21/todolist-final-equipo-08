@@ -75,7 +75,7 @@ public class TareaServiceTest {
 
         // THEN
 
-        assertThat(tareas.size()).isEqualTo(2);
+        assertThat(tareas.size()).isEqualTo(4);
         assertThat(tareas).contains(lavarCoche);
     }
 

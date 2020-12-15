@@ -20,17 +20,19 @@ public class Proyecto implements Serializable {
     @NotNull
     private String nombre;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "equipo_id")
     private Equipo equipo;
 
-    @OneToMany(mappedBy = "proyectos", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "proyecto", fetch = FetchType.EAGER)
     Set<Tarea> tareas = new HashSet<>();
 
     private Proyecto(){}
 
-    public Proyecto(String nombre){
+    public Proyecto(String nombre, Equipo creador){
         this.nombre = nombre;
+        this.equipo = creador;
     }
 
     public Long getId() { return id; }
