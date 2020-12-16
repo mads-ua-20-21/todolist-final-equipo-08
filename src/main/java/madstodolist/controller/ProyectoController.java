@@ -164,6 +164,33 @@ public class ProyectoController {
         return "formEditarProyecto";
     }
 
+    @PostMapping("/proyectos/{id}/editar")
+    public String guardarProyectoModificado(@PathVariable(value="id") Long idProyecto,
+                                       @ModelAttribute Proyecto proyecto,
+                                       Model model, RedirectAttributes flash, HttpSession session) {
+
+        Proyecto proyectoMod = proyectoService.findById(idProyecto);
+        if (proyectoMod == null) {
+            throw new ProyectoNotFoundException();
+        }
+
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+
+        //Comprobamos que el usuario logeado es el administrador del equipo del proyecto
+        if (!proyectoMod.getEquipo().getUsuarioAdministrador().equals(usuario)){
+            throw new UsuarioNoAdminException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        proyectoService.modificarProyecto(idProyecto,proyecto.getNombre());
+        flash.addFlashAttribute("mensaje", "Proyecto modificado correctamente");
+        return "redirect:/equipos/" + proyectoMod.getEquipo().getId();
+    }
+
     
 
     @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/nueva")
