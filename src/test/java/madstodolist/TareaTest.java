@@ -59,6 +59,42 @@ public class TareaTest {
 
         assertThat(tarea.getTitulo()).isEqualTo("Práctica 1 de MADS");
         assertThat(tarea.getUsuario()).isEqualTo(usuario);
+        assertThat(tarea.getPrioridad()).isEqualTo(1);
+    }
+
+    @Test
+    public void crearTareaConPrioridadYEstado() throws Exception {
+        // GIVEN
+        Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
+
+        // WHEN
+
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", 1);
+
+        // THEN
+
+        assertThat(tarea.getTitulo()).isEqualTo("Práctica 1 de MADS");
+        assertThat(tarea.getUsuario()).isEqualTo(usuario);
+        assertThat(tarea.getPrioridad()).isEqualTo(1);
+        assertThat(tarea.getEstado()).isEqualTo(Tarea.EstadoTarea.PENDIENTE);
+    }
+
+    @Test
+    public void setEstadoTarea() throws Exception {
+        // GIVEN
+        Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
+
+        // WHEN
+
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", 1);
+        tarea.setEstado(Tarea.EstadoTarea.ENPROCESO);
+
+        // THEN
+
+        assertThat(tarea.getTitulo()).isEqualTo("Práctica 1 de MADS");
+        assertThat(tarea.getUsuario()).isEqualTo(usuario);
+        assertThat(tarea.getPrioridad()).isEqualTo(1);
+        assertThat(tarea.getEstado()).isEqualTo(Tarea.EstadoTarea.ENPROCESO);
     }
 
     @Test
@@ -207,5 +243,27 @@ public class TareaTest {
         assertThat(tarea.getId()).isNotNull();
         assertThat(tarea.getUsuario()).isEqualTo(usuario);
         assertThat(tarea.getPrioridad()).isEqualTo(2);
+    }
+
+    @Test
+    @Transactional
+    public void crearTareaConPrioridadYEstadoEnBaseDatos() {
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Usuario usuario = usuarioRepository.findById(1L).orElse(null);
+        Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS");
+        tarea.setPrioridad(2);
+
+        // WHEN
+
+        tareaRepository.save(tarea);
+
+        // THEN
+
+        assertThat(tarea.getId()).isNotNull();
+        assertThat(tarea.getUsuario()).isEqualTo(usuario);
+        assertThat(tarea.getPrioridad()).isEqualTo(2);
+        assertThat(tarea.getEstado()).isEqualTo(Tarea.EstadoTarea.PENDIENTE);
     }
 }
