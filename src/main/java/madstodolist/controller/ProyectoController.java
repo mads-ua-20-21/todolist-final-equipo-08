@@ -4,6 +4,7 @@ import madstodolist.authentication.ManagerUserSesion;
 import madstodolist.authentication.UsuarioNoAdminException;
 import madstodolist.controller.exception.EquipoNotFoundException;
 import madstodolist.controller.exception.ProyectoNotFoundException;
+import madstodolist.controller.exception.TareaNotFoundException;
 import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.Equipo;
 import madstodolist.model.Proyecto;
@@ -135,8 +136,38 @@ public class ProyectoController {
         return "redirect:/equipos/" + idEquipo;
     }
 
+    @GetMapping("/proyectos/{id}/editar")
+    public String formEditaProyecto(@PathVariable(value="id") Long idProyecto,
+                                    @ModelAttribute Proyecto proyecto,
+                                 Model model, HttpSession session) {
+
+        Proyecto proyectoMod = proyectoService.findById(idProyecto);
+        if (proyectoMod == null) {
+            throw new ProyectoNotFoundException();
+        }
+
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+
+        //Comprobamos que el usuario logeado es el administrador del equipo del proyecto
+        if (!proyectoMod.getEquipo().getUsuarioAdministrador().equals(usuario)){
+            throw new UsuarioNoAdminException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        proyecto.setNombre(proyectoMod.getNombre());
+        model.addAttribute("proyecto", proyecto);
+
+        return "formEditarProyecto";
+    }
+
+    
+
     @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/nueva")
-    public String formNuevaTarea(@PathVariable(value="id") Long idUsuario,
+    public String formNuevaTareaProyecto(@PathVariable(value="id") Long idUsuario,
                                  @PathVariable(value="proyecto") Long idProyecto,
                                  @ModelAttribute TareaData tareaData, Model model,
                                  HttpSession session) {
@@ -158,7 +189,7 @@ public class ProyectoController {
     }
 
     @PostMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/nueva")
-    public String nuevaTarea(@PathVariable(value="id") Long idUsuario,
+    public String nuevaTareaProyecto(@PathVariable(value="id") Long idUsuario,
                              @PathVariable(value="proyecto") Long idProyecto,
                              @ModelAttribute TareaData tareaData,
                              Model model, RedirectAttributes flash,
