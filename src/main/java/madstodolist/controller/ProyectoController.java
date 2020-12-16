@@ -108,6 +108,33 @@ public class ProyectoController {
         return "formNuevoProyecto";
     }
 
+    @PostMapping("/equipos/{id}/proyectos/nuevo")
+    public String nuevoProyecto(@PathVariable(value="id") Long idEquipo,
+                                @ModelAttribute Proyecto proyecto,
+                             Model model, RedirectAttributes flash,
+                             HttpSession session) {
+
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+
+        Equipo equipo = equipoService.findById(idEquipo);
+        if (equipo == null){
+            throw new EquipoNotFoundException();
+        }
+
+        //Comprobamos que el usuario logeado sea el admin del equipo
+        if (!equipo.getUsuarioAdministrador().equals(usuario)){
+            throw new UsuarioNoAdminException();
+        }
+
+        proyectoService.nuevoProyecto(idEquipo,equipo.getNombre());
+        flash.addFlashAttribute("mensaje", "Proyecto creada correctamente");
+        return "redirect:/equipos/" + idEquipo;
+    }
+
     @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/nueva")
     public String formNuevaTarea(@PathVariable(value="id") Long idUsuario,
                                  @PathVariable(value="proyecto") Long idProyecto,
