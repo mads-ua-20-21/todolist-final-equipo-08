@@ -18,11 +18,13 @@ public class TareaService {
 
     private UsuarioRepository usuarioRepository;
     private TareaRepository tareaRepository;
+    private ProyectoRepository proyectoRepository;
 
     @Autowired
-    public TareaService(UsuarioRepository usuarioRepository, TareaRepository tareaRepository) {
+    public TareaService(UsuarioRepository usuarioRepository, TareaRepository tareaRepository, ProyectoRepository proyectoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.tareaRepository = tareaRepository;
+        this.proyectoRepository = proyectoRepository;
     }
     @Transactional
     public Tarea nuevaTareaUsuario(Long idUsuario, String tituloTarea) {
@@ -42,6 +44,18 @@ public class TareaService {
             throw new TareaServiceException("Usuario " + idUsuario + " no existe al crear tarea " + tituloTarea);
         }
         Tarea tarea = new Tarea(usuario, tituloTarea, prioridad);
+        tareaRepository.save(tarea);
+        return tarea;
+    }
+
+    @Transactional
+    public Tarea nuevaTareaUsuario(Long idUsuario, Long idProyecto, String tituloTarea, Integer prioridad) {
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new TareaServiceException("Usuario " + idUsuario + " no existe al crear tarea " + tituloTarea);
+        }
+        Proyecto proyecto = proyectoRepository.findById(idProyecto).orElse(null);
+        Tarea tarea = new Tarea(usuario, proyecto, tituloTarea, prioridad);
         tareaRepository.save(tarea);
         return tarea;
     }
