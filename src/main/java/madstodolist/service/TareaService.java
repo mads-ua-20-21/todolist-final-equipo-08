@@ -1,9 +1,6 @@
 package madstodolist.service;
 
-import madstodolist.model.Tarea;
-import madstodolist.model.TareaRepository;
-import madstodolist.model.Usuario;
-import madstodolist.model.UsuarioRepository;
+import madstodolist.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +90,14 @@ public class TareaService {
         }
         tarea.setPrioridad(prioridad);
         tareaRepository.save(tarea);
+    }
+
+    @Transactional(readOnly = true)
+    public Proyecto proyectoTarea(Long idTarea){
+        Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
+        if (tarea == null) {
+            throw new TareaServiceException("No existe tarea con id " + idTarea);
+        }
+        return tarea.getProyecto();
     }
 }
