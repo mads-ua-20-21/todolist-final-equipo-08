@@ -94,4 +94,15 @@ public class TareaService {
         tarea.setPrioridad(prioridad);
         tareaRepository.save(tarea);
     }
+
+    @Transactional
+    public Tarea actualizarEstado(Long idTarea, Tarea.EstadoTarea nuevoEstado){
+        Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
+        if (tarea == null) {
+            throw new TareaServiceException("No existe tarea con id " + idTarea);
+        }
+        tarea.setEstado(nuevoEstado);
+        tareaRepository.save(tarea);
+        return tarea;
+    }
 }

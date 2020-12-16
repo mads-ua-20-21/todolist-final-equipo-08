@@ -16,7 +16,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TareaServiceTest {
@@ -145,4 +144,27 @@ public class TareaServiceTest {
 
         assertThat(tareaService.findById(tarea.getId()).getPrioridad()).isEqualTo(3);
     }
+
+    @Test
+    @Transactional
+    public void testActualizarEstado(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Tarea tarea = tareaService.nuevaTareaUsuario(1L, "Estudiar MADS");
+        Long idNuevaTarea = tarea.getId();
+
+        // WHEN
+
+        Tarea tareaModificada = tareaService.actualizarEstado(idNuevaTarea, Tarea.EstadoTarea.ENPROCESO);
+        Tarea tareaBD = tareaService.findById(idNuevaTarea);
+
+        // THEN
+
+        assertThat(tareaModificada.getTitulo()).isEqualTo("Estudiar MADS");
+        assertThat(tareaModificada.getEstado()).isEqualTo(Tarea.EstadoTarea.ENPROCESO);
+        assertThat(tareaBD.getTitulo()).isEqualTo("Estudiar MADS");
+        assertThat(tareaBD.getEstado()).isEqualTo(Tarea.EstadoTarea.ENPROCESO);
+    }
 }
+
