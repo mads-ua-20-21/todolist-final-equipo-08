@@ -60,6 +60,22 @@ public class ProyectoController {
         model.addAttribute("proyectos", proyectos);
         return "listaProyectos";
     }
+    @GetMapping("/proyectos")
+    public String listarProyectos(Model model, HttpSession session){
+
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
+        model.addAttribute("usuario", usuario);
+
+        List<Proyecto> proyectos = proyectoService.findAllProyectos();
+        model.addAttribute("proyectos", proyectos);
+        return "listaProyectos";
+    }
+
 
     @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas")
     public String tareasProyecto(@PathVariable(value="id") Long idUsuario,

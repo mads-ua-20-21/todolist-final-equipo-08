@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -25,6 +26,13 @@ public class ProyectoService {
     @Transactional(readOnly = true)
     public Proyecto findById(Long proyectoId) {
         return proyectoRepository.findById(proyectoId).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Proyecto> findAllProyectos(){
+
+        List<Proyecto> proyectos = proyectoRepository.findAll();
+        return proyectos;
     }
 
     @Transactional(readOnly = true)
