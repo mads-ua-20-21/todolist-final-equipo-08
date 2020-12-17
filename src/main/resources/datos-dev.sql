@@ -15,3 +15,6 @@ INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('1', '2');
 
 INSERT INTO equipos (id, nombre, administrador_id) VALUES('2', 'Proyecto P3', '2');
 INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('2', '2');
+
+INSERT INTO proyectos (id, nombre, equipo_id) VALUES ('1','Proyecto MADS','1');
+INSERT INTO proyectos (id, nombre, equipo_id) VALUES ('2','Proyecto ADI','2');

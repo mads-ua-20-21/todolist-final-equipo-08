@@ -12,7 +12,8 @@
 
     <div class="row mt-3">
         <div class="col">
-            <h2 th:text="'Proyectos del usuario ' + ${usuario.nombre}"></h2>
+            <h2 th:if="${!session.administrador}" th:text="'Proyectos del usuario ' + ${usuario.nombre}"></h2>
+            <h2 th:if="${session.administrador}">Proyectos del sistema</h2>
         </div>
     </div>
 
