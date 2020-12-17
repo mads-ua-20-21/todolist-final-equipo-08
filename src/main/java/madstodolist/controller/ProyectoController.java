@@ -229,8 +229,11 @@ public class ProyectoController {
         }
 
         proyectoService.borrarProyecto(idProyecto);
-        flash.addFlashAttribute("mensaje", "Proyecto eliminado");
+        flash.addFlashAttribute("mensaje", "Proyecto eliminado correctamente");
 
+        if ((Boolean) session.getAttribute("administrador")){
+            return "redirect:/proyectos";
+        }
         return "redirect:/usuarios/"+ usuario.getId() + "/proyectos";
     }
 
