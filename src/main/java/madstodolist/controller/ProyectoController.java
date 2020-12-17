@@ -99,9 +99,9 @@ public class ProyectoController {
             throw new EquipoNotFoundException();
         }
 
-        //Comprobamos que el usuario logeado sea el admin del equipo
+        //Comprobamos que el usuario logeado sea el admin del equipo o el admin de la aplicacion
         if (!equipo.getUsuarioAdministrador().equals(usuario)){
-            throw new UsuarioNoAdminException();
+            managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
         }
 
         model.addAttribute("equipo",equipo);
@@ -128,7 +128,7 @@ public class ProyectoController {
 
         //Comprobamos que el usuario logeado sea el admin del equipo
         if (!equipo.getUsuarioAdministrador().equals(usuario)){
-            throw new UsuarioNoAdminException();
+            managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
         }
 
         proyectoService.nuevoProyecto(idEquipo,equipo.getNombre());
@@ -154,7 +154,7 @@ public class ProyectoController {
 
         //Comprobamos que el usuario logeado es el administrador del equipo del proyecto
         if (!proyectoMod.getEquipo().getUsuarioAdministrador().equals(usuario)){
-            throw new UsuarioNoAdminException();
+            managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
         }
         model.addAttribute("usuario", usuario);
 
@@ -182,7 +182,7 @@ public class ProyectoController {
 
         //Comprobamos que el usuario logeado es el administrador del equipo del proyecto
         if (!proyectoMod.getEquipo().getUsuarioAdministrador().equals(usuario)){
-            throw new UsuarioNoAdminException();
+            managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
         }
         model.addAttribute("usuario", usuario);
 
@@ -191,7 +191,32 @@ public class ProyectoController {
         return "redirect:/equipos/" + proyectoMod.getEquipo().getId();
     }
 
-    
+    @PostMapping("/proyectos/{id}/eliminar")
+    public String eliminarProyecto(@PathVariable(value="id") Long idProyecto, Model model,
+                                 RedirectAttributes flash, HttpSession session){
+
+        Proyecto proyecto = proyectoService.findById(idProyecto);
+        if (proyecto == null) {
+            throw new ProyectoNotFoundException();
+        }
+
+        managerUserSesion.usuarioLogueado(session);
+
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+
+        //Comprobamos que el usuario logeado es el administrador del equipo del proyecto
+        if (!proyecto.getEquipo().getUsuarioAdministrador().equals(usuario)){
+            managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
+        }
+
+        proyectoService.borrarProyecto(idProyecto);
+        flash.addFlashAttribute("mensaje", "Proyecto eliminado");
+
+        return "redirect:/usuarios/"+ usuario.getId() + "/proyectos";
+    }
 
     @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/nueva")
     public String formNuevaTareaProyecto(@PathVariable(value="id") Long idUsuario,
