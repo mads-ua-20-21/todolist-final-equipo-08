@@ -1,5 +1,8 @@
 package madstodolist.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -27,6 +30,11 @@ public class Tarea implements Serializable {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "proyecto_id")
+    private Proyecto proyecto;
+
     // Constructor vacío necesario para JPA/Hibernate.
     // Lo hacemos privado para que no se pueda usar desde el código de la aplicación. Para crear un
     // usuario en la aplicación habrá que llamar al constructor público. Hibernate sí que lo puede usar, a pesar
@@ -46,6 +54,14 @@ public class Tarea implements Serializable {
         this.usuario = usuario;
         this.titulo = titulo;
         this.prioridad = prioridad;
+        usuario.getTareas().add(this);
+    }
+
+    public Tarea(Usuario usuario, Proyecto proyecto, String titulo, Integer prioridad) {
+        this.usuario = usuario;
+        this.titulo = titulo;
+        this.prioridad = prioridad;
+        this.proyecto = proyecto;
         usuario.getTareas().add(this);
     }
 
@@ -80,6 +96,10 @@ public class Tarea implements Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public Proyecto getProyecto(){ return proyecto; }
+
+    public void setProyecto(Proyecto proyecto) { this.proyecto = proyecto; }
 
 
     @Override

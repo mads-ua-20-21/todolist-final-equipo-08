@@ -1,8 +1,10 @@
 package madstodolist;
 
 
+import madstodolist.model.Proyecto;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
+import madstodolist.service.ProyectoService;
 import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
 import org.junit.Test;
@@ -26,6 +28,9 @@ public class TareaServiceTest {
 
     @Autowired
     TareaService tareaService;
+
+    @Autowired
+    ProyectoService proyectoService;
 
 
     @Test
@@ -75,7 +80,7 @@ public class TareaServiceTest {
 
         // THEN
 
-        assertThat(tareas.size()).isEqualTo(2);
+        assertThat(tareas.size()).isEqualTo(4);
         assertThat(tareas).contains(lavarCoche);
     }
 
@@ -144,5 +149,19 @@ public class TareaServiceTest {
         // THEN
 
         assertThat(tareaService.findById(tarea.getId()).getPrioridad()).isEqualTo(3);
+    }
+
+    @Test
+    public void testObtenerProyectoTarea(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        //WHEN
+        Tarea tarea = tareaService.findById(3L);
+        Proyecto proyecto = tareaService.proyectoTarea(3L);
+
+        //THEN
+        assertThat(proyecto).isNotNull();
+        assertThat(proyecto.getNombre()).isEqualTo("Proyecto MADS");
     }
 }
