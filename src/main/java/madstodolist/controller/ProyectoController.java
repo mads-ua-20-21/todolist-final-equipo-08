@@ -235,7 +235,7 @@ public class ProyectoController {
         if ((Boolean) session.getAttribute("administrador")){
             return "redirect:/proyectos";
         }
-        return "redirect:/usuarios/"+ usuario.getId() + "/proyectos";
+        return "redirect:/equipos/"+ proyecto.getEquipo().getId();
     }
 
     @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/nueva")
