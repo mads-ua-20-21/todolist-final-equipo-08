@@ -14,7 +14,7 @@
     <form method="post" th:action="@{/proyectos/{id}/editar(id=${proyecto.id})}" th:object="${proyecto}">
         <div class="col-6">
             <div class="form-group">
-                <label for="nuevoNombre">Nuevo nombre del Equipo:</label>
+                <label for="nuevoNombre">Nuevo nombre del Proyecto:</label>
                 <input class="form-control" id="nuevoNombre" name="nuevoNombre" required th:field="*{nombre}" type="text"/>
             </div>
             <button class="btn btn-primary" type="submit">Cambiar nombre del proyecto</button>

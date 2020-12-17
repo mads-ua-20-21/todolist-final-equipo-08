@@ -147,8 +147,8 @@ public class ProyectoController {
             managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
         }
 
-        proyectoService.nuevoProyecto(idEquipo,equipo.getNombre());
-        flash.addFlashAttribute("mensaje", "Proyecto creada correctamente");
+        proyectoService.nuevoProyecto(idEquipo,proyecto.getNombre());
+        flash.addFlashAttribute("mensaje", "Proyecto creado correctamente");
         return "redirect:/equipos/" + idEquipo;
     }
 
