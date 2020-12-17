@@ -278,7 +278,7 @@ public class ProyectoController {
         }
 
         tareaService.nuevaTareaUsuario(idUsuario, idProyecto, tareaData.getTitulo(), tareaData.getPrioridad());
-        flash.addFlashAttribute("mensaje", "Tarea creada correctamente");
+        flash.addFlashAttribute("mensaje", "Tarea de proyecto creada correctamente");
         return "redirect:/usuarios/" + idUsuario + "/proyectos/" + idProyecto + "/tareas";
     }
 }
