@@ -15,6 +15,7 @@ import org.thymeleaf.util.ListUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -61,6 +62,17 @@ public class TareaService {
         }
         List<Tarea> tareas = new ArrayList(usuario.getTareas());
         Collections.sort(tareas, (a, b) -> a.getId() < b.getId() ? -1 : a.getId() == b.getId() ? 0 : 1);
+        return tareas;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tarea> filtrarTareasPorPalabra(Long idUsuario, String palabra) {
+        List<Tarea> tareas = allTareasUsuario(idUsuario);
+        if (palabra != ""){
+         tareas = allTareasUsuario(idUsuario).stream()
+                .filter(tarea -> tarea.getTitulo().toLowerCase(Locale.ROOT).contains(palabra.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.toList());
+        }
         return tareas;
     }
 

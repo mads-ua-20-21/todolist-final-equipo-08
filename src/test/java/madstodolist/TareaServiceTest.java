@@ -79,6 +79,39 @@ public class TareaServiceTest {
     }
 
     @Test
+    public void testFiltrarTareasPorPalabra(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Usuario usuario = new Usuario("ana.garcia@gmail.com");
+        usuario.setId(1L);
+
+        Tarea lavarCoche = new Tarea(usuario, "Lavar coche");
+        lavarCoche.setId(1L);
+
+        Tarea renovarDNI = new Tarea(usuario, "Renovar DNI");
+        lavarCoche.setId(2L);
+
+
+        // WHEN
+
+        List<Tarea> tareas = tareaService.allTareasUsuario(1L);
+        List<Tarea> tareasSinFiltro = tareaService.filtrarTareasPorPalabra(1L, "");
+        List<Tarea> tareasConDNI = tareaService.filtrarTareasPorPalabra(1L, "dni");
+
+        // THEN
+
+        assertThat(tareas.size()).isEqualTo(2);
+        assertThat(tareas).contains(lavarCoche);
+        assertThat(tareasSinFiltro.size()).isEqualTo(2);
+        assertThat(tareasSinFiltro).contains(lavarCoche);
+        assertThat(tareasSinFiltro).contains(renovarDNI);
+        assertThat(tareasConDNI.size()).isEqualTo(1);
+        assertThat(tareasConDNI).contains(renovarDNI);
+
+    }
+
+    @Test
     public void testFiltrarYExcluirTareaPorEstado(){
         // GIVEN
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
