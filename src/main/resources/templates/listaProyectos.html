@@ -24,22 +24,23 @@
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
-                    <th th:if="${session.administrador}">Acciones</th>
+                    <th>Equipo</th>
+                    <th th:if="${session.administrador}">Modificar</th>
+                    <th th:if="${session.administrador}">Eliminar</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="proyecto: ${proyectos}">
                     <td th:text="${proyecto.getId()}"></td>
                     <td ><a class="btn btn-link" th:text="${proyecto.getNombre()}" th:href="@{/usuarios/{id}/proyectos/{proyecto}/tareas(id=${usuario.getId()},proyecto=${proyecto.getId()})}"></a></td>
+                    <td th:text="${proyecto.equipo.nombre}"></td>
                     <td th:if="${session.administrador}">
-                        <form method="get" th:action="@{/proyectos/{id}/editar(id=${proyecto.getId()})}">
-                            <button class="btn btn-primary" type="submit">Modificar proyecto</button>
-                        </form>
-
+                        <a class="btn btn-primary" th:href="@{/proyectos/{id}/editar(id=${proyecto.getId()})}">Modificar proyecto</a>
+                    </td>
+                    <td th:if="${session.administrador}">
                         <form method="post" th:action="@{/proyectos/{id}/eliminar(id=${proyecto.getId()})}">
                             <button class="btn btn-danger" type="submit">Eliminar proyecto</button>
                         </form>
-
                     </td>
 
 

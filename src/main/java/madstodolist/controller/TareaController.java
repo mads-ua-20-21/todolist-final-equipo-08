@@ -108,7 +108,11 @@ public class TareaController {
         tareaService.modificaTarea(idTarea, tareaData.getTitulo());
         tareaService.asignarEditarPrioridad(idTarea, tareaData.getPrioridad());
         flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
-        return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
+
+        if (tarea.getProyecto() == null)
+            return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
+        else
+            return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/proyectos/" + tarea.getProyecto().getId() + "/tareas";
     }
 
     @DeleteMapping("/tareas/{id}")
