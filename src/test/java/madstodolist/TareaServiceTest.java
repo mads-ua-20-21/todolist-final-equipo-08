@@ -79,6 +79,69 @@ public class TareaServiceTest {
     }
 
     @Test
+    public void testFiltrarYExcluirTareaPorEstado(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Usuario usuario = new Usuario("ana.garcia@gmail.com");
+        usuario.setId(1L);
+
+        Tarea lavarCoche = new Tarea(usuario, "Lavar coche");
+        lavarCoche.setId(1L);
+
+        Tarea renovarDNI = new Tarea(usuario, "Renovar DNI");
+        lavarCoche.setId(2L);
+
+
+        // WHEN
+
+        List<Tarea> tareas = tareaService.allTareasUsuario(1L);
+        List<Tarea> tareasEnProceso = tareaService.filtrarTareasPorEstado(1L, 1);
+        List<Tarea> tareasNoEnProceso = tareaService.excluirTareasPorEstado(1L, 1);
+
+        // THEN
+
+        assertThat(tareas.size()).isEqualTo(2);
+        assertThat(tareas).contains(lavarCoche);
+        assertThat(tareasEnProceso.size()).isEqualTo(1);
+        assertThat(tareasEnProceso).contains(renovarDNI);
+        assertThat(tareasNoEnProceso.size()).isEqualTo(1);
+        assertThat(tareasNoEnProceso).doesNotContain(renovarDNI);
+
+    }
+
+    @Test
+    public void testOrdenarTareaPorEstado(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Usuario usuario = new Usuario("ana.garcia@gmail.com");
+        usuario.setId(1L);
+
+        Tarea lavarCoche = new Tarea(usuario, "Lavar coche");
+        lavarCoche.setId(1L);
+
+        Tarea renovarDNI = new Tarea(usuario, "Renovar DNI");
+        lavarCoche.setId(2L);
+
+
+        // WHEN
+
+        List<Tarea> tareas = tareaService.allTareasUsuario(1L);
+        List<Tarea> tareasPrimeroEnProceso = tareaService.orndenarTareasPrimerEstado(1L, 1);
+
+        // THEN
+
+        assertThat(tareas.size()).isEqualTo(2);
+        assertThat(tareas).contains(lavarCoche);
+        assertThat(tareas.get(0)).isNotEqualTo(renovarDNI);
+        assertThat(tareasPrimeroEnProceso.size()).isEqualTo(2);
+        assertThat(tareasPrimeroEnProceso).contains(lavarCoche);
+        assertThat(tareasPrimeroEnProceso.get(0)).isEqualTo(renovarDNI);
+
+    }
+
+    @Test
     public void testBuscarTarea() {
         // GIVEN
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql

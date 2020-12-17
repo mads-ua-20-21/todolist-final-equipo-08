@@ -9,10 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.thymeleaf.util.ListUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TareaService {
@@ -58,6 +62,35 @@ public class TareaService {
         List<Tarea> tareas = new ArrayList(usuario.getTareas());
         Collections.sort(tareas, (a, b) -> a.getId() < b.getId() ? -1 : a.getId() == b.getId() ? 0 : 1);
         return tareas;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tarea> filtrarTareasPorEstado(Long idUsuario, int estadoInt) {
+        return allTareasUsuario(idUsuario).stream()
+                .filter(tarea -> tarea.getEstado() == enteroAEstado(estadoInt))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tarea> excluirTareasPorEstado(Long idUsuario, int estadoInt) {
+        return allTareasUsuario(idUsuario).stream()
+                .filter(tarea -> tarea.getEstado() != enteroAEstado(estadoInt))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tarea> orndenarTareasPrimerEstado(Long idUsuario, int estadoInt) {
+        return Stream.concat(
+                filtrarTareasPorEstado(idUsuario, estadoInt).stream(),
+                excluirTareasPorEstado(idUsuario, estadoInt).stream())
+                .collect(Collectors.toList());
+    }
+
+    public Tarea.EstadoTarea enteroAEstado(int estadoInt){
+        Tarea.EstadoTarea estado = Tarea.EstadoTarea.PENDIENTE;
+        if (estadoInt==1) estado = Tarea.EstadoTarea.ENPROCESO;
+        else if (estadoInt==2) estado = Tarea.EstadoTarea.TERMINADA;
+        return estado;
     }
 
     @Transactional(readOnly = true)
