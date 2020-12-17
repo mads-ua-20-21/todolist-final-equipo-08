@@ -60,6 +60,7 @@ public class ProyectoController {
         model.addAttribute("proyectos", proyectos);
         return "listaProyectos";
     }
+
     @GetMapping("/proyectos")
     public String listarProyectos(Model model, HttpSession session){
 
@@ -75,7 +76,6 @@ public class ProyectoController {
         model.addAttribute("proyectos", proyectos);
         return "listaProyectos";
     }
-
 
     @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas")
     public String tareasProyecto(@PathVariable(value="id") Long idUsuario,
