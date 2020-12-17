@@ -46,7 +46,8 @@
                 </tbody>
             </table>
             <p><a class="btn btn-primary" th:href="@{/usuarios/{id}/proyectos/{proyecto}/tareas/nueva(id=${usuario.id},proyecto=${proyecto.id})}"> Nueva tarea proyecto</a>
-                <a class="btn btn-link" th:href="@{/usuarios/{id}/proyectos(id=${usuario.id})}">Volver</a></p>
+                <a class="btn btn-link" th:if="${!session.administrador}" th:href="@{/usuarios/{id}/proyectos(id=${usuario.id})}">Volver</a></p>
+                <a class="btn btn-link" th:if="${session.administrador}" href="/proyectos">Volver</a></p>
         </div>
     </div>
     <div class="row mt-2">

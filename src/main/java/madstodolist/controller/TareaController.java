@@ -92,6 +92,7 @@ public class TareaController {
 
         model.addAttribute("tarea", tarea);
         tareaData.setTitulo(tarea.getTitulo());
+        tareaData.setPrioridad(tarea.getPrioridad());
         return "formEditarTarea";
     }
 

@@ -28,7 +28,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="tarea: ${tareas}">
+                <tr th:each="tarea: ${tareas}" th:if="${tarea.proyecto == null}">
                     <td th:text="${tarea.id}"></td>
                     <td th:text="${tarea.titulo}"></td>
                     <td th:text="${tarea.prioridad}"></td>
