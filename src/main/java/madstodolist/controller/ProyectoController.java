@@ -176,6 +176,7 @@ public class ProyectoController {
 
         proyecto.setNombre(proyectoMod.getNombre());
         model.addAttribute("proyecto", proyecto);
+        model.addAttribute("equipo", proyectoMod.getEquipo());
 
         return "formEditarProyecto";
     }
