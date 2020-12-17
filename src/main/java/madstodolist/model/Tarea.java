@@ -1,5 +1,8 @@
 package madstodolist.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -28,6 +31,7 @@ public class Tarea implements Serializable {
     private Usuario usuario;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "proyecto_id")
     private Proyecto proyecto;
 
