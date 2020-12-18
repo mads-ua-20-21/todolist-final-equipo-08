@@ -19,6 +19,7 @@ public class Tarea implements Serializable {
     //@NotNull
     private Integer prioridad;
 
+
     @NotNull
     // Relación muchos-a-uno entre tareas y usuario
     @ManyToOne
@@ -26,6 +27,13 @@ public class Tarea implements Serializable {
     // el ID del usuario con el que está asociado una tarea
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+
+    @ManyToOne
+    // Nombre de la columna en la BD que guarda físicamente
+    // el ID de la categoria con el que está asociado una tarea
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
 
     // Constructor vacío necesario para JPA/Hibernate.
     // Lo hacemos privado para que no se pueda usar desde el código de la aplicación. Para crear un
@@ -79,6 +87,14 @@ public class Tarea implements Serializable {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
 
