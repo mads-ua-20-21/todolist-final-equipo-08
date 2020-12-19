@@ -30,10 +30,9 @@ public class Tarea implements Serializable {
 
 
     @ManyToOne
-    // Nombre de la columna en la BD que guarda físicamente
-    // el ID de la categoria con el que está asociado una tarea
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
+
 
     // Constructor vacío necesario para JPA/Hibernate.
     // Lo hacemos privado para que no se pueda usar desde el código de la aplicación. Para crear un
@@ -96,7 +95,6 @@ public class Tarea implements Serializable {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
-
 
     @Override
     public boolean equals(Object o) {

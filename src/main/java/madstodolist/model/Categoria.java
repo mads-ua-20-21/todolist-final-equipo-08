@@ -16,16 +16,26 @@ public class Categoria implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     private String titulo;
 
-    // Definimos el tipo de fetch como EAGER para que
-    // cualquier consulta que devuelve un usuario rellene automáticamente
-    // toda su lista de tareas
-    // CUIDADO!! No es recomendable hacerlo en aquellos casos en los
-    // que la relación pueda traer a memoria una gran cantidad de entidades
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
-    Set<Tarea> tareas = new HashSet<>();
+ /*
+    //@OneToMany(mappedBy = "tarea", fetch = FetchType.EAGER)
+    //Set<Tarea> tareas = new HashSet<>();
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "tarea_id")
+    private Tarea tarea;
+
+  */
+    @OneToMany(mappedBy = "categoria", fetch = FetchType.EAGER)
+    Set<Tarea> tarea = new HashSet<>();
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     // Constructor vacío necesario para JPA/Hibernate.
     // Lo hacemos privado para que no se pueda usar desde el código de la aplicación. Para crear un
@@ -36,8 +46,10 @@ public class Categoria implements Serializable {
     // Al crear una tarea la asociamos automáticamente a un
     // usuario. Actualizamos por tanto la lista de tareas del
     // usuario.
-    public Categoria(String titulo) {
+    public Categoria(String titulo, Usuario usuario) {
+        this.usuario = usuario;
         this.titulo = titulo;
+        usuario.getCategorias().add(this);
     }
 
     public Long getId() {
@@ -56,14 +68,22 @@ public class Categoria implements Serializable {
         this.titulo = titulo;
     }
 
+    public Usuario getUsuario() { return usuario; }
+
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+
     public Set<Tarea> getTareas() {
-        return tareas;
+        return tarea;
     }
 
     public void setTareas(Set<Tarea> tareas) {
-        this.tareas = tareas;
+        this.tarea = tareas;
     }
 
+
+    //public Tarea getTarea() { return tarea; }
+
+    //public void setTarea(Tarea tarea) { this.tarea = tarea; }
 
     @Override
     public boolean equals(Object o) {
@@ -74,7 +94,8 @@ public class Categoria implements Serializable {
             // Si tenemos los ID, comparamos por ID
             return Objects.equals(id, categoria.id);
         // sino comparamos por campos obligatorios
-        return titulo.equals(categoria.titulo);
+        return titulo.equals(categoria.titulo)/* &&
+                usuario.equals(categoria.usuario)*/;
     }
 
     @Override

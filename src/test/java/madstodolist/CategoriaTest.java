@@ -36,10 +36,12 @@ public class CategoriaTest {
     public void crearCategoria() throws Exception {
         // GIVEN
         Usuario usuario = new Usuario("juan.gutierrez@gmail.com");
+        usuario.setId(1L);
 
         // WHEN
 
-        Categoria categoria = new Categoria("Casa");
+        Categoria categoria = new Categoria("Casa", usuario);
+        categoria.setId(1L);
 
         // THEN
 
