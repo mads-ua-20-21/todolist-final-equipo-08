@@ -6,7 +6,9 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tareas")
@@ -34,6 +36,9 @@ public class Tarea implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "proyecto_id")
     private Proyecto proyecto;
+
+    @OneToMany(mappedBy = "tarea", fetch = FetchType.EAGER)
+    Set<Comentario> comentarios = new HashSet<>();
 
     // Constructor vacío necesario para JPA/Hibernate.
     // Lo hacemos privado para que no se pueda usar desde el código de la aplicación. Para crear un
@@ -100,6 +105,10 @@ public class Tarea implements Serializable {
     public Proyecto getProyecto(){ return proyecto; }
 
     public void setProyecto(Proyecto proyecto) { this.proyecto = proyecto; }
+
+    public Set<Comentario> getComentarios() {return this.comentarios;}
+
+    public void setComentarios (Set<Comentario> comentarios){this.comentarios = comentarios;}
 
 
     @Override

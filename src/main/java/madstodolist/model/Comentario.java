@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "proyectos")
+@Table(name = "comentarios")
 public class Comentario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,7 +25,7 @@ public class Comentario implements Serializable {
     @NotNull
     private String mensaje;
 
-    @NotNull
+    //@NotNull
     private Date fechaHora;
 
     @NotNull
@@ -35,16 +35,16 @@ public class Comentario implements Serializable {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "usuario")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
 
-    private Comentario() {
-    }
+    private Comentario() {}
 
     public Comentario(Tarea tarea, Usuario usuario, String mensaje) {
         this.tarea = tarea;
         this.usuario = usuario;
+        this.mensaje = mensaje;
         this.fechaHora = new Date(System.currentTimeMillis());
     }
 
