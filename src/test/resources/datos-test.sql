@@ -16,3 +16,4 @@ INSERT INTO tareas (id, titulo, prioridad, usuario_id, proyecto_id) VALUES('3', 
 INSERT INTO tareas (id, titulo, prioridad, usuario_id, proyecto_id) VALUES('4', 'Implementar Tests', '1', '1','1');
 INSERT INTO proyectos (id, nombre, equipo_id) VALUES ('3','Proyecto DCA','3');
 INSERT INTO proyectos (id, nombre, equipo_id) VALUES ('4','Proyecto IW', '3');
+INSERT INTO comentarios (id, mensaje, usuario_id, tarea_id) VALUES ('1','Primer comentario','1','3');
