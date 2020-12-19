@@ -2,6 +2,8 @@ package madstodolist;
 
 import madstodolist.model.Comentario;
 import madstodolist.model.Equipo;
+import madstodolist.model.Tarea;
+import madstodolist.model.Usuario;
 import madstodolist.service.ComentarioService;
 import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
@@ -41,6 +43,24 @@ public class ComentarioServiceTest {
         // THEN
         assertThat(comentarios).hasSize(1);
         assertThat(comentarios.get(0).getMensaje()).isEqualTo("Primer comentario");
+    }
+
+    @Test
+    @Transactional
+    public void testNuevoComentario(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        // WHEN
+        Usuario usuario = usuarioService.findById(1L);
+        Tarea tarea = tareaService.findById(3L);
+
+        Comentario comentario = comentarioService.nuevoComentario("Pole", usuario, tarea);
+
+
+        // THEN
+        assertThat(comentario).isNotNull();
+        assertThat(comentario.getMensaje()).isEqualTo("Pole");
     }
 
 }

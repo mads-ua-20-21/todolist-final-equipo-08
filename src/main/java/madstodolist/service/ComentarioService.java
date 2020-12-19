@@ -40,4 +40,30 @@ public class ComentarioService {
         comentarios.sort(Comparator.comparing(Comentario::getFechaHoraString));
         return comentarios;
     }
+
+    @Transactional
+    public Comentario nuevoComentario(String mensaje, Usuario usuario, Tarea tarea){
+        Comentario comentario = new Comentario(tarea, usuario, mensaje);
+        comentarioRepository.save(comentario);
+
+        return comentario;
+    }
+
+    @Transactional (readOnly = true)
+    public Comentario existeComentario(Long idComentario) {
+        Comentario comentario = comentarioRepository.findById(idComentario).orElse(null);
+        if (comentario == null) {
+            throw new UsuarioServiceException("Comentario " + idComentario + " no existe ");
+        }
+        return comentario;
+    }
+
+    @Transactional
+    public void eliminarComentario(Long idUsuario, Long idComentario){
+
+        Comentario comentario = existeComentario(idComentario);
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        usuario.getComentarios().remove(comentario);
+        comentarioRepository.delete(comentario);
+    }
 }
