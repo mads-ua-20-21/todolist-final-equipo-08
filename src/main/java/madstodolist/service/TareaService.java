@@ -114,4 +114,15 @@ public class TareaService {
         }
         return tarea.getProyecto();
     }
+
+    @Transactional(readOnly = true)
+    public List<Comentario> comentariosTarea(Long idTarea){
+
+        Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
+        if (tarea == null) {
+            throw new TareaServiceException("No existe tarea con id " + idTarea);
+        }
+        List<Comentario> comentarios = new ArrayList(tarea.getComentarios());
+        return comentarios;
+    }
 }

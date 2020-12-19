@@ -63,4 +63,24 @@ public class ComentarioServiceTest {
         assertThat(comentario.getMensaje()).isEqualTo("Pole");
     }
 
+    @Test
+    @Transactional
+    public void testEliminarComentario(){
+
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+        Comentario comentario = comentarioService.findById(1L);
+        assertThat(comentarioService.findAllOrderedByName().size()).isEqualTo(1);
+        assertThat(comentarioService.findAllOrderedByName().contains(comentario));
+        Usuario usuario = usuarioService.findById(1L);
+
+        // WHEN
+        comentarioService.eliminarComentario(usuario.getId(),comentario.getId());
+
+
+        // THEN
+        assertThat(comentarioService.findAllOrderedByName().size()).isEqualTo(0);
+        assertThat(!comentarioService.findAllOrderedByName().contains(comentario));
+    }
+
 }
