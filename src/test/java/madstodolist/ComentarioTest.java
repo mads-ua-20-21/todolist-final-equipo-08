@@ -43,18 +43,18 @@ public class ComentarioTest {
         Comentario comentario2 = new Comentario(tarea, usuario, "Primer comentario funcionado");
         Comentario comentario3 = new Comentario(tarea, usuario, "Segundo comentario funcionado");
 
-        //Igualdad por nombre
-        assertThat(comentario1).isEqualTo(comentario2);
-        assertThat(comentario1).isNotEqualTo(comentario3);
+        //Igualdad por mensaje
+        assertThat(comentario1.getMensaje()).isEqualTo(comentario2.getMensaje());
+        assertThat(comentario1.getMensaje()).isNotEqualTo(comentario3.getMensaje());
 
         //Asignamos IPs
         comentario1.setId(1L);
         comentario2.setId(2L);
         comentario3.setId(2L);
 
-        //Igualdad por ID
+        //Desigualdad por ID
         assertThat(comentario1).isNotEqualTo(comentario2);
-        assertThat(comentario1).isEqualTo(comentario3);
+        assertThat(comentario1.getId()).isNotEqualTo(comentario3.getId());
     }
 
     @Test
@@ -111,8 +111,7 @@ public class ComentarioTest {
         Comentario comentario = comentarioRepository.findById(1L).orElse(null);
 
         //THEN
-        assertThat(proyecto).isNotNull();
-        assertThat(proyecto.getTareas().size()).isEqualTo(2);
-        assertThat(proyecto.getTareas().contains(tarea)).isTrue();
+        assertThat(comentario).isNotNull();
+        assertThat(comentario.getTarea()).isEqualTo(tarea);
     }
 }
