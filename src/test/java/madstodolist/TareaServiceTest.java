@@ -1,6 +1,7 @@
 package madstodolist;
 
 
+import madstodolist.model.Comentario;
 import madstodolist.model.Proyecto;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
@@ -82,6 +83,30 @@ public class TareaServiceTest {
 
         assertThat(tareas.size()).isEqualTo(4);
         assertThat(tareas).contains(lavarCoche);
+    }
+
+    @Test
+    public void testListadoComentarios() {
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Usuario usuario = new Usuario("ana.garcia@gmail.com");
+        usuario.setId(1L);
+
+        Tarea tarea = new Tarea(usuario, "Crear mockups");
+        tarea.setId(3L);
+
+        Comentario comentario = new Comentario(tarea, usuario, "Primer comentario");
+        comentario.setId(1L);
+
+        // WHEN
+
+        List<Comentario> comentarios = tareaService.comentariosTarea(3L);
+
+        // THEN
+
+        assertThat(comentarios.size()).isEqualTo(1);
+        assertThat(comentarios).contains(comentario);
     }
 
     @Test
