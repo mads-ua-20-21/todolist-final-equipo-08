@@ -94,8 +94,8 @@ public class Categoria implements Serializable {
             // Si tenemos los ID, comparamos por ID
             return Objects.equals(id, categoria.id);
         // sino comparamos por campos obligatorios
-        return titulo.equals(categoria.titulo)/* &&
-                usuario.equals(categoria.usuario)*/;
+        return titulo.equals(categoria.titulo) &&
+                usuario.equals(categoria.usuario);
     }
 
     @Override

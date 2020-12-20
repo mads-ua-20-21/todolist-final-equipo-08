@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -41,6 +42,17 @@ public class CategoriaService {
         Categoria categoria = new Categoria(tituloCategoria, usuario);
         categoriaRepository.save(categoria);
         return categoria;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Categoria> allCategoriasUsuario(Long idUsuario) {
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new TareaServiceException("Usuario " + idUsuario + " no existe al listar tareas ");
+        }
+        List<Categoria> categorias = new ArrayList(usuario.getCategorias());
+        //Collections.sort(tareas, (a, b) -> a.getId() < b.getId() ? -1 : a.getId() == b.getId() ? 0 : 1);
+        return categorias;
     }
 
 
