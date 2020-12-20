@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Tarea implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public enum EstadoTarea {PENDIENTE, ENPROCESO, TERMINADA;}
+    public enum EstadoTarea {PENDIENTE, ACTIVA, TERMINADA;}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

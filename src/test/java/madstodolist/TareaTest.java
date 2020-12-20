@@ -87,14 +87,14 @@ public class TareaTest {
         // WHEN
 
         Tarea tarea = new Tarea(usuario, "Práctica 1 de MADS", 1);
-        tarea.setEstado(Tarea.EstadoTarea.ENPROCESO);
+        tarea.setEstado(Tarea.EstadoTarea.ACTIVA);
 
         // THEN
 
         assertThat(tarea.getTitulo()).isEqualTo("Práctica 1 de MADS");
         assertThat(tarea.getUsuario()).isEqualTo(usuario);
         assertThat(tarea.getPrioridad()).isEqualTo(1);
-        assertThat(tarea.getEstado()).isEqualTo(Tarea.EstadoTarea.ENPROCESO);
+        assertThat(tarea.getEstado()).isEqualTo(Tarea.EstadoTarea.ACTIVA);
     }
 
     @Test

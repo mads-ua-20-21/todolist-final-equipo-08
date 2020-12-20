@@ -70,7 +70,8 @@ public class TareaService {
         List<Tarea> tareas = allTareasUsuario(idUsuario);
         if (palabra != ""){
          tareas = allTareasUsuario(idUsuario).stream()
-                .filter(tarea -> tarea.getTitulo().toLowerCase(Locale.ROOT).contains(palabra.toLowerCase(Locale.ROOT)))
+                .filter(tarea -> tarea.getTitulo().toLowerCase(Locale.ROOT)
+                        .contains(palabra.toLowerCase(Locale.ROOT)))
                 .collect(Collectors.toList());
         }
         return tareas;
@@ -79,14 +80,14 @@ public class TareaService {
     @Transactional(readOnly = true)
     public List<Tarea> filtrarTareasPorEstado(Long idUsuario, int estadoInt) {
         return allTareasUsuario(idUsuario).stream()
-                .filter(tarea -> tarea.getEstado() == enteroAEstado(estadoInt))
+                .filter(tarea -> tarea.getEstado().ordinal() == estadoInt)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<Tarea> excluirTareasPorEstado(Long idUsuario, int estadoInt) {
         return allTareasUsuario(idUsuario).stream()
-                .filter(tarea -> tarea.getEstado() != enteroAEstado(estadoInt))
+                .filter(tarea -> tarea.getEstado().ordinal() != estadoInt)
                 .collect(Collectors.toList());
     }
 
@@ -96,13 +97,6 @@ public class TareaService {
                 filtrarTareasPorEstado(idUsuario, estadoInt).stream(),
                 excluirTareasPorEstado(idUsuario, estadoInt).stream())
                 .collect(Collectors.toList());
-    }
-
-    public Tarea.EstadoTarea enteroAEstado(int estadoInt){
-        Tarea.EstadoTarea estado = Tarea.EstadoTarea.PENDIENTE;
-        if (estadoInt==1) estado = Tarea.EstadoTarea.ENPROCESO;
-        else if (estadoInt==2) estado = Tarea.EstadoTarea.TERMINADA;
-        return estado;
     }
 
     @Transactional(readOnly = true)
@@ -141,13 +135,20 @@ public class TareaService {
     }
 
     @Transactional
-    public Tarea actualizarEstado(Long idTarea, Tarea.EstadoTarea nuevoEstado){
+    public Tarea actualizarEstado(Long idTarea, int nuevoEstado){
         Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
         if (tarea == null) {
             throw new TareaServiceException("No existe tarea con id " + idTarea);
         }
-        tarea.setEstado(nuevoEstado);
+        tarea.setEstado(enteroAEstado(nuevoEstado));
         tareaRepository.save(tarea);
         return tarea;
+    }
+
+    public Tarea.EstadoTarea enteroAEstado(int estadoInt){
+        Tarea.EstadoTarea estado = Tarea.EstadoTarea.PENDIENTE;
+        if (estadoInt==1) estado = Tarea.EstadoTarea.ACTIVA;
+        else if (estadoInt==2) estado = Tarea.EstadoTarea.TERMINADA;
+        return estado;
     }
 }

@@ -75,6 +75,76 @@ public class TareaController {
         return "listaTareas";
     }
 
+
+    @GetMapping("/usuarios/{id}/tareas/filtrar")
+    public String listadoTareasFiltrarEstado(@PathVariable(value="id") Long idUsuario,
+                                             @ModelAttribute(value="filtrarEstado") int filtrarEstado,
+                                Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+
+        Usuario usuario = usuarioService.findById(idUsuario);
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        List<Tarea> tareas = tareaService.filtrarTareasPorEstado(idUsuario, filtrarEstado);
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("tareas", tareas);
+
+        return "listaTareas";
+    }
+
+    @GetMapping("/usuarios/{id}/tareas/excluir")
+    public String listadoTareasExcluirEstado(@PathVariable(value="id") Long idUsuario,
+                                             @ModelAttribute(value="excluir") int estado,
+                                             Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+
+        Usuario usuario = usuarioService.findById(idUsuario);
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        List<Tarea> tareas = tareaService.excluirTareasPorEstado(idUsuario, estado);
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("tareas", tareas);
+        return "listaTareas";
+    }
+
+    @GetMapping("/usuarios/{id}/tareas/ordenar")
+    public String orndenarTareasPrimerEstado(@PathVariable(value="id") Long idUsuario,
+                                             @ModelAttribute(value="ordenar") int estado,
+                                             Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+
+        Usuario usuario = usuarioService.findById(idUsuario);
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        List<Tarea> tareas = tareaService.orndenarTareasPrimerEstado(idUsuario, estado);
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("tareas", tareas);
+        return "listaTareas";
+    }
+
+    @GetMapping("/usuarios/{id}/tareas/buscar")
+    public String buscarTareaPalabra(@PathVariable(value="id") Long idUsuario,
+                                     @ModelAttribute(value="palabra") String palabra,
+                                             Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+
+        Usuario usuario = usuarioService.findById(idUsuario);
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        List<Tarea> tareas = tareaService.filtrarTareasPorPalabra(idUsuario, palabra);
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("tareas", tareas);
+        return "listaTareas";
+    }
+
     @GetMapping("/tareas/{id}/editar")
     public String formEditaTarea(@PathVariable(value="id") Long idTarea, @ModelAttribute TareaData tareaData,
                                  Model model, HttpSession session) {
@@ -107,7 +177,24 @@ public class TareaController {
 
         tareaService.modificaTarea(idTarea, tareaData.getTitulo());
         tareaService.asignarEditarPrioridad(idTarea, tareaData.getPrioridad());
+        tareaService.actualizarEstado(idTarea, tareaData.getEstado());
         flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
+        return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
+    }
+
+    @PostMapping("/tareas/{id}/estado")
+    public String modificarEstadoTarea(@PathVariable(value="id") Long idTarea,
+                                       @ModelAttribute(value="estado") int estado,
+                                       Model model, RedirectAttributes flash, HttpSession session) {
+        Tarea tarea = tareaService.findById(idTarea);
+        if (tarea == null) {
+            throw new TareaNotFoundException();
+        }
+
+        managerUserSesion.comprobarUsuarioLogeado(session, tarea.getUsuario().getId());
+
+        tareaService.actualizarEstado(idTarea, estado);
+        flash.addFlashAttribute("mensaje", "Estado de la tarea modificado correctamente");
         return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
     }
 

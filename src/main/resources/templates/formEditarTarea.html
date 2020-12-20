@@ -24,6 +24,12 @@
                 <option value=2>Prioridad 2</option>
                 <option value=3>Prioridad 3</option>
             </select>
+            <label for="estado">Estado de la tarea:</label>
+            <select class="custom-select" id="estado" name="estado" required type="integer">
+                <option value=0 th:selected="${tarea.getEstado().ordinal() == 0}">PENDIENTE</option>
+                <option value=1 th:selected="${tarea.getEstado().ordinal() == 1}">ACTIVA</option>
+                <option value=2 th:selected="${tarea.getEstado().ordinal() == 2}">TERMINADA</option>
+            </select>
         </div>
         <button class="btn btn-primary" type="submit">Modificar tarea</button>
         <a class="btn btn-link" th:href="@{/usuarios/{id}/tareas(id=${tarea.usuario.id})}">Cancelar</a>

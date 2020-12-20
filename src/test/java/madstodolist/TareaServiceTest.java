@@ -252,15 +252,15 @@ public class TareaServiceTest {
 
         // WHEN
 
-        Tarea tareaModificada = tareaService.actualizarEstado(idNuevaTarea, Tarea.EstadoTarea.ENPROCESO);
+        Tarea tareaModificada = tareaService.actualizarEstado(idNuevaTarea, 1);
         Tarea tareaBD = tareaService.findById(idNuevaTarea);
 
         // THEN
 
         assertThat(tareaModificada.getTitulo()).isEqualTo("Estudiar MADS");
-        assertThat(tareaModificada.getEstado()).isEqualTo(Tarea.EstadoTarea.ENPROCESO);
+        assertThat(tareaModificada.getEstado()).isEqualTo(Tarea.EstadoTarea.ACTIVA);
         assertThat(tareaBD.getTitulo()).isEqualTo("Estudiar MADS");
-        assertThat(tareaBD.getEstado()).isEqualTo(Tarea.EstadoTarea.ENPROCESO);
+        assertThat(tareaBD.getEstado()).isEqualTo(Tarea.EstadoTarea.ACTIVA);
     }
 }
 
