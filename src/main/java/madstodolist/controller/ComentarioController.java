@@ -41,6 +41,7 @@ public class ComentarioController {
     public String comentariosTarea(@PathVariable(value="id") Long idUsuario,
                                  @PathVariable(value="proyecto") Long idProyecto,
                                  @PathVariable(value="tarea") Long idTarea,
+                                   @ModelAttribute Comentario comentario,
                                  Model model, HttpSession session){
 
         managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
@@ -58,6 +59,7 @@ public class ComentarioController {
         if (tarea == null) {
             throw new TareaNotFoundException();
         }
+        model.addAttribute("tarea", tarea);
         if (!proyectoService.tareasProyecto(idProyecto).contains(tarea)){
             throw  new ProyectoNotContainsTareaException();
         }
