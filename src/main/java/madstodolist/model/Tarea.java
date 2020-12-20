@@ -37,8 +37,7 @@ public class Tarea implements Serializable {
     @JoinColumn(name = "proyecto_id")
     private Proyecto proyecto;
 
-    @OneToMany(mappedBy = "tarea", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "tarea", fetch = FetchType.EAGER)
     Set<Comentario> comentarios = new HashSet<>();
 
     // Constructor vacío necesario para JPA/Hibernate.
