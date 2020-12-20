@@ -15,14 +15,19 @@ import java.util.Set;
 public class Tarea implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public enum EstadoTarea {PENDIENTE, ACTIVA, TERMINADA;}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     private String titulo;
-    //@NotNull
+
     private Integer prioridad;
+
+    @NotNull
+    @Enumerated(EnumType.ORDINAL)
+    private EstadoTarea estado;
 
     @NotNull
     // Relación muchos-a-uno entre tareas y usuario
@@ -52,6 +57,7 @@ public class Tarea implements Serializable {
     public Tarea(Usuario usuario, String titulo) {
         this.usuario = usuario;
         this.titulo = titulo;
+        this.estado = EstadoTarea.PENDIENTE;
         usuario.getTareas().add(this);
     }
 
@@ -59,6 +65,7 @@ public class Tarea implements Serializable {
         this.usuario = usuario;
         this.titulo = titulo;
         this.prioridad = prioridad;
+        this.estado = EstadoTarea.PENDIENTE;
         usuario.getTareas().add(this);
     }
 
@@ -102,6 +109,11 @@ public class Tarea implements Serializable {
         this.usuario = usuario;
     }
 
+
+    public void setEstado(EstadoTarea estado) { this.estado = estado; }
+
+    public EstadoTarea getEstado() { return estado; }
+
     public Proyecto getProyecto(){ return proyecto; }
 
     public void setProyecto(Proyecto proyecto) { this.proyecto = proyecto; }
@@ -109,7 +121,6 @@ public class Tarea implements Serializable {
     public Set<Comentario> getComentarios() {return this.comentarios;}
 
     public void setComentarios (Set<Comentario> comentarios){this.comentarios = comentarios;}
-
 
     @Override
     public boolean equals(Object o) {
