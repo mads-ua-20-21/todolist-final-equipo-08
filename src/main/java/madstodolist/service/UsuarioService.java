@@ -122,4 +122,15 @@ public class UsuarioService {
 
         return proyectos;
     }
+
+    @Transactional(readOnly = true)
+    public List<Comentario> comentariosUsuario(Long idUsuario){
+
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+        List<Comentario> comentarios = new ArrayList(usuario.getComentarios());
+        return comentarios;
+    }
 }
