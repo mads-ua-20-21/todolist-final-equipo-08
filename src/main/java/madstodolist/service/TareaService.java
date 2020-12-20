@@ -166,12 +166,12 @@ public class TareaService {
         return tarea;
     }
 
-    public Tarea.EstadoTarea enteroAEstado(int estadoInt){
+    public Tarea.EstadoTarea enteroAEstado(int estadoInt) {
         Tarea.EstadoTarea estado = Tarea.EstadoTarea.PENDIENTE;
-        if (estadoInt==1) estado = Tarea.EstadoTarea.ACTIVA;
-        else if (estadoInt==2) estado = Tarea.EstadoTarea.TERMINADA;
+        if (estadoInt == 1) estado = Tarea.EstadoTarea.ACTIVA;
+        else if (estadoInt == 2) estado = Tarea.EstadoTarea.TERMINADA;
         return estado;
-        
+    }
 
     @Transactional(readOnly = true)
     public List<Comentario> comentariosTarea(Long idTarea){

@@ -131,9 +131,9 @@ public class TareaServiceTest {
 
         // THEN
 
-        assertThat(tareas.size()).isEqualTo(2);
+        assertThat(tareas.size()).isEqualTo(4);
         assertThat(tareas).contains(lavarCoche);
-        assertThat(tareasSinFiltro.size()).isEqualTo(2);
+        assertThat(tareasSinFiltro.size()).isEqualTo(4);
         assertThat(tareasSinFiltro).contains(lavarCoche);
         assertThat(tareasSinFiltro).contains(renovarDNI);
         assertThat(tareasConDNI.size()).isEqualTo(1);
@@ -164,11 +164,11 @@ public class TareaServiceTest {
 
         // THEN
 
-        assertThat(tareas.size()).isEqualTo(2);
+        assertThat(tareas.size()).isEqualTo(4);
         assertThat(tareas).contains(lavarCoche);
         assertThat(tareasEnProceso.size()).isEqualTo(1);
         assertThat(tareasEnProceso).contains(renovarDNI);
-        assertThat(tareasNoEnProceso.size()).isEqualTo(1);
+        assertThat(tareasNoEnProceso.size()).isEqualTo(3);
         assertThat(tareasNoEnProceso).doesNotContain(renovarDNI);
 
     }
@@ -195,10 +195,10 @@ public class TareaServiceTest {
 
         // THEN
 
-        assertThat(tareas.size()).isEqualTo(2);
+        assertThat(tareas.size()).isEqualTo(4);
         assertThat(tareas).contains(lavarCoche);
         assertThat(tareas.get(0)).isNotEqualTo(renovarDNI);
-        assertThat(tareasPrimeroEnProceso.size()).isEqualTo(2);
+        assertThat(tareasPrimeroEnProceso.size()).isEqualTo(4);
         assertThat(tareasPrimeroEnProceso).contains(lavarCoche);
         assertThat(tareasPrimeroEnProceso.get(0)).isEqualTo(renovarDNI);
     }
