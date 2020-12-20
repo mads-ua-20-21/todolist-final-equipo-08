@@ -76,7 +76,7 @@
                 <tbody>
                 <tr th:each="proyecto: ${equipo.proyectos}">
                     <td th:text="${proyecto.id}"></td>
-                    <td th:text="${proyecto.nombre}"></td>
+                    <td><a class="btn btn-link" th:text="${proyecto.getNombre()}" th:href="@{/usuarios/{id}/proyectos/{proyecto}/tareas(id=${usuario.getId()},proyecto=${proyecto.getId()})}"></a></td>
                     <td th:if="${usuario.getId()==equipo.getUsuarioAdministrador().getId() || usuario.getAdministrador()}" >
                         <a class="btn btn-primary btn-xs" th:href="@{/proyectos/{id}/editar(id=${proyecto.id})}"/>Editar proyecto</a>
                         <form method="post" th:action="@{/proyectos/{id}/eliminar(id=${proyecto.id})}">

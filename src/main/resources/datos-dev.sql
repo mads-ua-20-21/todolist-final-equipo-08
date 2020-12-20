@@ -19,7 +19,7 @@ INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('2', '2');
 
 INSERT INTO proyectos (id, nombre, equipo_id) VALUES ('1','Proyecto MADS','1');
 INSERT INTO proyectos (id, nombre, equipo_id) VALUES ('2','Proyecto ADI','2');
-INSERT INTO tareas (id, titulo, prioridad, usuario_id, proyecto_id) VALUES('5', 'Crear mockups', '1', '1','1');
-INSERT INTO tareas (id, titulo, prioridad, usuario_id, proyecto_id) VALUES('6', 'Implementar Tests', '1', '1','1');
+INSERT INTO tareas (id, titulo, prioridad, usuario_id, estado, proyecto_id) VALUES('5', 'Crear mockups', '1', '1', '0', '1');
+INSERT INTO tareas (id, titulo, prioridad, usuario_id, estado, proyecto_id) VALUES('6', 'Implementar Tests', '1', '1', '0','1');
 
 INSERT INTO comentarios (id, mensaje, usuario_id, tarea_id) VALUES ('1','Comentario de prueba','1','5');
