@@ -1,8 +1,11 @@
 package madstodolist;
 
 
+import madstodolist.model.Comentario;
+import madstodolist.model.Proyecto;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
+import madstodolist.service.ProyectoService;
 import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
 import org.junit.Test;
@@ -25,6 +28,9 @@ public class TareaServiceTest {
 
     @Autowired
     TareaService tareaService;
+
+    @Autowired
+    ProyectoService proyectoService;
 
 
     @Test
@@ -74,10 +80,34 @@ public class TareaServiceTest {
 
         // THEN
 
-        assertThat(tareas.size()).isEqualTo(2);
+        assertThat(tareas.size()).isEqualTo(4);
         assertThat(tareas).contains(lavarCoche);
     }
 
+    @Test
+    public void testListadoComentarios() {
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        Usuario usuario = new Usuario("ana.garcia@gmail.com");
+        usuario.setId(1L);
+        
+        Tarea tarea = new Tarea(usuario, "Crear mockups");
+        tarea.setId(3L);
+
+        Comentario comentario = new Comentario(tarea, usuario, "Primer comentario");
+        comentario.setId(1L);
+
+        // WHEN
+
+        List<Comentario> comentarios = tareaService.comentariosTarea(3L);
+
+        // THEN
+
+        assertThat(comentarios.size()).isEqualTo(1);
+        assertThat(comentarios).contains(comentario);
+    }
+  
     @Test
     public void testFiltrarTareasPorPalabra(){
         // GIVEN
@@ -171,7 +201,6 @@ public class TareaServiceTest {
         assertThat(tareasPrimeroEnProceso.size()).isEqualTo(2);
         assertThat(tareasPrimeroEnProceso).contains(lavarCoche);
         assertThat(tareasPrimeroEnProceso.get(0)).isEqualTo(renovarDNI);
-
     }
 
     @Test
@@ -261,6 +290,20 @@ public class TareaServiceTest {
         assertThat(tareaModificada.getEstado()).isEqualTo(Tarea.EstadoTarea.ACTIVA);
         assertThat(tareaBD.getTitulo()).isEqualTo("Estudiar MADS");
         assertThat(tareaBD.getEstado()).isEqualTo(Tarea.EstadoTarea.ACTIVA);
+    }
+
+    @Test
+    public void testObtenerProyectoTarea(){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        //WHEN
+        Tarea tarea = tareaService.findById(3L);
+        Proyecto proyecto = tareaService.proyectoTarea(3L);
+
+        //THEN
+        assertThat(proyecto).isNotNull();
+        assertThat(proyecto.getNombre()).isEqualTo("Proyecto MADS");
     }
 }
 

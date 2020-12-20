@@ -1,5 +1,6 @@
 package madstodolist;
 
+import madstodolist.model.Proyecto;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import madstodolist.service.UsuarioService;
@@ -178,6 +179,23 @@ public class UsuarioServiceTest {
 
         assertThat(usuarioModificado.getBloqueado()).isEqualTo(true);
         assertThat(usuarioBD.getBloqueado()).isEqualTo(true);
+
+    }
+
+    @Test
+    public void obtenerProyectosUsuario (){
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        // WHEN
+        Usuario usuario = usuarioService.findById(2L);
+
+        //THEN
+        assertThat(usuario).isNotNull();
+        assertThat(usuarioService.equiposUsuario(2L).get(0).getNombre()).isEqualTo("Proyecto P4");
+        assertThat(usuarioService.proyectosUsuario(2L).size()).isEqualTo(2);
+        assertThat(usuarioService.proyectosUsuario(2L).get(0).getNombre()).isEqualTo("Proyecto IW");
+        assertThat(usuarioService.proyectosUsuario(2L).get(1).getNombre()).isEqualTo("Proyecto DCA");
 
     }
 }

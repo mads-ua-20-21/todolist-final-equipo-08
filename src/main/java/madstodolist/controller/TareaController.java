@@ -162,6 +162,7 @@ public class TareaController {
 
         model.addAttribute("tarea", tarea);
         tareaData.setTitulo(tarea.getTitulo());
+        tareaData.setPrioridad(tarea.getPrioridad());
         return "formEditarTarea";
     }
 
@@ -179,7 +180,11 @@ public class TareaController {
         tareaService.asignarEditarPrioridad(idTarea, tareaData.getPrioridad());
         tareaService.actualizarEstado(idTarea, tareaData.getEstado());
         flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
-        return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
+
+        if (tarea.getProyecto() == null)
+            return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
+        else
+            return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/proyectos/" + tarea.getProyecto().getId() + "/tareas";
     }
 
     @PostMapping("/tareas/{id}/estado")

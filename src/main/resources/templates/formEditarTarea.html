@@ -32,7 +32,9 @@
             </select>
         </div>
         <button class="btn btn-primary" type="submit">Modificar tarea</button>
-        <a class="btn btn-link" th:href="@{/usuarios/{id}/tareas(id=${tarea.usuario.id})}">Cancelar</a>
+        <a class="btn btn-link" th:if="${tarea.proyecto == null}" th:href="@{/usuarios/{id}/tareas(id=${tarea.usuario.id})}">Cancelar</a>
+            <a class="btn btn-link" th:if="${tarea.proyecto != null}" th:href="@{/usuarios/{id}/proyectos/{proyecto}/tareas(id=${tarea.usuario.id},proyecto=${tarea.proyecto.id})}">Cancelar</a>
+
         </div>
     </form>
 </div>

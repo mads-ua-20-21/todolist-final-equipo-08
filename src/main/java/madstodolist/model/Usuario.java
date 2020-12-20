@@ -35,6 +35,9 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
     Set<Tarea> tareas = new HashSet<>();
 
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
+    Set<Comentario> comentarios = new HashSet<>();
+
     @ManyToMany(mappedBy = "usuarios", fetch = FetchType.EAGER)
     Set<Equipo> equipos = new HashSet<>();
 
@@ -106,6 +109,10 @@ public class Usuario implements Serializable {
     }
 
     public Set<Equipo> getEquipos() { return equipos; }
+
+    public Set<Comentario> getComentarios() {return this.comentarios;}
+
+    public void setComentarios (Set<Comentario> comentarios){this.comentarios = comentarios;}
 
     @Override
     public boolean equals(Object o) {
