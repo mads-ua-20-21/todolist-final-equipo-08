@@ -52,7 +52,6 @@
             <div class="form-group">
                 <label for="titulo">Nuevo comentario:</label>
                 <input class="form-control" id="titulo" name="titulo" required th:field="*{mensaje}" type="text"/>
-                <br>
             </div>
             <button class="btn btn-primary" type="submit">Comentar</button>
             <a class="btn btn-link" th:href="@{/usuarios/{id}/proyectos/{proyecto}/tareas(id=${usuario.id},proyecto=${tarea.proyecto.id})}">Volver</a>

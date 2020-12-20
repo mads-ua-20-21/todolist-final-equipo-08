@@ -36,7 +36,7 @@
                 <tbody>
                 <tr th:each="tarea: ${tareas}">
                     <td th:text="${tarea.id}"></td>
-                    <td th:text="${tarea.titulo}"></td>
+                    <td><a th:href="@{/usuarios/{id}/proyectos/{proyecto}/tareas/{tarea}(id=${usuario.id},proyecto=${proyecto.id},tarea=${tarea.id})}" th:text="${tarea.titulo}"></a></td>
                     <td th:text="${tarea.prioridad}"></td>
                     <td><a class="btn btn-primary btn-xs" th:href="@{/tareas/{id}/editar(id=${tarea.id})}"/>editar</a>
                         <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
