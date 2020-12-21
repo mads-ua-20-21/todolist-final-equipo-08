@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -85,6 +86,28 @@ public class ProyectoService {
 
         return proyecto;
     }
+
+    @Transactional
+    public Proyecto actualizarDescripcionProyecto (Long idProyecto, String descripcion){
+        Proyecto proyecto = comprobarIdProyecto(idProyecto);
+
+        proyecto.setDescripcion(descripcion);
+        proyecto = proyectoRepository.save(proyecto);
+
+        return proyecto;
+    }
+
+    @Transactional
+    public Proyecto actualizarFechaProyecto (Long idProyecto, Date fecha){
+        Proyecto proyecto = comprobarIdProyecto(idProyecto);
+
+        proyecto.setFechaLimite(fecha);
+        proyecto = proyectoRepository.save(proyecto);
+
+        return proyecto;
+    }
+
+
 
 
 

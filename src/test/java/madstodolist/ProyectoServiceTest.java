@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,6 +103,40 @@ public class ProyectoServiceTest {
         proyecto = proyectoService.findById(idProyecto);
         assertThat(proyecto).isNotNull();
         assertThat(proyecto.getNombre()).isEqualTo("Proyecto test modificado");
+    }
+
+    @Test
+    @Transactional
+    public void modificarDescripcionProyectoBD(){
+        // GIVEN
+        Proyecto proyecto = proyectoService.nuevoProyecto(1L,"Proyecto test");
+        String descripcion = "Proyecto que tiene como objetivo probar la funcion en la BBDD";
+
+        //WHEN
+        Long idProyecto = proyecto.getId();
+        proyectoService.actualizarDescripcionProyecto(idProyecto, descripcion);
+
+        //THEN
+        proyecto = proyectoService.findById(idProyecto);
+        assertThat(proyecto).isNotNull();
+        assertThat(proyecto.getDescripcion()).isEqualTo(descripcion);
+    }
+
+    @Test
+    @Transactional
+    public void modificarDFechaProyectoBD(){
+        // GIVEN
+        Proyecto proyecto = proyectoService.nuevoProyecto(1L,"Proyecto test");
+        Date fecha = new Date(2020, 12, 21);
+
+        //WHEN
+        Long idProyecto = proyecto.getId();
+        proyectoService.actualizarFechaProyecto(idProyecto, fecha);
+
+        //THEN
+        proyecto = proyectoService.findById(idProyecto);
+        assertThat(proyecto).isNotNull();
+        assertThat(proyecto.getFechaLimite()).isEqualTo(fecha);
     }
 
     @Test
