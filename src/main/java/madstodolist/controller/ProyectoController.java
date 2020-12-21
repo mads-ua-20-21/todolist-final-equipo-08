@@ -374,4 +374,22 @@ public class ProyectoController {
         flash.addFlashAttribute("mensaje", "Tarea de proyecto creada correctamente");
         return "redirect:/usuarios/" + idUsuario + "/proyectos/" + idProyecto + "/tareas";
     }
+
+    @PostMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/{tarea}/estado")
+    public String modificarEstadoTarea(@PathVariable(value="id") Long idUsuario,
+                                       @PathVariable(value="proyecto") Long idProyecto,
+                                       @PathVariable(value="tarea") Long idTarea,
+                                       @ModelAttribute(value="estado") int estado,
+                                       Model model, RedirectAttributes flash, HttpSession session) {
+        Tarea tarea = tareaService.findById(idTarea);
+        if (tarea == null) {
+            throw new TareaNotFoundException();
+        }
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+
+        tareaService.actualizarEstado(idTarea, estado);
+        flash.addFlashAttribute("mensaje", "Estado de la tarea modificado correctamente");
+        return "redirect:/usuarios/" + idUsuario + "/proyectos/" + idProyecto + "/tareas";
+    }
 }
