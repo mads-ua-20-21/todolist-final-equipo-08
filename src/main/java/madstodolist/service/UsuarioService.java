@@ -2,7 +2,6 @@ package madstodolist.service;
 
 import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.*;
-import madstodolist.model.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
