@@ -63,6 +63,8 @@ public class Comentario implements Serializable {
 
     public Date getFechaHora() { return fechaHora; }
 
+    public void setFechaHora(Date fechaHora) { this.fechaHora = fechaHora; }
+
     public Tarea getTarea() { return tarea; }
 
     public void setTarea(Tarea tarea) { this.tarea = tarea; }

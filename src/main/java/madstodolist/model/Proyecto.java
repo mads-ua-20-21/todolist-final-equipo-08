@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -32,6 +33,10 @@ public class Proyecto implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     Set<Tarea> tareas = new HashSet<>();
 
+    private Date fechaLimite;
+
+    private String descripcion;
+
     private Proyecto(){}
 
     public Proyecto(String nombre, Equipo creador){
@@ -54,6 +59,14 @@ public class Proyecto implements Serializable {
     public Set<Tarea> getTareas() { return this.tareas; }
 
     public void setTareas(Set<Tarea> tareas) { this.tareas = tareas; }
+
+    public Date getFechaLimite() { return fechaLimite; }
+
+    public void setFechaLimite(Date fechaLimite) { this.fechaLimite = fechaLimite; }
+
+    public String getDescripcion() { return descripcion; }
+
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
     @Override
     public boolean equals(Object o) {
