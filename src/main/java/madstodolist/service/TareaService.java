@@ -145,14 +145,35 @@ public class TareaService {
         tareaRepository.save(tarea);
     }
 
-    @Transactional(readOnly = true)
-    public Proyecto proyectoTarea(Long idTarea){
-
+    @Transactional
+    public void asignarCategoria(Long idTarea, Categoria categoria) {
         Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
         if (tarea == null) {
             throw new TareaServiceException("No existe tarea con id " + idTarea);
         }
-        return tarea.getProyecto();
+        tarea.getCategoria().add(categoria);
+        categoria.getTareas().add(tarea);
+        tareaRepository.save(tarea);
+    }
+
+    @Transactional(readOnly = true)
+    public Proyecto proyectoTarea(Long idTarea){
+        Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
+        if (tarea == null) {
+            throw new TareaServiceException("No existe tarea con id " + idTarea);
+        }
+       return tarea.getProyecto();
+    }
+
+    @Transactional
+    public void borrarCategoriasDeTarea(Long idTarea) {
+        Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
+        if (tarea == null) {
+            throw new TareaServiceException("No existe tarea con id " + idTarea);
+        }
+        tarea.getCategoria().forEach(categoria -> categoria.getTareas().remove(tarea));
+        tarea.getCategoria().removeAll(tarea.getCategoria());
+        tareaRepository.save(tarea);
     }
 
     @Transactional

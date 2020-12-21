@@ -41,6 +41,9 @@ public class Usuario implements Serializable {
     @ManyToMany(mappedBy = "usuarios", fetch = FetchType.EAGER)
     Set<Equipo> equipos = new HashSet<>();
 
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
+    Set<Categoria> categorias = new HashSet<>();
+
     // Constructor vacío necesario para JPA/Hibernate.
     // Lo hacemos privado para que no se pueda usar desde el código de la aplicación. Para crear un
     // usuario en la aplicación habrá que llamar al constructor público. Hibernate sí que lo puede usar, a pesar
@@ -110,9 +113,12 @@ public class Usuario implements Serializable {
 
     public Set<Equipo> getEquipos() { return equipos; }
 
+    public Set<Categoria> getCategorias() { return categorias; }
+
     public Set<Comentario> getComentarios() {return this.comentarios;}
 
     public void setComentarios (Set<Comentario> comentarios){this.comentarios = comentarios;}
+
 
     @Override
     public boolean equals(Object o) {
