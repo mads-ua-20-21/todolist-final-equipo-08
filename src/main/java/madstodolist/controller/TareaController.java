@@ -62,8 +62,10 @@ public class TareaController {
             throw new UsuarioNotFoundException();
         }
         Tarea tarea = tareaService.nuevaTareaUsuario(idUsuario, tareaData.getTitulo(), tareaData.getPrioridad());
-        Categoria categoria = categoriaService.findById(tareaData.getCategoria());
-        tareaService.asignarCategoria(tarea.getId(), categoria);
+        if (tareaData.getCategoria() != null) {
+            Categoria categoria = categoriaService.findById(tareaData.getCategoria());
+            tareaService.asignarCategoria(tarea.getId(), categoria);
+        }
         flash.addFlashAttribute("mensaje", "Tarea creada correctamente");
         return "redirect:/usuarios/" + idUsuario + "/tareas";
     }
@@ -187,8 +189,10 @@ public class TareaController {
 
         tareaService.modificaTarea(idTarea, tareaData.getTitulo());
         tareaService.asignarEditarPrioridad(idTarea, tareaData.getPrioridad());
-        Categoria categoria = categoriaService.findById(tareaData.getCategoria());
-        tareaService.asignarCategoria(tarea.getId(), categoria);
+        if (tareaData.getCategoria() != null) {
+            Categoria categoria = categoriaService.findById(tareaData.getCategoria());
+            tareaService.asignarCategoria(tarea.getId(), categoria);
+        }
         if (tareaData.getBorrarCategorias()) {
             tareaService.borrarCategoriasDeTarea(tarea.getId());
         }
