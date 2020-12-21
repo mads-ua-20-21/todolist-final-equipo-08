@@ -102,7 +102,6 @@ public class UsuariosController {
 
     @GetMapping("/usuarios/{id}/editar")
     public String formEditarUsuario(@PathVariable(value="id") Long idUsuario,
-                                    @ModelAttribute Usuario usuarioMod,
                                     Model model, HttpSession session){
 
         managerUserSesion.usuarioLogueado(session);
@@ -125,9 +124,13 @@ public class UsuariosController {
             throw new UsuarioNoAdminException();
         }
 
-        usuarioMod.setEmail(usuario.getEmail());
-        usuarioMod.setNombre(usuario.getNombre());
-        usuarioMod.setFechaNacimiento(usuario.getFechaNacimiento());
+        RegistroData registroData = new RegistroData();
+
+        registroData.seteMail(usuario.getEmail());
+        registroData.setNombre(usuario.getNombre());
+        registroData.setFechaNacimiento(usuario.getFechaNacimiento());
+
+        model.addAttribute("registroData", registroData);
 
         return "formEditarUsuario";
     }

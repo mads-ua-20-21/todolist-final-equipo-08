@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head (titulo='Editar usuario')"></head>
+
+<body>
+
+<nav th:replace="fragments :: barra-menu"></nav>
+
+
+<div class="container-fluid">
+
+    <h2 th:text="'Editar usuario ' + ${usuarioDescrito.getNombre()}"></h2>
+
+    <form method="post" th:action="@{/usuarios/{id}/editar(id=${usuarioDescrito.id})}" th:object="${registroData}">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input id="email" class="form-control" name="email" placeholder="Correo electrónico"
+                       type="text" th:field="*{eMail}"/>
+                <br>
+                <label for="nombre">Nombre</label>
+                <input id="nombre" class="form-control" name="nombre" placeholder="Nombre" type="text"
+                       th:field="*{nombre}"/>
+                <br>
+                <label for="fechaNacimiento">Fecha de nacimiento</label>
+                <input id="fechaNacimiento" class="form-control" name="fechaNacimiento"
+                       placeholder="01-12-2019" type="datetime-local" th:field="*{fechaNacimiento}"/>
+            </div>
+            <button class="btn btn-primary" type="submit">Modificar usuario</button>
+            <a class="btn btn-link" th:href="@{/usuarios/{id}(id=${usuarioDescrito.id})}">Cancelar</a>
+
+        </div>
+    </form>
+</div>
+
+<div th:replace="fragments::javascript"/>
+
+</body>
+</html>
