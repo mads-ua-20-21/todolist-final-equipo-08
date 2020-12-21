@@ -3,7 +3,9 @@ package madstodolist.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tareas")
@@ -28,11 +30,13 @@ public class Tarea implements Serializable {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-
+/*
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
-
+*/
+    @ManyToMany(mappedBy = "tareas", fetch = FetchType.EAGER)
+    Set<Categoria> categorias = new HashSet<>();
 
     // Constructor vacío necesario para JPA/Hibernate.
     // Lo hacemos privado para que no se pueda usar desde el código de la aplicación. Para crear un
@@ -88,13 +92,15 @@ public class Tarea implements Serializable {
         this.usuario = usuario;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public Set<Categoria> getCategoria() {
+        return categorias;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategoria(Set<Categoria> categoria) {
+        this.categorias = categoria;
     }
+
+    public void eliminarCategoria(Categoria categoria) { this.getCategoria().remove(categoria); }
 
     @Override
     public boolean equals(Object o) {

@@ -28,9 +28,17 @@ public class Categoria implements Serializable {
     @JoinColumn(name = "tarea_id")
     private Tarea tarea;
 
-  */
+
     @OneToMany(mappedBy = "categoria", fetch = FetchType.EAGER)
     Set<Tarea> tarea = new HashSet<>();
+
+  */
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "categoria_tarea",
+            joinColumns = { @JoinColumn(name = "fk_categoria") },
+            inverseJoinColumns = {@JoinColumn(name = "fk_tarea")})
+    Set<Tarea> tareas = new HashSet<>();
 
     @NotNull
     @ManyToOne
@@ -73,13 +81,13 @@ public class Categoria implements Serializable {
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
     public Set<Tarea> getTareas() {
-        return tarea;
+        return tareas;
     }
-
+/*
     public void setTareas(Set<Tarea> tareas) {
         this.tarea = tareas;
     }
-
+*/
 
     //public Tarea getTarea() { return tarea; }
 

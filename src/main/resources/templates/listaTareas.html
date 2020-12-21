@@ -24,6 +24,7 @@
                     <th>Id</th>
                     <th>Tarea</th>
                     <th>Prioridad</th>
+                    <th>Categoria</th>
                     <th>Acción</th>
                 </tr>
                 </thead>
@@ -32,6 +33,11 @@
                     <td th:text="${tarea.id}"></td>
                     <td th:text="${tarea.titulo}"></td>
                     <td th:text="${tarea.prioridad}"></td>
+                    <td th:if="${tarea.categoria.size() != 0}">
+                        <a th:each="categoria: ${tarea.categoria}"
+                           th:text="${categoria.titulo} + ' '"></a>
+                    </td>
+                    <td th:if="${tarea.categoria.size() == 0}">Sin Categoría</td>
                     <td><a class="btn btn-primary btn-xs" th:href="@{/tareas/{id}/editar(id=${tarea.id})}"/>editar</a>
                         <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
                            th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">borrar</button>

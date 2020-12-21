@@ -3,8 +3,10 @@ package madstodolist.controller;
 import madstodolist.authentication.ManagerUserSesion;
 import madstodolist.controller.exception.TareaNotFoundException;
 import madstodolist.controller.exception.UsuarioNotFoundException;
+import madstodolist.model.Categoria;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
+import madstodolist.service.CategoriaService;
 import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -24,6 +27,9 @@ public class TareaController {
 
     @Autowired
     TareaService tareaService;
+
+    @Autowired
+    CategoriaService categoriaService;
 
     @Autowired
     ManagerUserSesion managerUserSesion;
@@ -55,7 +61,9 @@ public class TareaController {
         if (usuario == null) {
             throw new UsuarioNotFoundException();
         }
-        tareaService.nuevaTareaUsuario(idUsuario, tareaData.getTitulo(), tareaData.getPrioridad());
+        Tarea tarea = tareaService.nuevaTareaUsuario(idUsuario, tareaData.getTitulo(), tareaData.getPrioridad());
+        Categoria categoria = categoriaService.findById(tareaData.getCategoria());
+        tareaService.asignarCategoria(tarea.getId(), categoria);
         flash.addFlashAttribute("mensaje", "Tarea creada correctamente");
         return "redirect:/usuarios/" + idUsuario + "/tareas";
     }
@@ -70,6 +78,7 @@ public class TareaController {
             throw new UsuarioNotFoundException();
         }
         List<Tarea> tareas = tareaService.allTareasUsuario(idUsuario);
+        //Collections.sort(tareas, (a, b) -> a.getCategoria().getId() < b.getCategoria().getId() ? -1 : a.getId() == b.getId() ? 0 : 1);
         model.addAttribute("usuario", usuario);
         model.addAttribute("tareas", tareas);
         return "listaTareas";

@@ -78,7 +78,30 @@ public class CategoriaController {
             throw new UsuarioNotFoundException();
         }
         categoriaService.nuevaCategoriaUsuario(idUsuario, categoriaData.getTitulo());
-        flash.addFlashAttribute("mensaje", "Categoria creada correctamente");
+        flash.addFlashAttribute("mensaje", "Categoria eliminada correctamente");
+        return "redirect:/usuarios/" + idUsuario + "/categoria";
+    }
+
+    @PostMapping("/usuarios/{id}/categoria/{id_c}/eliminar")
+    public String eliminarCategoria(@PathVariable(value="id") Long idUsuario,
+                                    @PathVariable(value="id_c") Long idCategoria,
+                                    @ModelAttribute CategoriaData categoriaData,
+                                 Model model, RedirectAttributes flash,
+                                 HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+
+        Usuario usuario = usuarioService.findById(idUsuario);
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        Categoria categoria = categoriaService.findById(idCategoria);
+        if (categoria == null) {
+            throw new CategoriaServiceException("error categoria");
+        }
+
+        categoriaService.eliminarCategoria(idCategoria);
+        flash.addFlashAttribute("mensaje", "Categoria eliminada correctamente");
         return "redirect:/usuarios/" + idUsuario + "/categoria";
     }
 }

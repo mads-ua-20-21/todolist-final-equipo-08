@@ -91,28 +91,56 @@ public class CategoriaService {
     public Boolean tareaTieneCategoria(Long idTarea){
 
         Tarea tarea = comprobarIdTarea(idTarea);
-        //if (tarea.getCategoria() != null) {
-        //    return true;
-        //}
+        if (tarea.getCategoria() != null) {
+            return true;
+        }
         return false;
     }
 
     @Transactional
-    public Boolean anyadirCategoriaATarea(Long idCategoria, Long idTarea){
+    public void anyadirCategoriaATarea(Long idCategoria, Long idTarea){
 
-        Boolean anyadido = false;
+        //Boolean anyadido = false;
 
 
-        if (!tareaTieneCategoria(idTarea)){
+        //if (!tareaPerteneceACategoria(idCategoria, idTarea)){
             Categoria categoria = categoriaRepository.findById(idCategoria).orElse(null);
 
             Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
 
-            //categoria.getTareas().add(tarea);
-            //tarea.setCategoria(categoria);
-            anyadido = true;
-        }
-        return anyadido;
+            categoria.getTareas().add(tarea);
+            tarea.getCategoria().add(categoria);
+            //anyadido = true;
+        //}
+        //return anyadido;
+    }
+
+    @Transactional
+    public void eliminarCategoriaDeTarea(Long idCategoria, Long idTarea){
+
+        //Boolean eliminado = false;
+
+        //if (tareaPerteneceACategoria(idCategoria, idTarea)){
+            Categoria categoria = categoriaRepository.findById(idCategoria).orElse(null);
+
+            Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
+
+            categoria.getTareas().remove(tarea);
+            tarea.getCategoria().remove(categoria);
+            //eliminado = true;
+        //}
+
+        //return eliminado;
+    }
+
+    @Transactional
+    public void eliminarCategoria(Long idCategoria){
+
+        Categoria categoria = categoriaRepository.findById(idCategoria).orElse(null);
+        List<Tarea> tareas = new ArrayList<>(categoria.getTareas());
+
+        tareas.forEach(tarea -> tarea.eliminarCategoria(categoria));
+        categoriaRepository.delete(categoria);
     }
 
 }

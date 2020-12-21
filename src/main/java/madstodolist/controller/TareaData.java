@@ -3,6 +3,7 @@ package madstodolist.controller;
 public class TareaData {
     private String titulo;
     private Integer prioridad;
+    private Long categoria;
 
     public String getTitulo() {
         return titulo;
@@ -18,5 +19,13 @@ public class TareaData {
 
     public void setPrioridad(Integer prioridad) {
         this.prioridad = prioridad;
+    }
+
+    public Long getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Long categoria) {
+        this.categoria = categoria;
     }
 }

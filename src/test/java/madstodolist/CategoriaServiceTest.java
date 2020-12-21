@@ -47,4 +47,44 @@ public class CategoriaServiceTest {
         // THEN
         assertThat(categoria.getTitulo()).contains("Casa");
     }
+/*
+    @Test
+    @Transactional
+    public void testAnyadirCategoriaATarea() {
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        // WHEN
+        Usuario usuario = usuarioService.findById(1L);
+
+        Tarea tarea = tareaService.nuevaTareaUsuario(1L, "Práctica 1 de MADS");
+
+        Categoria categoria = categoriaService.nuevaCategoriaUsuario(usuario.getId(), "Casa");
+        categoriaService.anyadirCategoriaATarea(categoria.getId(), tarea.getId());
+
+        // THEN
+        assertThat(categoria.getTitulo()).contains("Casa");
+        assertThat(tarea.getCategoria()).isNotNull();
+    }
+
+    @Test
+    @Transactional
+    public void testEliminarCategoriaATarea() {
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        // WHEN
+        Usuario usuario = usuarioService.findById(1L);
+
+        Tarea tarea = tareaService.nuevaTareaUsuario(1L, "Práctica 1 de MADS");
+
+        Categoria categoria = categoriaService.nuevaCategoriaUsuario(usuario.getId(), "Casa");
+        categoriaService.anyadirCategoriaATarea(categoria.getId(), tarea.getId());
+        categoriaService.eliminarCategoriaATarea(categoria.getId(), tarea.getId());
+
+        // THEN
+        assertThat(categoria.getTitulo()).contains("Casa");
+        //assertThat(tareaService.findById(tarea.getId()).getCategoria()).isNull();
+    }
+ */
 }
