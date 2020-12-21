@@ -75,7 +75,7 @@ public class ComentarioServiceTest {
         Usuario usuario = usuarioService.findById(1L);
 
         // WHEN
-        comentarioService.eliminarComentario(usuario.getId(),comentario.getId());
+        comentarioService.eliminarComentario(comentario.getId());
 
 
         // THEN

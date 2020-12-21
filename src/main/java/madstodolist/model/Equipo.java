@@ -1,5 +1,8 @@
 package madstodolist.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -32,7 +35,8 @@ public class Equipo implements Serializable{
     @JoinColumn(name = "administrador_id")
     private Usuario usuarioAdministrador;
 
-    @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Set<Proyecto> proyectos = new HashSet<>();
 
     private Equipo(){}
