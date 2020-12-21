@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProyectoService {
@@ -50,6 +53,40 @@ public class ProyectoService {
         Proyecto proyecto = comprobarIdProyecto(idProyecto);
         List<Tarea> tareas = new ArrayList(proyecto.getTareas());
         return tareas;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tarea> filtrarTareasPorPalabra(Long idProyecto, String palabra) {
+        List<Tarea> tareas = tareasProyecto(idProyecto);
+        if (palabra != ""){
+            tareas = tareasProyecto(idProyecto).stream()
+                    .filter(tarea -> tarea.getTitulo().toLowerCase(Locale.ROOT)
+                            .contains(palabra.toLowerCase(Locale.ROOT)))
+                    .collect(Collectors.toList());
+        }
+        return tareas;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tarea> filtrarTareasPorEstado(Long idProyecto, int estadoInt) {
+        return tareasProyecto(idProyecto).stream()
+                .filter(tarea -> tarea.getEstado().ordinal() == estadoInt)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tarea> excluirTareasPorEstado(Long idProyecto, int estadoInt) {
+        return tareasProyecto(idProyecto).stream()
+                .filter(tarea -> tarea.getEstado().ordinal() != estadoInt)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Tarea> ordenarTareasPrimerEstado(Long idProyecto, int estadoInt) {
+        return Stream.concat(
+                filtrarTareasPorEstado(idProyecto, estadoInt).stream(),
+                excluirTareasPorEstado(idProyecto, estadoInt).stream())
+                .collect(Collectors.toList());
     }
 
     @Transactional

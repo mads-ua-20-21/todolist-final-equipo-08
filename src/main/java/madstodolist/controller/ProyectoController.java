@@ -99,6 +99,98 @@ public class ProyectoController {
         return "tareasProyecto";
     }
 
+    @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/filtrar")
+    public String listadoTareasFiltrarEstado(@PathVariable(value="id") Long idUsuario,
+                                             @PathVariable(value="proyecto") Long idProyecto,
+                                             @ModelAttribute(value="filtrarEstado") int filtrarEstado,
+                                             Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Proyecto proyecto = proyectoService.findById(idProyecto);
+        model.addAttribute("proyecto", proyecto);
+        Equipo equipo = proyecto.getEquipo();
+        model.addAttribute("equipo", equipo);
+
+        List<Tarea> tareas = proyectoService.filtrarTareasPorEstado(idProyecto, filtrarEstado);
+        model.addAttribute("tareas", tareas);
+        return "tareasProyecto";
+    }
+
+    @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/excluir")
+    public String listadoTareasExcluirEstado(@PathVariable(value="id") Long idUsuario,
+                                             @PathVariable(value="proyecto") Long idProyecto,
+                                             @ModelAttribute(value="excluir") int estado,
+                                             Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Proyecto proyecto = proyectoService.findById(idProyecto);
+        model.addAttribute("proyecto", proyecto);
+        Equipo equipo = proyecto.getEquipo();
+        model.addAttribute("equipo", equipo);
+
+        List<Tarea> tareas = proyectoService.excluirTareasPorEstado(idProyecto, estado);
+        model.addAttribute("tareas", tareas);
+        return "tareasProyecto";
+    }
+
+    @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/ordenar")
+    public String orndenarTareasPrimerEstado(@PathVariable(value="id") Long idUsuario,
+                                             @PathVariable(value="proyecto") Long idProyecto,
+                                             @ModelAttribute(value="ordenar") int estado,
+                                             Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Proyecto proyecto = proyectoService.findById(idProyecto);
+        model.addAttribute("proyecto", proyecto);
+        Equipo equipo = proyecto.getEquipo();
+        model.addAttribute("equipo", equipo);
+
+        List<Tarea> tareas = proyectoService.ordenarTareasPrimerEstado(idProyecto, estado);
+        model.addAttribute("tareas", tareas);
+        return "tareasProyecto";
+    }
+
+    @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/buscar")
+    public String buscarTareaPalabra(@PathVariable(value="id") Long idUsuario,
+                                     @PathVariable(value="proyecto") Long idProyecto,
+                                     @ModelAttribute(value="palabra") String palabra,
+                                     Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Proyecto proyecto = proyectoService.findById(idProyecto);
+        model.addAttribute("proyecto", proyecto);
+        Equipo equipo = proyecto.getEquipo();
+        model.addAttribute("equipo", equipo);
+
+        List<Tarea> tareas = proyectoService.filtrarTareasPorPalabra(idProyecto, palabra);
+        model.addAttribute("tareas", tareas);
+        return "tareasProyecto";
+    }
+
     @GetMapping("/equipos/{id}/proyectos/nuevo")
     public String formNuevoProyecto(@PathVariable(value="id") Long idEquipo,
                                  @ModelAttribute Proyecto proyecto, Model model,
