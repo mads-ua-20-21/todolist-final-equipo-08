@@ -1,9 +1,7 @@
 package madstodolist.service;
 
 import madstodolist.controller.exception.UsuarioNotFoundException;
-import madstodolist.model.Categoria;
-import madstodolist.model.Tarea;
-import madstodolist.model.Usuario;
+import madstodolist.model.*;
 import madstodolist.model.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
