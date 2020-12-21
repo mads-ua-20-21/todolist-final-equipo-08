@@ -77,7 +77,7 @@ public class UsuariosController {
         return"descripcionUsuario";
     }
 
-    @PostMapping("/usuarios/{id}/editar")
+    @PostMapping("/usuarios/{id}/bloquear")
     public String bloquearUsuario(@PathVariable(value="id") Long idUsuario,
                                   Model model, RedirectAttributes flash, HttpSession session){
 
@@ -98,5 +98,37 @@ public class UsuariosController {
         else flash.addFlashAttribute("mensaje", "Usuario habilitado");
 
         return "redirect:/usuarios";
+    }
+
+    @GetMapping("/usuarios/{id}/editar")
+    public String formEditarUsuario(@PathVariable(value="id") Long idUsuario,
+                                    @ModelAttribute Usuario usuarioMod,
+                                    Model model, HttpSession session){
+
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+
+        //Una vez se ha comprobado que hay un usuario logueado se siguen dos caminos,
+        //comprobar que coincide con el usuario descrito o que el usuario es admin
+        model.addAttribute("usuario", usuario);
+
+        Usuario usuarioDescrito = usuarioService.findById(idUsuario);
+        if (usuarioDescrito == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuarioDescrito", usuarioDescrito);
+
+        if (!usuario.equals(usuarioDescrito) && !usuario.getAdministrador()){
+            throw new UsuarioNoAdminException();
+        }
+
+        usuarioMod.setEmail(usuario.getEmail());
+        usuarioMod.setNombre(usuario.getNombre());
+        usuarioMod.setFechaNacimiento(usuario.getFechaNacimiento());
+
+        return "formEditarUsuario";
     }
 }

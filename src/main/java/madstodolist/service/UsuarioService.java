@@ -133,4 +133,19 @@ public class UsuarioService {
         List<Comentario> comentarios = new ArrayList(usuario.getComentarios());
         return comentarios;
     }
+
+    @Transactional
+    public Usuario modificaUsuario (Long idUsuario, Usuario usuarioMod){
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+
+        usuario.setNombre(usuarioMod.getNombre());
+        usuario.setFechaNacimiento(usuarioMod.getFechaNacimiento());
+        usuario.setEmail(usuarioMod.getEmail());
+
+        usuarioRepository.save(usuario);
+        return usuario;
+    }
 }
