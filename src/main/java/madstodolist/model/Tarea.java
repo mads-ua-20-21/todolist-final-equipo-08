@@ -42,11 +42,12 @@ public class Tarea implements Serializable {
     Set<Categoria> categorias = new HashSet<>();
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "proyecto_id")
+    @OnDelete( action = OnDeleteAction.CASCADE )
     private Proyecto proyecto;
 
     @OneToMany(mappedBy = "tarea", fetch = FetchType.EAGER)
+    @OnDelete( action = OnDeleteAction.CASCADE )
     Set<Comentario> comentarios = new HashSet<>();
 
 

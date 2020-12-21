@@ -35,8 +35,8 @@ public class Equipo implements Serializable{
     @JoinColumn(name = "administrador_id")
     private Usuario usuarioAdministrador;
 
-    @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER)
+    @OnDelete( action = OnDeleteAction.CASCADE )
     Set<Proyecto> proyectos = new HashSet<>();
 
     private Equipo(){}

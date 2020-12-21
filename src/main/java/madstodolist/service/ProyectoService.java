@@ -107,6 +107,8 @@ public class ProyectoService {
         if (proyecto == null){
             throw new ProyectoServiceException("El proyecto " + idProyecto + " no existe ");
         }
+
+        proyecto.getTareas().removeAll(tareasProyecto(idProyecto));
         proyectoRepository.delete(proyecto);
     }
 
