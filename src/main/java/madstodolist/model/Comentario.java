@@ -25,8 +25,9 @@ public class Comentario implements Serializable {
     @NotNull
     private String mensaje;
 
-    //@NotNull
-    private Date fechaHora;
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechahora;
 
     @NotNull
     @ManyToOne
@@ -45,7 +46,7 @@ public class Comentario implements Serializable {
         this.tarea = tarea;
         this.usuario = usuario;
         this.mensaje = mensaje;
-        this.fechaHora = new Date(System.currentTimeMillis());
+        this.fechahora = new Date(System.currentTimeMillis());
     }
 
     public Long getId() { return id; }
@@ -58,12 +59,12 @@ public class Comentario implements Serializable {
 
     public String getFechaHoraString() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        return formatter.format(fechaHora.getTime());
+        return formatter.format(fechahora.getTime());
     }
 
-    public Date getFechaHora() { return fechaHora; }
+    public Date getFechaHora() { return fechahora; }
 
-    public void setFechaHora(Date fechaHora) { this.fechaHora = fechaHora; }
+    public void setFechaHora(Date fechaHora) { this.fechahora = fechaHora; }
 
     public Tarea getTarea() { return tarea; }
 
@@ -84,7 +85,7 @@ public class Comentario implements Serializable {
             return Objects.equals(id, comentario.id);
         // sino comparamos por campos obligatorios
         return comentario.equals(comentario.mensaje) &&
-                comentario.equals(comentario.fechaHora);
+                comentario.equals(comentario.fechahora);
     }
 
     @Override

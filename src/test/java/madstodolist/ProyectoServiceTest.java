@@ -13,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +45,22 @@ public class ProyectoServiceTest {
         //THEN
         assertThat(proyecto).isNotNull();
         assertThat(proyecto.getNombre()).isEqualTo("Proyecto MADS");
+    }
+
+    @Test
+    public void comprobarFechaProyecto() throws ParseException {
+        // GIVEN
+        // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
+
+        //WHEN
+        Proyecto proyecto = proyectoService.comprobarIdProyecto(1L);
+        Date fecha =new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2020-12-24 00:00");
+
+        //THEN
+        assertThat(proyecto).isNotNull();
+        assertThat(proyecto.getNombre()).isEqualTo("Proyecto MADS");
+        assertThat(proyecto.getFechaLimite()).isEqualTo(fecha);
+        assertThat(proyecto.getStringFechaLimite()).isEqualTo("24-12-2020");
     }
 
     @Test

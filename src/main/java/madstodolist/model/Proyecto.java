@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -33,7 +34,8 @@ public class Proyecto implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     Set<Tarea> tareas = new HashSet<>();
 
-    private Date fechaLimite;
+    @Temporal(TemporalType.DATE)
+    private Date fechalimite;
 
     private String descripcion;
 
@@ -60,9 +62,14 @@ public class Proyecto implements Serializable {
 
     public void setTareas(Set<Tarea> tareas) { this.tareas = tareas; }
 
-    public Date getFechaLimite() { return fechaLimite; }
+    public Date getFechaLimite() { return fechalimite; }
 
-    public void setFechaLimite(Date fechaLimite) { this.fechaLimite = fechaLimite; }
+    public String getStringFechaLimite(){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return formatter.format(fechalimite.getTime());
+    }
+
+    public void setFechaLimite(Date fechaLimite) { this.fechalimite = fechaLimite; }
 
     public String getDescripcion() { return descripcion; }
 
