@@ -24,6 +24,15 @@
                 <option value=2>Prioridad 2</option>
                 <option value=3>Prioridad 3</option>
             </select>
+            <br>
+            <label for="categoria">Categoria de la tarea:</label>
+            <a th:if="${usuario.getCategorias().size() == 0}">No tienes categorías, crea una.</a>
+            <select th:if="${usuario.getCategorias().size() != 0}" class="custom-select" id="categoria" name="categroia" required th:field="*{categoria}" type="Long">
+                <option th:each="categoria: ${usuario.getCategorias()}"
+                        th:text="${categoria.getTitulo()}"
+                        th:value="${categoria.getId()}"></option>
+
+            </select>
         </div>
         <button class="btn btn-primary" type="submit">Crear tarea</button>
         <a class="btn btn-link" th:href="@{/usuarios/{id}/tareas(id=${usuario.id})}">Cancelar</a>

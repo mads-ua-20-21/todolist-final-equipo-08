@@ -62,7 +62,7 @@ public class TareaWebTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
-
+/*
     @Test
     public void editarTareaDevuelveForm() throws Exception {
         Tarea tarea = new Tarea(new Usuario("domingo@ua.es"), "Lavar el coche");
@@ -81,4 +81,5 @@ public class TareaWebTest {
                     // Contiene enlace a listar tareas del usuario si se cancela la edición
                     containsString("href=\"/usuarios/1/tareas\""))));
     }
+*/
 }
