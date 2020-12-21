@@ -42,14 +42,23 @@
     <form th:if="${proyecto != null}" method="post" th:action="@{/usuarios/{id}/proyectos/{proyecto}/tareas/nueva(id=${usuario.id},proyecto=${proyecto.id})}" th:object="${tareaData}">
         <div class="col-6">
             <div class="form-group">
-                <label for="titulo">Título de la tarea:</label>
-                <input class="form-control" id="tituloP" name="titulo" required th:field="*{titulo}" type="text"/>
+                <label for="tituloP">Título de la tarea:</label>
+                <input class="form-control" id="tituloP" name="tituloP" required th:field="*{titulo}" type="text"/>
                 <br>
-                <label for="prioridad">Prioridad de la tarea:</label>
-                <select class="custom-select" id="prioridadP" name="prioridad" required th:field="*{prioridad}" type="integer">
+                <label for="prioridadP">Prioridad de la tarea:</label>
+                <select class="custom-select" id="prioridadP" name="prioridadP" required th:field="*{prioridad}" type="integer">
                     <option value=1>Prioridad 1</option>
                     <option value=2>Prioridad 2</option>
                     <option value=3>Prioridad 3</option>
+                </select>
+                <br>
+                <label for="categoriaP">Categoria de la tarea:</label>
+                <a th:if="${usuario.getCategorias().size() == 0}">No tienes categorías, crea una.</a>
+                <select th:if="${usuario.getCategorias().size() != 0}" class="custom-select" id="categoriaP" name="categroiaP" required th:field="*{categoria}" type="Long">
+                    <option th:each="categoria: ${usuario.getCategorias()}"
+                            th:text="${categoria.getTitulo()}"
+                            th:value="${categoria.getId()}"></option>
+
                 </select>
             </div>
             <button class="btn btn-primary" type="submit">Crear tarea</button>

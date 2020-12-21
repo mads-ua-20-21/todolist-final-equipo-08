@@ -6,14 +6,8 @@ import madstodolist.controller.exception.EquipoNotFoundException;
 import madstodolist.controller.exception.ProyectoNotFoundException;
 import madstodolist.controller.exception.TareaNotFoundException;
 import madstodolist.controller.exception.UsuarioNotFoundException;
-import madstodolist.model.Equipo;
-import madstodolist.model.Proyecto;
-import madstodolist.model.Tarea;
-import madstodolist.model.Usuario;
-import madstodolist.service.EquipoService;
-import madstodolist.service.ProyectoService;
-import madstodolist.service.TareaService;
-import madstodolist.service.UsuarioService;
+import madstodolist.model.*;
+import madstodolist.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +34,9 @@ public class ProyectoController {
 
     @Autowired
     UsuarioService usuarioService;
+
+    @Autowired
+    CategoriaService categoriaService;
 
     @Autowired
     ManagerUserSesion managerUserSesion;
@@ -370,7 +367,11 @@ public class ProyectoController {
             throw new ProyectoNotFoundException();
         }
 
-        tareaService.nuevaTareaUsuario(idUsuario, idProyecto, tareaData.getTitulo(), tareaData.getPrioridad());
+        Tarea tarea = tareaService.nuevaTareaUsuario(idUsuario, idProyecto, tareaData.getTitulo(), tareaData.getPrioridad());
+        if (tareaData.getCategoria() != null) {
+            Categoria categoria = categoriaService.findById(tareaData.getCategoria());
+            tareaService.asignarCategoria(tarea.getId(), categoria);
+        }
         flash.addFlashAttribute("mensaje", "Tarea de proyecto creada correctamente");
         return "redirect:/usuarios/" + idUsuario + "/proyectos/" + idProyecto + "/tareas";
     }

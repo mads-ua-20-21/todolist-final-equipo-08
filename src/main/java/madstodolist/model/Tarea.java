@@ -79,6 +79,7 @@ public class Tarea implements Serializable {
         this.titulo = titulo;
         this.prioridad = prioridad;
         this.proyecto = proyecto;
+        this.estado = EstadoTarea.PENDIENTE;
         usuario.getTareas().add(this);
     }
 
