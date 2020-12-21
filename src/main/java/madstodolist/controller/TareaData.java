@@ -5,6 +5,7 @@ public class TareaData {
     private Integer prioridad;
     private Long categoria;
     private Boolean borrarCategorias;
+    private Integer estado;
 
     public String getTitulo() {
         return titulo;
@@ -33,4 +34,8 @@ public class TareaData {
     public Boolean getBorrarCategorias() { return borrarCategorias; }
 
     public void setBorrarCategorias(Boolean borrar) { borrarCategorias = borrar; }
+
+    public Integer getEstado() { return estado; }
+
+    public void setEstado(Integer estado) { this.estado = estado; }
 }

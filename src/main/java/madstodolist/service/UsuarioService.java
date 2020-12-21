@@ -97,4 +97,43 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
         return usuario;
     }
+
+    @Transactional(readOnly = true)
+    public List<Equipo> equiposUsuario(Long idUsuario){
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+
+        List<Equipo> equipos = new ArrayList(usuario.getEquipos());
+        return equipos;
+    }
+
+    @Transactional
+    public List<Proyecto> proyectosUsuario(Long idUsuario){
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+
+        List<Equipo> equipos = this.equiposUsuario(idUsuario);
+        List<Proyecto> proyectos = new ArrayList<Proyecto>();
+
+        for (Equipo equipo: equipos){
+            proyectos.addAll(equipo.getProyectos());
+        }
+
+        return proyectos;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Comentario> comentariosUsuario(Long idUsuario){
+
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+        List<Comentario> comentarios = new ArrayList(usuario.getComentarios());
+        return comentarios;
+    }
 }

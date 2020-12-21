@@ -132,6 +132,6 @@ public class EquipoTest {
         List<Equipo> equipos = equipoRepository.findAll();
 
         // THEN
-        assertThat(equipos).hasSize(2);
+        assertThat(equipos).hasSize(3);
     }
 }

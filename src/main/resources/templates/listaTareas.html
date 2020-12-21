@@ -16,57 +16,133 @@
         </div>
     </div>
 
-    <div class="row mt-3">
+    <div class="row">
+
         <div class="col">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Tarea</th>
-                    <th>Prioridad</th>
-                    <th>Categoria</th>
-                    <th>Acción</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="tarea: ${tareas}">
-                    <td th:text="${tarea.id}"></td>
-                    <td th:text="${tarea.titulo}"></td>
-                    <td th:text="${tarea.prioridad}"></td>
-                    <td th:if="${tarea.categoria.size() != 0}">
+            <form method="get" th:action="@{/usuarios/{id}/tareas/buscar(id=${usuario.id})}">
+                <div class="form-group">
+                    <label>Buscar:</label>
+                    <input class="form-control" id="palabra" name="palabra" required type="text"/>
+                </div>
+                <button class="btn btn-primary" type="submit">Buscar</button>
+            </form>
+        </div>
+
+        <div class="col">
+            <form method="get" th:action="@{/usuarios/{id}/tareas/filtrar(id=${usuario.id})}">
+                <div class="form-group">
+                    <label>Mostrar solamente las tareas:</label>
+                    <select class="custom-select" id="filtrarEstado" name="filtrarEstado" required type="int">
+                        <option value=0 selected="selected">Pendientes</option>
+                        <option value=1>Activas</option>
+                        <option value=2>Terminadas</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" type="submit">Filtrar</button>
+            </form>
+        </div>
+
+        <div class="col">
+            <form method="get" th:action="@{/usuarios/{id}/tareas/excluir(id=${usuario.id})}">
+                <div class="form-group">
+                    <label>Excluir las tareas:</label>
+                    <select class="custom-select" id="excluir" name="excluir" required type="int">
+                        <option value=0 selected="selected">Pendientes</option>
+                        <option value=1>Activas</option>
+                        <option value=2>Terminadas</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" type="submit">Excluir</button>
+            </form>
+        </div>
+
+        <div class="col">
+            <form method="get" th:action="@{/usuarios/{id}/tareas/ordenar(id=${usuario.id})}">
+                <div class="form-group">
+                    <label>Mostrar primero las tareas:</label>
+                    <select class="custom-select" id="ordenar" name="ordenar" required type="int">
+                        <option value=0 selected="selected">Pendientes</option>
+                        <option value=1>Activas</option>
+                        <option value=2>Terminadas</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" type="submit">Ordenar</button>
+            </form>
+        </div>
+
+    </div>
+
+    <p></p>
+    <p><a class="btn btn-primary btn-xs" th:href="@{/usuarios/{id}/tareas(id=${usuario.id})}"/>Quitar filtro</a></p>
+
+        <div class="row mt-3">
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Tarea</th>
+                        <th>Prioridad</th>
+                        <th>Categoria</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="tarea: ${tareas}">
+                        <td th:text="${tarea.id}"></td>
+                        <td th:text="${tarea.titulo}"></td>
+                        <td th:text="${tarea.prioridad}"></td>
+                      
+                        <td th:if="${tarea.categoria.size() != 0}">
                         <a th:each="categoria: ${tarea.categoria}"
                            th:text="${categoria.titulo} + ' '"></a>
-                    </td>
-                    <td th:if="${tarea.categoria.size() == 0}">Sin Categoría</td>
-                    <td><a class="btn btn-primary btn-xs" th:href="@{/tareas/{id}/editar(id=${tarea.id})}"/>editar</a>
-                        <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
-                           th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">borrar</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <p><a class="btn btn-primary" th:href="@{/usuarios/{id}/tareas/nueva(id=${usuario.id})}"> Nueva tarea</a>
-            <a class="btn btn-link" href="/logout">Salir</a></p>
+                        </td>
+                        <td th:if="${tarea.categoria.size() == 0}">Sin Categoría</td>
+                      
+                        <td>
+                            <form method="post" th:action="@{/tareas/{id}/estado(id=${tarea.id})}">
+                                <div class="col-6">
+                            <select class="custom-select" id="estado" name="estado" required type="integer">
+                                <option value=0 th:selected="${tarea.getEstado().ordinal() == 0}">PENDIENTE</option>
+                                <option value=1 th:selected="${tarea.getEstado().ordinal() == 1}">ACTIVA</option>
+                                <option value=2 th:selected="${tarea.getEstado().ordinal() == 2}">TERMINADA</option>
+                            </select>
+                                <input name="Actualizar" type="submit" value="Actualizar" />
+                                </div>
+                            </form>
+                        </td>
+
+
+                        <td><a class="btn btn-primary btn-xs" th:href="@{/tareas/{id}/editar(id=${tarea.id})}"/>editar</a>
+                            <button class="btn btn-danger btn-xs" onmouseover="" style="cursor: pointer;"
+                               th:onclick="'del(\'/tareas/' + ${tarea.id} + '\')'">borrar</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p><a class="btn btn-primary" th:href="@{/usuarios/{id}/tareas/nueva(id=${usuario.id})}"> Nueva tarea</a>
+                <a class="btn btn-link" href="/logout">Salir</a></p>
+            </div>
         </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col">
-            <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(mensaje)}">
-                <span th:text="${mensaje}"></span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+        <div class="row mt-2">
+            <div class="col">
+                <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(mensaje)}">
+                    <span th:text="${mensaje}"></span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-</div>
+    </div>
 
-<div th:replace="fragments::javascript"/>
+    <div th:replace="fragments::javascript"/>
 
-<!-- Ejemplo de uso de Ajax para lanzar una petición DELETE y borrar una tarea -->
+    <!-- Ejemplo de uso de Ajax para lanzar una petición DELETE y borrar una tarea -->
 
 <script type="text/javascript">
     function del(urlBorrar) {
