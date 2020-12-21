@@ -35,7 +35,8 @@
                     <td th:text="${proyecto.getId()}"></td>
                     <td ><a class="btn btn-link" th:text="${proyecto.getNombre()}" th:href="@{/usuarios/{id}/proyectos/{proyecto}/tareas(id=${usuario.getId()},proyecto=${proyecto.getId()})}"></a></td>
                     <td th:text="${proyecto.equipo.nombre}"></td>
-                    <td th:text="${proyecto.getStringFechaLimite()}"></td>
+                    <td th:if="${proyecto.getFechaLimite() != null}" th:text="${proyecto.getStringFechaLimite()}"></td>
+                    <td th:if="${proyecto.getFechaLimite() == null}"> Sin fecha límite</td>
                     <td th:if="${usuario.getId()==proyecto.getEquipo().getUsuarioAdministrador().getId()|| usuario.getAdministrador()}">
                         <a class="btn btn-primary" th:href="@{/proyectos/{id}/editar(id=${proyecto.getId()})}">Modificar proyecto</a>
                     </td>

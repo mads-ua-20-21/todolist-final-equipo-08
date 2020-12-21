@@ -37,7 +37,8 @@ public class ComentarioService {
     public List<Comentario> findAllOrderedByName(){
 
         List<Comentario> comentarios = comentarioRepository.findAll();
-        comentarios.sort(Comparator.comparing(Comentario::getFechaHoraString));
+        //comentarios.sort(Comparator.comparing(Comentario::getFechaHoraString));
+        comentarios.sort(Comparator.comparing(Comentario::getFechaHora));
         return comentarios;
     }
 

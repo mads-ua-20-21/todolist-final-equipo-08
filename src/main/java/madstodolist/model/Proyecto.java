@@ -2,6 +2,7 @@ package madstodolist.model;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -35,6 +36,7 @@ public class Proyecto implements Serializable {
     Set<Tarea> tareas = new HashSet<>();
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechalimite;
 
     private String descripcion;

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -61,6 +62,20 @@ public class ProyectoService {
         }
 
         Proyecto proyecto = new Proyecto(nombre,equipo);
+        proyecto = proyectoRepository.save(proyecto);
+        return proyecto;
+    }
+
+    @Transactional
+    public Proyecto nuevoProyecto (Long idEquipo, String nombre, String descripcion, Date fechalimite){
+        Equipo equipo = equipoRepository.findById(idEquipo).orElse(null);
+        if (equipo == null){
+            throw new ProyectoServiceException("El equipo " + idEquipo + " no existe ");
+        }
+
+        Proyecto proyecto = new Proyecto(nombre,equipo);
+        proyecto.setDescripcion(descripcion);
+        proyecto.setFechaLimite(fechalimite);
         proyecto = proyectoRepository.save(proyecto);
         return proyecto;
     }
