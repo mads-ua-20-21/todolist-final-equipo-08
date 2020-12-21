@@ -3,6 +3,7 @@ package madstodolist.controller;
 import madstodolist.authentication.ManagerUserSesion;
 import madstodolist.authentication.UsuarioNoAdminException;
 import madstodolist.authentication.UsuarioNoLogeadoException;
+import madstodolist.controller.exception.TareaNotFoundException;
 import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -126,12 +128,46 @@ public class UsuariosController {
 
         RegistroData registroData = new RegistroData();
 
-        registroData.seteMail(usuario.getEmail());
-        registroData.setNombre(usuario.getNombre());
-        registroData.setFechaNacimiento(usuario.getFechaNacimiento());
+        registroData.seteMail(usuarioDescrito.getEmail());
+        registroData.setNombre(usuarioDescrito.getNombre());
+        registroData.setFechaNacimiento(usuarioDescrito.getFechaNacimiento());
 
         model.addAttribute("registroData", registroData);
 
         return "formEditarUsuario";
+    }
+
+    @PostMapping("/usuarios/{id}/editar")
+    public String guardarUsuarioModificado(@PathVariable(value="id") Long idUsuario,
+                                           @Valid RegistroData registroData,
+                                       Model model, RedirectAttributes flash, HttpSession session) {
+
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+
+        //Una vez se ha comprobado que hay un usuario logueado se siguen dos caminos,
+        //comprobar que coincide con el usuario descrito o que el usuario es admin
+        model.addAttribute("usuario", usuario);
+
+        Usuario usuarioDescrito = usuarioService.findById(idUsuario);
+        if (usuarioDescrito == null) {
+            throw new UsuarioNotFoundException();
+        }
+        if (!usuario.equals(usuarioDescrito) && !usuario.getAdministrador()){
+            throw new UsuarioNoAdminException();
+        }
+
+        usuarioDescrito.setFechaNacimiento(registroData.getFechaNacimiento());
+        usuarioDescrito.setNombre(registroData.getNombre());
+        usuarioDescrito.setEmail(registroData.geteMail());
+
+        usuarioService.modificaUsuario(idUsuario,usuarioDescrito);
+        flash.addFlashAttribute("mensaje", "Usuario modificado correctamente");
+
+        return "redirect:/usuarios/" + idUsuario;
+
     }
 }

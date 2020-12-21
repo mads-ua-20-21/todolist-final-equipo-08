@@ -17,7 +17,7 @@
             <div class="form-group">
                 <label for="email">Correo electrónico</label>
                 <input id="email" class="form-control" name="email" placeholder="Correo electrónico"
-                       type="text" th:field="*{eMail}"/>
+                       type="text" th:field="*{eMail}" required/>
                 <br>
                 <label for="nombre">Nombre</label>
                 <input id="nombre" class="form-control" name="nombre" placeholder="Nombre" type="text"
@@ -32,6 +32,8 @@
 
         </div>
     </form>
+
+
 </div>
 
 <div th:replace="fragments::javascript"/>
