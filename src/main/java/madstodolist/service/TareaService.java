@@ -102,4 +102,15 @@ public class TareaService {
         categoria.getTareas().add(tarea);
         tareaRepository.save(tarea);
     }
+
+    @Transactional
+    public void borrarCategoriasDeTarea(Long idTarea) {
+        Tarea tarea = tareaRepository.findById(idTarea).orElse(null);
+        if (tarea == null) {
+            throw new TareaServiceException("No existe tarea con id " + idTarea);
+        }
+        tarea.getCategoria().forEach(categoria -> categoria.getTareas().remove(tarea));
+        tarea.getCategoria().removeAll(tarea.getCategoria());
+        tareaRepository.save(tarea);
+    }
 }

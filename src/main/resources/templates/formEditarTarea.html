@@ -24,6 +24,20 @@
                 <option value=2>Prioridad 2</option>
                 <option value=3>Prioridad 3</option>
             </select>
+            <br>
+            <label for="categoria">Añadir categoria a la tarea:</label>
+            <select class="custom-select" id="categoria" name="categroia" required th:field="*{categoria}" type="Long">
+                <option th:each="categoria: ${usuario.getCategorias()}"
+                        th:text="${categoria.getTitulo()}"
+                        th:value="${categoria.getId()}"></option>
+            </select>
+
+            <br>
+            <label for="borrarCategoria">Borrar todas ls categorias de la tearea:</label>
+            <select class="custom-select" id="borrarCategoria" name="borrarCategoria" required th:field="*{borrarCategorias}" type="Boolean">
+                <option value=false>No borrar</option>
+                <option value=true>Si borrar todas</option>
+            </select>
         </div>
         <button class="btn btn-primary" type="submit">Modificar tarea</button>
         <a class="btn btn-link" th:href="@{/usuarios/{id}/tareas(id=${tarea.usuario.id})}">Cancelar</a>

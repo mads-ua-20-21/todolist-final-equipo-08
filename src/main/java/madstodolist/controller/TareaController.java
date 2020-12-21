@@ -116,6 +116,13 @@ public class TareaController {
 
         tareaService.modificaTarea(idTarea, tareaData.getTitulo());
         tareaService.asignarEditarPrioridad(idTarea, tareaData.getPrioridad());
+        Categoria categoria = categoriaService.findById(tareaData.getCategoria());
+        tareaService.asignarCategoria(tarea.getId(), categoria);
+
+        if (tareaData.getBorrarCategorias()) {
+            tareaService.borrarCategoriasDeTarea(tarea.getId());
+        }
+
         flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
         return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
     }
@@ -131,9 +138,9 @@ public class TareaController {
         }
 
         managerUserSesion.comprobarUsuarioLogeado(session, tarea.getUsuario().getId());
-
+        tareaService.borrarCategoriasDeTarea(tarea.getId());
         tareaService.borraTarea(idTarea);
-        return "";
+        return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
     }
 }
 
