@@ -26,7 +26,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="categoria: ${categorias}">
-                    <td th:text="${categoria.getTitulo()}"></td>
+                    <td ><a class="btn btn-link" th:text="${categoria.getTitulo()}" th:href="@{/usuarios/{id}/categoria/{id_c}(id=${usuario.getId()}, id_c=${categoria.getId()})}"></a></td>
                     <td>
                         <form method="post" th:action="@{/usuarios/{id}/categoria/{id_c}/eliminar(id=${usuario.getId()}, id_c=${categoria.getId()})}">
                             <button class="btn btn-danger" type="submit">Eliminar</button>
