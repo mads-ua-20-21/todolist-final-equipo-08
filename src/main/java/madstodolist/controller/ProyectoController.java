@@ -194,8 +194,7 @@ public class ProyectoController {
     }
 
     @GetMapping("/equipos/{id}/proyectos/nuevo")
-    public String formNuevoProyecto(@PathVariable(value="id") Long idEquipo,
-                                 @ModelAttribute Proyecto proyecto, Model model,
+    public String formNuevoProyecto(@PathVariable(value="id") Long idEquipo, Model model,
                                  HttpSession session) {
 
         managerUserSesion.usuarioLogueado(session);
@@ -216,14 +215,13 @@ public class ProyectoController {
 
         model.addAttribute("equipo",equipo);
         model.addAttribute("usuario", usuario);
+        model.addAttribute("proyecto",new ProyectoData());
         return "formNuevoProyecto";
     }
 
     @PostMapping("/equipos/{id}/proyectos/nuevo")
     public String nuevoProyecto(@PathVariable(value="id") Long idEquipo,
-                                @ModelAttribute Proyecto proyecto,
-                                @ModelAttribute(value = "descripcion") String descripcion,
-                                @ModelAttribute(value = "fechalimite") String fechalimite,
+                                @ModelAttribute ProyectoData proyecto,
                              Model model, RedirectAttributes flash,
                              HttpSession session) throws ParseException {
 
@@ -243,15 +241,14 @@ public class ProyectoController {
             managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
         }
 
-        if (descripcion == null && fechalimite==null) proyectoService.nuevoProyecto(idEquipo,proyecto.getNombre());
-        else proyectoService.nuevoProyecto(idEquipo, proyecto.getNombre(), descripcion, new SimpleDateFormat("dd-MM-yyyy").parse(fechalimite));
+        if (proyecto.getDescripcion() == null && proyecto.getFechaLimite()==null) proyectoService.nuevoProyecto(idEquipo,proyecto.getNombre());
+        else proyectoService.nuevoProyecto(idEquipo, proyecto.getNombre(), proyecto.getDescripcion(), proyecto.getFechaLimite());
         flash.addFlashAttribute("mensaje", "Proyecto creado correctamente");
         return "redirect:/equipos/" + idEquipo;
     }
 
     @GetMapping("/proyectos/{id}/editar")
     public String formEditaProyecto(@PathVariable(value="id") Long idProyecto,
-                                    @ModelAttribute Proyecto proyecto,
                                  Model model, HttpSession session) {
 
         Proyecto proyectoMod = proyectoService.findById(idProyecto);
@@ -271,17 +268,21 @@ public class ProyectoController {
         }
         model.addAttribute("usuario", usuario);
 
+        ProyectoData proyecto = new ProyectoData();
+
         proyecto.setNombre(proyectoMod.getNombre());
+        proyecto.setDescripcion(proyectoMod.getDescripcion());
+        proyecto.setFechaLimite(proyectoMod.getFechaLimite());
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("equipo", proyectoMod.getEquipo());
+        model.addAttribute("idProyecto",idProyecto);
 
         return "formEditarProyecto";
     }
 
     @PostMapping("/proyectos/{id}/editar")
     public String guardarProyectoModificado(@PathVariable(value="id") Long idProyecto,
-                                       @ModelAttribute Proyecto proyecto,
-                                            @ModelAttribute(value = "fechalimite") String fechalimite,
+                                       @ModelAttribute ProyectoData proyecto,
                                        Model model, RedirectAttributes flash, HttpSession session) throws ParseException {
 
         Proyecto proyectoMod = proyectoService.findById(idProyecto);
@@ -302,7 +303,7 @@ public class ProyectoController {
         model.addAttribute("usuario", usuario);
 
         proyectoService.modificarProyecto(idProyecto,proyecto.getNombre());
-        proyectoService.actualizarFechaProyecto(idProyecto, new SimpleDateFormat("dd-MM-yyyy").parse(fechalimite));
+        proyectoService.actualizarFechaProyecto(idProyecto, proyecto.getFechaLimite());
         proyectoService.actualizarDescripcionProyecto(idProyecto, proyecto.getDescripcion());
         flash.addFlashAttribute("mensaje", "Proyecto modificado correctamente");
         return "redirect:/equipos/" + proyectoMod.getEquipo().getId();

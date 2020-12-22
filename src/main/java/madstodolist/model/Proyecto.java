@@ -37,7 +37,6 @@ public class Proyecto implements Serializable {
     Set<Tarea> tareas = new HashSet<>();
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechalimite;
 
     private String descripcion;

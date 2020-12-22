@@ -18,11 +18,11 @@
                 <input class="form-control" id="nombre" name="nombre" required th:field="*{nombre}" type="text"/>
 
                 <p></p><label>Descripción del proyecto:</label>
-                <textarea class="form-control" id="descripcion" name="descripcion" type="text"/></textarea>
+                <textarea class="form-control" id="descripcion" name="descripcion" th:field="*{descripcion}" type="text"/></textarea>
 
                 <p></p><label>Fecha del proyecto (dia-mes-año):</label>
-                <input id="fechalimite" class="form-control" name="fechalimite"
-                       placeholder="01-12-2020" value="23-12-2020" type="datetime-local">
+                <input id="fechaLimite" class="form-control" name="fechaLimite"
+                       placeholder="01-12-2020" th:field="*{fechaLimite}" type="datetime-local">
             </div>
             <button class="btn btn-primary" type="submit">Crear proyecto</button>
             <a class="btn btn-link" th:href="@{/equipos/{id}(id=${equipo.id})}">Cancelar</a>
