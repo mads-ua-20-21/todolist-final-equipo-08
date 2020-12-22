@@ -1,9 +1,11 @@
 package madstodolist.controller;
 
 import madstodolist.authentication.ManagerUserSesion;
+import madstodolist.controller.exception.ProyectoNotFoundException;
 import madstodolist.controller.exception.TareaNotFoundException;
 import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.Categoria;
+import madstodolist.model.Proyecto;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import madstodolist.service.CategoriaService;
@@ -235,6 +237,31 @@ public class TareaController {
         tareaService.borrarCategoriasDeTarea(tarea.getId());
         tareaService.borraTarea(idTarea);
         return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
+    }
+
+    @PostMapping("/tareas/{id}/eliminar")
+    public String eliminarTareaProyecto(@PathVariable(value="id") Long idTarea, Model model,
+                                   RedirectAttributes flash, HttpSession session){
+
+        Tarea tarea = tareaService.findById(idTarea);
+        if (tarea == null) {
+            throw new TareaNotFoundException();
+        }
+
+        managerUserSesion.usuarioLogueado(session);
+
+        managerUserSesion.comprobarUsuarioLogeado(session, tarea.getUsuario().getId());
+
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        tareaService.borrarCategoriasDeTarea(tarea.getId());
+        tareaService.borraTarea(idTarea);
+
+        flash.addFlashAttribute("mensaje", "Tarea eliminada correctamente");
+
+        return "redirect:/usuarios/" + usuario.getId() + "/proyectos/" + tarea.getProyecto().getId() + "/tareas";
     }
 }
 

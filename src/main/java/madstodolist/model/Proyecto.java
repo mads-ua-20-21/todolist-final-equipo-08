@@ -26,10 +26,11 @@ public class Proyecto implements Serializable {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "equipo_id")
+    @OnDelete( action = OnDeleteAction.CASCADE )
     private Equipo equipo;
 
-    @OneToMany(mappedBy = "proyecto", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "proyecto", fetch = FetchType.EAGER)
+    @OnDelete( action = OnDeleteAction.CASCADE )
     Set<Tarea> tareas = new HashSet<>();
 
     private Proyecto(){}
