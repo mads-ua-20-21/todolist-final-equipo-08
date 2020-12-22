@@ -27,6 +27,7 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
+                    <th>Fecha</th>
                     <th>Usuario</th>
                     <th>Comentario</th>
                     <th>Acción</th>
@@ -34,6 +35,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="comentario: ${comentarios}">
+                    <td th:text="${comentario.getFechaHoraString()}"></td>
                     <td th:text="${comentario.usuario.nombre}"></td>
                     <td th:text="${comentario.mensaje}"></td>
                     <td th:if="${comentario.usuario.equals(usuario) || usuario.getAdministrador()}">

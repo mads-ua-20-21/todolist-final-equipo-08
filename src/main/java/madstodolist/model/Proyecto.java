@@ -2,10 +2,13 @@ package madstodolist.model;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -33,6 +36,12 @@ public class Proyecto implements Serializable {
     @OnDelete( action = OnDeleteAction.CASCADE )
     Set<Tarea> tareas = new HashSet<>();
 
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date fechalimite;
+
+    private String descripcion;
+
     private Proyecto(){}
 
     public Proyecto(String nombre, Equipo creador){
@@ -55,6 +64,19 @@ public class Proyecto implements Serializable {
     public Set<Tarea> getTareas() { return this.tareas; }
 
     public void setTareas(Set<Tarea> tareas) { this.tareas = tareas; }
+
+    public Date getFechaLimite() { return fechalimite; }
+
+    public String getStringFechaLimite(){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return formatter.format(fechalimite.getTime());
+    }
+
+    public void setFechaLimite(Date fechaLimite) { this.fechalimite = fechaLimite; }
+
+    public String getDescripcion() { return descripcion; }
+
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
     @Override
     public boolean equals(Object o) {

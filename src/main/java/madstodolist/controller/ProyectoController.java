@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Controller
@@ -87,6 +89,9 @@ public class ProyectoController {
         model.addAttribute("usuario", usuario);
 
         Proyecto proyecto = proyectoService.findById(idProyecto);
+        if(proyecto == null){
+            throw new ProyectoNotFoundException();
+        }
         model.addAttribute("proyecto", proyecto);
         Equipo equipo = proyecto.getEquipo();
         model.addAttribute("equipo", equipo);
@@ -217,8 +222,10 @@ public class ProyectoController {
     @PostMapping("/equipos/{id}/proyectos/nuevo")
     public String nuevoProyecto(@PathVariable(value="id") Long idEquipo,
                                 @ModelAttribute Proyecto proyecto,
+                                @ModelAttribute(value = "descripcion") String descripcion,
+                                @ModelAttribute(value = "fechalimite") String fechalimite,
                              Model model, RedirectAttributes flash,
-                             HttpSession session) {
+                             HttpSession session) throws ParseException {
 
         managerUserSesion.usuarioLogueado(session);
         Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
@@ -236,7 +243,8 @@ public class ProyectoController {
             managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
         }
 
-        proyectoService.nuevoProyecto(idEquipo,proyecto.getNombre());
+        if (descripcion == null && fechalimite==null) proyectoService.nuevoProyecto(idEquipo,proyecto.getNombre());
+        else proyectoService.nuevoProyecto(idEquipo, proyecto.getNombre(), descripcion, new SimpleDateFormat("dd-MM-yyyy").parse(fechalimite));
         flash.addFlashAttribute("mensaje", "Proyecto creado correctamente");
         return "redirect:/equipos/" + idEquipo;
     }
@@ -273,7 +281,8 @@ public class ProyectoController {
     @PostMapping("/proyectos/{id}/editar")
     public String guardarProyectoModificado(@PathVariable(value="id") Long idProyecto,
                                        @ModelAttribute Proyecto proyecto,
-                                       Model model, RedirectAttributes flash, HttpSession session) {
+                                            @ModelAttribute(value = "fechalimite") String fechalimite,
+                                       Model model, RedirectAttributes flash, HttpSession session) throws ParseException {
 
         Proyecto proyectoMod = proyectoService.findById(idProyecto);
         if (proyectoMod == null) {
@@ -293,6 +302,8 @@ public class ProyectoController {
         model.addAttribute("usuario", usuario);
 
         proyectoService.modificarProyecto(idProyecto,proyecto.getNombre());
+        proyectoService.actualizarFechaProyecto(idProyecto, new SimpleDateFormat("dd-MM-yyyy").parse(fechalimite));
+        proyectoService.actualizarDescripcionProyecto(idProyecto, proyecto.getDescripcion());
         flash.addFlashAttribute("mensaje", "Proyecto modificado correctamente");
         return "redirect:/equipos/" + proyectoMod.getEquipo().getId();
     }

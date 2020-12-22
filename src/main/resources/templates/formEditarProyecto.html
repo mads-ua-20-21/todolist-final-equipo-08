@@ -16,8 +16,15 @@
             <div class="form-group">
                 <label for="nuevoNombre">Nuevo nombre del Proyecto:</label>
                 <input class="form-control" id="nuevoNombre" name="nuevoNombre" required th:field="*{nombre}" type="text"/>
+
+                <p></p><label>Descripción del proyecto:</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" th:value="${proyecto.getDescripcion()}" th:field="*{descripcion}" type="text"/></textarea>
+
+                <p></p><label>Fecha del proyecto (dia-mes-año):</label>
+                <input id="fechalimite" class="form-control" name="fechalimite"
+                       placeholder="01-12-2020" th:value="${proyecto.getFechaLimite()}" type="datetime-local">
             </div>
-            <button class="btn btn-primary" type="submit">Cambiar nombre del proyecto</button>
+            <button class="btn btn-primary" type="submit">Editar proyecto</button>
             <a class="btn btn-link" th:href="@{/equipos/{id}(id=${equipo.id})}">Cancelar</a>
         </div>
     </form>

@@ -9,10 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.thymeleaf.util.ListUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -202,6 +199,7 @@ public class TareaService {
             throw new TareaServiceException("No existe tarea con id " + idTarea);
         }
         List<Comentario> comentarios = new ArrayList(tarea.getComentarios());
+        comentarios.sort(Comparator.comparing(Comentario::getFechaHora));
         return comentarios;
     }
 }
