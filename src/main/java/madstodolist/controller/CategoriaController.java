@@ -4,6 +4,7 @@ import madstodolist.authentication.ManagerUserSesion;
 import madstodolist.controller.exception.UsuarioNotFoundException;
 import madstodolist.model.Categoria;
 import madstodolist.model.Equipo;
+import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
 import madstodolist.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -103,5 +105,26 @@ public class CategoriaController {
         categoriaService.eliminarCategoria(idCategoria);
         flash.addFlashAttribute("mensaje", "Categoria eliminada correctamente");
         return "redirect:/usuarios/" + idUsuario + "/categoria";
+    }
+
+    @GetMapping("/usuarios/{id}/categoria/{id_c}")
+    public String listarTareasCategoria(@PathVariable(value="id_c") Long idCategoria, Model model, HttpSession session) {
+
+        managerUserSesion.usuarioLogueado(session);
+        Usuario usuario = usuarioService.findById((Long) session.getAttribute("idUsuarioLogeado"));
+
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Categoria categoria = categoriaService.findById(idCategoria);
+        if (categoria == null){
+            throw new CategoriaServiceException("Categoria " + idCategoria + " no existe ");
+        }
+
+        List<Tarea> tareas = new ArrayList<>(categoria.getTareas());
+        model.addAttribute("tareas", tareas);
+        return "listaTareas";
     }
 }
