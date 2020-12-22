@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments :: head (titulo='Lista De Usuarios')"></head>
+<head th:replace="fragments :: head (titulo='Categorias')"></head>
 
 <body>
 
@@ -12,7 +12,7 @@
 
     <div class="row mt-3">
         <div class="col">
-            <h2 th:text="'Listado de Usuarios'"></h2>
+            <h2 th:text="'Listado de Categorías de ' + ${usuario.getNombre()}"></h2>
         </div>
     </div>
 
@@ -21,30 +21,25 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Consultar Descripción</th>
-                    <th>Bloquear/Habilitar</th>
+                    <th>Categoría</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="user: ${usuarios}" th:unless="${user.administrador}">
-                    <td th:text="${user.getId()}"></td>
-                    <td th:text="${user.getNombre()}"></td>
-                    <td th:text="${user.getEmail()}"></td>
-                    <td><a class="btn btn-success btn-xs" th:href="@{/usuarios/{id}(id=${user.getId()})}"/>Detalles de usuario</a></td>
+                <tr th:each="categoria: ${categorias}">
+                    <td th:text="${categoria.getTitulo()}"></td>
                     <td>
-                        <form method="post" th:action="@{/usuarios/{id}/bloquear(id=${user.getId()})}" th:object="${usuario}">
-                            <button th:unless="${user.getBloqueado()}" class="btn btn-danger" type="submit">Bloquear</button>
-                            <button th:if="${user.getBloqueado()}" class="btn btn-success" type="submit">Habilitar</button>
+                        <form method="post" th:action="@{/usuarios/{id}/categoria/{id_c}/eliminar(id=${usuario.getId()}, id_c=${categoria.getId()})}">
+                            <button class="btn btn-danger" type="submit">Eliminar</button>
                         </form>
                     </td>
+
                 </tr>
                 </tbody>
             </table>
+            <p><a class="btn btn-primary" th:href="@{/usuarios/{id}/categoria/nueva(id=${usuario.id})}"> Nueva Categoria</a>
         </div>
     </div>
+
     <div class="row mt-2">
         <div class="col">
             <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(mensaje)}">
@@ -55,6 +50,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <div th:replace="fragments::javascript"/>

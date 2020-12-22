@@ -6,14 +6,8 @@ import madstodolist.controller.exception.EquipoNotFoundException;
 import madstodolist.controller.exception.ProyectoNotFoundException;
 import madstodolist.controller.exception.TareaNotFoundException;
 import madstodolist.controller.exception.UsuarioNotFoundException;
-import madstodolist.model.Equipo;
-import madstodolist.model.Proyecto;
-import madstodolist.model.Tarea;
-import madstodolist.model.Usuario;
-import madstodolist.service.EquipoService;
-import madstodolist.service.ProyectoService;
-import madstodolist.service.TareaService;
-import madstodolist.service.UsuarioService;
+import madstodolist.model.*;
+import madstodolist.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +36,9 @@ public class ProyectoController {
 
     @Autowired
     UsuarioService usuarioService;
+
+    @Autowired
+    CategoriaService categoriaService;
 
     @Autowired
     ManagerUserSesion managerUserSesion;
@@ -100,6 +97,98 @@ public class ProyectoController {
         model.addAttribute("equipo", equipo);
 
         List<Tarea> tareas = proyectoService.tareasProyecto(idProyecto);
+        model.addAttribute("tareas", tareas);
+        return "tareasProyecto";
+    }
+
+    @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/filtrar")
+    public String listadoTareasFiltrarEstado(@PathVariable(value="id") Long idUsuario,
+                                             @PathVariable(value="proyecto") Long idProyecto,
+                                             @ModelAttribute(value="filtrarEstado") int filtrarEstado,
+                                             Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Proyecto proyecto = proyectoService.findById(idProyecto);
+        model.addAttribute("proyecto", proyecto);
+        Equipo equipo = proyecto.getEquipo();
+        model.addAttribute("equipo", equipo);
+
+        List<Tarea> tareas = proyectoService.filtrarTareasPorEstado(idProyecto, filtrarEstado);
+        model.addAttribute("tareas", tareas);
+        return "tareasProyecto";
+    }
+
+    @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/excluir")
+    public String listadoTareasExcluirEstado(@PathVariable(value="id") Long idUsuario,
+                                             @PathVariable(value="proyecto") Long idProyecto,
+                                             @ModelAttribute(value="excluir") int estado,
+                                             Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Proyecto proyecto = proyectoService.findById(idProyecto);
+        model.addAttribute("proyecto", proyecto);
+        Equipo equipo = proyecto.getEquipo();
+        model.addAttribute("equipo", equipo);
+
+        List<Tarea> tareas = proyectoService.excluirTareasPorEstado(idProyecto, estado);
+        model.addAttribute("tareas", tareas);
+        return "tareasProyecto";
+    }
+
+    @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/ordenar")
+    public String orndenarTareasPrimerEstado(@PathVariable(value="id") Long idUsuario,
+                                             @PathVariable(value="proyecto") Long idProyecto,
+                                             @ModelAttribute(value="ordenar") int estado,
+                                             Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Proyecto proyecto = proyectoService.findById(idProyecto);
+        model.addAttribute("proyecto", proyecto);
+        Equipo equipo = proyecto.getEquipo();
+        model.addAttribute("equipo", equipo);
+
+        List<Tarea> tareas = proyectoService.ordenarTareasPrimerEstado(idProyecto, estado);
+        model.addAttribute("tareas", tareas);
+        return "tareasProyecto";
+    }
+
+    @GetMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/buscar")
+    public String buscarTareaPalabra(@PathVariable(value="id") Long idUsuario,
+                                     @PathVariable(value="proyecto") Long idProyecto,
+                                     @ModelAttribute(value="palabra") String palabra,
+                                     Model model, HttpSession session) {
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        model.addAttribute("usuario", usuario);
+
+        Proyecto proyecto = proyectoService.findById(idProyecto);
+        model.addAttribute("proyecto", proyecto);
+        Equipo equipo = proyecto.getEquipo();
+        model.addAttribute("equipo", equipo);
+
+        List<Tarea> tareas = proyectoService.filtrarTareasPorPalabra(idProyecto, palabra);
         model.addAttribute("tareas", tareas);
         return "tareasProyecto";
     }
@@ -289,8 +378,30 @@ public class ProyectoController {
             throw new ProyectoNotFoundException();
         }
 
-        tareaService.nuevaTareaUsuario(idUsuario, idProyecto, tareaData.getTitulo(), tareaData.getPrioridad());
+        Tarea tarea = tareaService.nuevaTareaUsuario(idUsuario, idProyecto, tareaData.getTitulo(), tareaData.getPrioridad());
+        if (tareaData.getCategoria() != null) {
+            Categoria categoria = categoriaService.findById(tareaData.getCategoria());
+            tareaService.asignarCategoria(tarea.getId(), categoria);
+        }
         flash.addFlashAttribute("mensaje", "Tarea de proyecto creada correctamente");
+        return "redirect:/usuarios/" + idUsuario + "/proyectos/" + idProyecto + "/tareas";
+    }
+
+    @PostMapping("/usuarios/{id}/proyectos/{proyecto}/tareas/{tarea}/estado")
+    public String modificarEstadoTarea(@PathVariable(value="id") Long idUsuario,
+                                       @PathVariable(value="proyecto") Long idProyecto,
+                                       @PathVariable(value="tarea") Long idTarea,
+                                       @ModelAttribute(value="estado") int estado,
+                                       Model model, RedirectAttributes flash, HttpSession session) {
+        Tarea tarea = tareaService.findById(idTarea);
+        if (tarea == null) {
+            throw new TareaNotFoundException();
+        }
+
+        managerUserSesion.comprobarUsuarioLogeado(session, idUsuario);
+
+        tareaService.actualizarEstado(idTarea, estado);
+        flash.addFlashAttribute("mensaje", "Estado de la tarea modificado correctamente");
         return "redirect:/usuarios/" + idUsuario + "/proyectos/" + idProyecto + "/tareas";
     }
 }

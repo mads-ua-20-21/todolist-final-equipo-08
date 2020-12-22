@@ -32,6 +32,7 @@ public class Comentario implements Serializable {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "tarea_id")
+    @OnDelete( action = OnDeleteAction.CASCADE )
     private Tarea tarea;
 
     @NotNull

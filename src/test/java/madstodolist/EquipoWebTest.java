@@ -64,6 +64,7 @@ public class EquipoWebTest {
         Usuario usuario = new Usuario("andres@ua.es");
         usuario.setId(1L);
         usuario.setNombre("Andres Tebar");
+        usuario.setAdministrador(false);
 
         List<Usuario> usuarios = new ArrayList<>();
         usuarios.add(usuario);

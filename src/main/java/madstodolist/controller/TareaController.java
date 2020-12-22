@@ -1,10 +1,14 @@
 package madstodolist.controller;
 
 import madstodolist.authentication.ManagerUserSesion;
+import madstodolist.controller.exception.ProyectoNotFoundException;
 import madstodolist.controller.exception.TareaNotFoundException;
 import madstodolist.controller.exception.UsuarioNotFoundException;
+import madstodolist.model.Categoria;
+import madstodolist.model.Proyecto;
 import madstodolist.model.Tarea;
 import madstodolist.model.Usuario;
+import madstodolist.service.CategoriaService;
 import madstodolist.service.TareaService;
 import madstodolist.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -24,6 +29,9 @@ public class TareaController {
 
     @Autowired
     TareaService tareaService;
+
+    @Autowired
+    CategoriaService categoriaService;
 
     @Autowired
     ManagerUserSesion managerUserSesion;
@@ -55,7 +63,11 @@ public class TareaController {
         if (usuario == null) {
             throw new UsuarioNotFoundException();
         }
-        tareaService.nuevaTareaUsuario(idUsuario, tareaData.getTitulo(), tareaData.getPrioridad());
+        Tarea tarea = tareaService.nuevaTareaUsuario(idUsuario, tareaData.getTitulo(), tareaData.getPrioridad());
+        if (tareaData.getCategoria() != null) {
+            Categoria categoria = categoriaService.findById(tareaData.getCategoria());
+            tareaService.asignarCategoria(tarea.getId(), categoria);
+        }
         flash.addFlashAttribute("mensaje", "Tarea creada correctamente");
         return "redirect:/usuarios/" + idUsuario + "/tareas";
     }
@@ -70,6 +82,7 @@ public class TareaController {
             throw new UsuarioNotFoundException();
         }
         List<Tarea> tareas = tareaService.allTareasUsuario(idUsuario);
+        //Collections.sort(tareas, (a, b) -> a.getCategoria().getId() < b.getCategoria().getId() ? -1 : a.getId() == b.getId() ? 0 : 1);
         model.addAttribute("usuario", usuario);
         model.addAttribute("tareas", tareas);
         return "listaTareas";
@@ -178,6 +191,13 @@ public class TareaController {
 
         tareaService.modificaTarea(idTarea, tareaData.getTitulo());
         tareaService.asignarEditarPrioridad(idTarea, tareaData.getPrioridad());
+        if (tareaData.getCategoria() != null) {
+            Categoria categoria = categoriaService.findById(tareaData.getCategoria());
+            tareaService.asignarCategoria(tarea.getId(), categoria);
+        }
+        if (tareaData.getBorrarCategorias()) {
+            tareaService.borrarCategoriasDeTarea(tarea.getId());
+        }
         tareaService.actualizarEstado(idTarea, tareaData.getEstado());
         flash.addFlashAttribute("mensaje", "Tarea modificada correctamente");
 
@@ -214,9 +234,34 @@ public class TareaController {
         }
 
         managerUserSesion.comprobarUsuarioLogeado(session, tarea.getUsuario().getId());
-
+        tareaService.borrarCategoriasDeTarea(tarea.getId());
         tareaService.borraTarea(idTarea);
-        return "";
+        return "redirect:/usuarios/" + tarea.getUsuario().getId() + "/tareas";
+    }
+
+    @PostMapping("/tareas/{id}/eliminar")
+    public String eliminarTareaProyecto(@PathVariable(value="id") Long idTarea, Model model,
+                                   RedirectAttributes flash, HttpSession session){
+
+        Tarea tarea = tareaService.findById(idTarea);
+        if (tarea == null) {
+            throw new TareaNotFoundException();
+        }
+
+        managerUserSesion.usuarioLogueado(session);
+
+        managerUserSesion.comprobarUsuarioLogeado(session, tarea.getUsuario().getId());
+
+        Usuario usuario = usuarioService.findById((Long)session.getAttribute("idUsuarioLogeado"));
+        if (usuario == null) {
+            throw new UsuarioNotFoundException();
+        }
+        tareaService.borrarCategoriasDeTarea(tarea.getId());
+        tareaService.borraTarea(idTarea);
+
+        flash.addFlashAttribute("mensaje", "Tarea eliminada correctamente");
+
+        return "redirect:/usuarios/" + usuario.getId() + "/proyectos/" + tarea.getProyecto().getId() + "/tareas";
     }
 }
 

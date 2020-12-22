@@ -122,7 +122,7 @@ public class ComentarioController {
             managerUserSesion.comprobarUsuarioAdministrador(session,(Boolean) session.getAttribute("administrador"));
         }
 
-        comentarioService.eliminarComentario(usuario.getId(),idComentario);
+        comentarioService.eliminarComentario(idComentario);
         flash.addFlashAttribute("mensaje", "Comentario eliminado correctamente");
 
         return "redirect:/usuarios/" + usuario.getId() +

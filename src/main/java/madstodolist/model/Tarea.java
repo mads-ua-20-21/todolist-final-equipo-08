@@ -25,6 +25,7 @@ public class Tarea implements Serializable {
 
     private Integer prioridad;
 
+
     @NotNull
     @Enumerated(EnumType.ORDINAL)
     private EstadoTarea estado;
@@ -37,13 +38,18 @@ public class Tarea implements Serializable {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @ManyToMany(mappedBy = "tareas", fetch = FetchType.EAGER)
+    Set<Categoria> categorias = new HashSet<>();
+
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "proyecto_id")
+    @OnDelete( action = OnDeleteAction.CASCADE )
     private Proyecto proyecto;
 
     @OneToMany(mappedBy = "tarea", fetch = FetchType.EAGER)
+    @OnDelete( action = OnDeleteAction.CASCADE )
     Set<Comentario> comentarios = new HashSet<>();
+
 
     // Constructor vacío necesario para JPA/Hibernate.
     // Lo hacemos privado para que no se pueda usar desde el código de la aplicación. Para crear un
@@ -74,6 +80,7 @@ public class Tarea implements Serializable {
         this.titulo = titulo;
         this.prioridad = prioridad;
         this.proyecto = proyecto;
+        this.estado = EstadoTarea.PENDIENTE;
         usuario.getTareas().add(this);
     }
 
@@ -109,6 +116,15 @@ public class Tarea implements Serializable {
         this.usuario = usuario;
     }
 
+    public Set<Categoria> getCategoria() {
+        return categorias;
+    }
+
+    public void setCategoria(Set<Categoria> categoria) {
+        this.categorias = categoria;
+    }
+
+    public void eliminarCategoria(Categoria categoria) { this.getCategoria().remove(categoria); }
 
     public void setEstado(EstadoTarea estado) { this.estado = estado; }
 

@@ -7,6 +7,7 @@ INSERT INTO tareas (id, titulo, prioridad, usuario_id, estado, proyecto_id) VALU
 INSERT INTO equipos (id, nombre, administrador_id) VALUES('1', 'Proyecto P1', '1');
 INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('1', '1');
 INSERT INTO equipos (id, nombre, administrador_id) VALUES('2', 'Proyecto P3', '1');
+
 INSERT INTO equipos (id, nombre, administrador_id) VALUES('3', 'Proyecto P4', '2');
 INSERT INTO equipo_usuario (fk_equipo, fk_usuario) VALUES('3', '2');
 

@@ -58,11 +58,8 @@ public class ComentarioService {
     }
 
     @Transactional
-    public void eliminarComentario(Long idUsuario, Long idComentario){
-
+    public void eliminarComentario(Long idComentario){
         Comentario comentario = existeComentario(idComentario);
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
-        usuario.getComentarios().remove(comentario);
         comentarioRepository.delete(comentario);
     }
 }

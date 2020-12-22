@@ -83,16 +83,23 @@
                         <th>Id</th>
                         <th>Tarea</th>
                         <th>Prioridad</th>
+                        <th>Categoria</th>
                         <th>Estado</th>
                         <th>Acción</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="tarea: ${tareas}">
+                    <tr th:each="tarea: ${tareas}" th:if="${tarea.proyecto == null}">
                         <td th:text="${tarea.id}"></td>
                         <td th:text="${tarea.titulo}"></td>
                         <td th:text="${tarea.prioridad}"></td>
-
+                      
+                        <td th:if="${tarea.categoria.size() != 0}">
+                        <a th:each="categoria: ${tarea.categoria}"
+                           th:text="${categoria.titulo} + ' '"></a>
+                        </td>
+                        <td th:if="${tarea.categoria.size() == 0}">Sin Categoría</td>
+                      
                         <td>
                             <form method="post" th:action="@{/tareas/{id}/estado(id=${tarea.id})}">
                                 <div class="col-6">
