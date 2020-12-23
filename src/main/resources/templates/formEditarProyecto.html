@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head (titulo='Editar nombre de Proyecto')"></head>
+
+<body>
+<nav th:replace="fragments :: barra-menu"></nav>
+
+
+<div class="container-fluid">
+
+    <h2 th:text="'Editar nombre del Proyecto: ' + ${proyecto.getNombre()}"></h2>
+
+    <form method="post" th:action="@{/proyectos/{id}/editar(id=${idProyecto})}" th:object="${proyecto}">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="nuevoNombre">Nuevo nombre del Proyecto:</label>
+                <input class="form-control" id="nuevoNombre" name="nuevoNombre" required th:field="*{nombre}" type="text"/>
+
+                <p></p><label>Descripción del proyecto:</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" th:field="*{descripcion}" type="text"/></textarea>
+
+                <p></p><label>Fecha del proyecto (dia-mes-año):</label>
+                <input id="fechalimite" class="form-control" name="fechalimite"
+                       placeholder="01-12-2020" th:field="*{fechaLimite}" type="datetime-local">
+            </div>
+            <button class="btn btn-primary" type="submit">Editar proyecto</button>
+            <a class="btn btn-link" th:href="@{/equipos/{id}(id=${equipo.id})}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="fragments::javascript"/>
+
+</body>
+</html>

@@ -48,7 +48,7 @@ public class EquipoWebTest {
         usuario.setId(1L);
 
         List<Equipo> equipos = new ArrayList<>();
-        Equipo equipo = new Equipo("Proyecto P1");
+        Equipo equipo = new Equipo("Proyecto P1", usuario);
         equipos.add(equipo);
 
         when(usuarioService.findById(null)).thenReturn(usuario);
@@ -64,11 +64,12 @@ public class EquipoWebTest {
         Usuario usuario = new Usuario("andres@ua.es");
         usuario.setId(1L);
         usuario.setNombre("Andres Tebar");
+        usuario.setAdministrador(false);
 
         List<Usuario> usuarios = new ArrayList<>();
         usuarios.add(usuario);
 
-        Equipo equipo = new Equipo("Proyecto P1");
+        Equipo equipo = new Equipo("Proyecto P1", usuario);
         equipo.setId(1L);
 
         when(usuarioService.findById(null)).thenReturn(usuario);
@@ -113,7 +114,7 @@ public class EquipoWebTest {
         Usuario usuario = new Usuario("andres@ua.es");
         usuario.setId(1L);
 
-        Equipo equipo = new Equipo("Proyecto P1");
+        Equipo equipo = new Equipo("Proyecto P1", usuario);
         equipo.setId(1L);
 
         when(usuarioService.findById(null)).thenReturn(usuario);
@@ -131,7 +132,7 @@ public class EquipoWebTest {
         Usuario usuario = new Usuario("andres@ua.es");
         usuario.setId(1L);
 
-        Equipo equipo = new Equipo("Proyecto P1");
+        Equipo equipo = new Equipo("Proyecto P1", usuario);
         equipo.setId(1L);
 
         when(usuarioService.findById(null)).thenReturn(usuario);
@@ -144,12 +145,32 @@ public class EquipoWebTest {
     }
 
     @Test
+    public void testQuitarDeEquipo() throws Exception {
+        Usuario usuario = new Usuario("andres@ua.es");
+        usuario.setId(1L);
+
+        Usuario usuarioAQuitar = new Usuario("quitar@ua.es");
+        usuario.setId(2L);
+
+        Equipo equipo = new Equipo("Proyecto P1", usuario);
+        equipo.setId(1L);
+
+        when(usuarioService.findById(null)).thenReturn(usuario);
+        when(equipoService.eliminarUsuarioDeEquipo(usuarioAQuitar.getId(), 1L)).thenReturn(true);
+
+        this.mockMvc.perform(post("/equipos/1/quitar/2"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/equipos/1"));
+    }
+
+    @Test
     public void testMostrarEditarForm() throws Exception{
         Usuario usuario = new Usuario("andres@ua.es");
         usuario.setId(1L);
         usuario.setAdministrador(true);
 
-        Equipo equipo = new Equipo("EquipoTest");
+        Equipo equipo = new Equipo("EquipoTest", usuario);
         equipo.setId(1L);
 
         when(usuarioService.findById(null)).thenReturn(usuario);
@@ -168,7 +189,7 @@ public class EquipoWebTest {
         usuario.setId(1L);
         usuario.setAdministrador(true);
 
-        Equipo equipo = new Equipo("EquipoTest");
+        Equipo equipo = new Equipo("EquipoTest", usuario);
         equipo.setId(1L);
 
         when(usuarioService.findById(null)).thenReturn(usuario);
@@ -186,7 +207,7 @@ public class EquipoWebTest {
         usuario.setId(1L);
         usuario.setAdministrador(true);
 
-        Equipo equipo = new Equipo("EquipoTest");
+        Equipo equipo = new Equipo("EquipoTest", usuario);
         equipo.setId(1L);
 
         when(usuarioService.findById(null)).thenReturn(usuario);

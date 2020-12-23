@@ -36,9 +36,10 @@ public class EquipoServiceTest {
         List<Equipo> equipos = equipoService.findAllOrderedByName();
 
         // THEN
-        assertThat(equipos).hasSize(2);
+        assertThat(equipos).hasSize(3);
         assertThat(equipos.get(0).getNombre()).isEqualTo("Proyecto P1");
         assertThat(equipos.get(1).getNombre()).isEqualTo("Proyecto P3");
+        assertThat(equipos.get(2).getNombre()).isEqualTo("Proyecto P4");
     }
 
     @Test
@@ -97,11 +98,12 @@ public class EquipoServiceTest {
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
 
         // WHEN
-        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
+        Usuario usuario = usuarioService.findById(1L);
+        Equipo equipo = equipoService.nuevoEquipoConAdmin("EquipoTest", usuario);
         List<Equipo> equipos = equipoService.findAllOrderedByName();
 
         // THEN
-        assertThat(equipos).hasSize(3);
+        assertThat(equipos).hasSize(4);
         assertThat(equipos.get(0).getNombre()).isEqualTo("EquipoTest");
     }
 
@@ -112,8 +114,9 @@ public class EquipoServiceTest {
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
 
         // WHEN
-        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
         Usuario usuario = usuarioService.findById(1L);
+        Equipo equipo = equipoService.nuevoEquipoConAdmin("EquipoTest", usuario);
+
 
         Boolean resultadoPrimeraOperacion = equipoService.anyadirUsuarioAEquipo(usuario.getId(), equipo.getId());
         //2a inserción, que no debe realizarse
@@ -162,7 +165,7 @@ public class EquipoServiceTest {
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
 
         Equipo equipo = equipoService.findById(1L);
-        assertThat(equipoService.findAllOrderedByName().size()).isEqualTo(2);
+        assertThat(equipoService.findAllOrderedByName().size()).isEqualTo(3);
         assertThat(equipoService.findAllOrderedByName().contains(equipo));
 
         // WHEN
@@ -170,7 +173,7 @@ public class EquipoServiceTest {
 
 
         // THEN
-        assertThat(equipoService.findAllOrderedByName().size()).isEqualTo(1);
+        assertThat(equipoService.findAllOrderedByName().size()).isEqualTo(2);
         assertThat(!equipoService.findAllOrderedByName().contains(equipo));
     }
 
@@ -180,7 +183,8 @@ public class EquipoServiceTest {
 
         // GIVEN
         // En el application.properties se cargan los datos de prueba del fichero datos-test.sql
-        Equipo equipo = equipoService.nuevoEquipo("EquipoTest");
+        Usuario usuario = usuarioService.findById(1L);
+        Equipo equipo = equipoService.nuevoEquipoConAdmin("EquipoTest", usuario);
         Long idEquipoAModificar = 1L;
         equipo.setId(idEquipoAModificar);
 

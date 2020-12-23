@@ -1,5 +1,8 @@
 package madstodolist.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -25,10 +28,23 @@ public class Equipo implements Serializable{
             inverseJoinColumns = {@JoinColumn(name = "fk_usuario")})
     Set<Usuario> usuarios = new HashSet<>();
 
+    @NotNull
+    @ManyToOne
+    // Nombre de la columna en la BD que guarda físicamente
+    // el ID del usuario asociado como administrador del equipo
+    @JoinColumn(name = "administrador_id")
+    private Usuario usuarioAdministrador;
+
+    @OneToMany(mappedBy = "equipo", fetch = FetchType.EAGER)
+    @OnDelete( action = OnDeleteAction.CASCADE )
+    Set<Proyecto> proyectos = new HashSet<>();
 
     private Equipo(){}
 
-    public Equipo(String nombre){ this.nombre = nombre;}
+    public Equipo(String nombre, Usuario administrador){
+        this.nombre = nombre;
+        this.usuarioAdministrador = administrador;
+    }
 
     public Long getId() { return id; }
 
@@ -38,7 +54,15 @@ public class Equipo implements Serializable{
 
     public void setNombre(String nombre) { this.nombre = nombre; }
 
+    public void setUsuarioAdministrador(Usuario usuarioAdministrador) { this.usuarioAdministrador = usuarioAdministrador; }
+
+    public Usuario getUsuarioAdministrador() { return usuarioAdministrador; }
+
     public Set<Usuario> getUsuarios() { return usuarios; }
+
+    public Set<Proyecto> getProyectos() { return proyectos; }
+
+    public void setProyectos(Set<Proyecto> proyectos) { this.proyectos = proyectos; }
 
     @Override
     public boolean equals(Object o) {

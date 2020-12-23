@@ -1,9 +1,7 @@
 package madstodolist.service;
 
 import madstodolist.controller.exception.UsuarioNotFoundException;
-import madstodolist.model.Tarea;
-import madstodolist.model.Usuario;
-import madstodolist.model.UsuarioRepository;
+import madstodolist.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +91,60 @@ public class UsuarioService {
             throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
         }
         usuario.setBloqueado(nuevoEstado);
+        usuarioRepository.save(usuario);
+        return usuario;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Equipo> equiposUsuario(Long idUsuario){
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+
+        List<Equipo> equipos = new ArrayList(usuario.getEquipos());
+        return equipos;
+    }
+
+    @Transactional
+    public List<Proyecto> proyectosUsuario(Long idUsuario){
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+
+        List<Equipo> equipos = this.equiposUsuario(idUsuario);
+        List<Proyecto> proyectos = new ArrayList<Proyecto>();
+
+        for (Equipo equipo: equipos){
+            proyectos.addAll(equipo.getProyectos());
+        }
+
+        return proyectos;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Comentario> comentariosUsuario(Long idUsuario){
+
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+        List<Comentario> comentarios = new ArrayList(usuario.getComentarios());
+        return comentarios;
+    }
+
+    @Transactional
+    public Usuario modificaUsuario (Long idUsuario, Usuario usuarioMod){
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario == null) {
+            throw new UsuarioServiceException("No existe usuario con id " + idUsuario);
+        }
+
+        usuario.setNombre(usuarioMod.getNombre());
+        usuario.setFechaNacimiento(usuarioMod.getFechaNacimiento());
+        usuario.setEmail(usuarioMod.getEmail());
+
         usuarioRepository.save(usuario);
         return usuario;
     }

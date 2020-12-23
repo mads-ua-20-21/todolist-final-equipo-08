@@ -17,9 +17,43 @@
         <div class="form-group">
             <label for="titulo">Título de la tarea:</label>
             <input class="form-control" id="titulo" name="titulo" required th:field="*{titulo}" type="text"/>
+            <br>
+            <label for="prioridad">Prioridad de la tarea:</label>
+            <select class="custom-select" id="prioridad" name="prioridad" required th:field="*{prioridad}" type="integer">
+                <option value=1>Prioridad 1</option>
+                <option value=2>Prioridad 2</option>
+                <option value=3>Prioridad 3</option>
+            </select>
+          
+            <br>
+            <label for="estado">Estado de la tarea:</label>
+            <select class="custom-select" id="estado" name="estado" required type="integer">
+                <option value=0 th:selected="${tarea.getEstado().ordinal() == 0}">PENDIENTE</option>
+                <option value=1 th:selected="${tarea.getEstado().ordinal() == 1}">ACTIVA</option>
+                <option value=2 th:selected="${tarea.getEstado().ordinal() == 2}">TERMINADA</option>
+            </select>
+          
+            <br>
+            <label for="categoria">Añadir categoria a la tarea:</label>
+            <a th:if="${usuario.getCategorias().size() == 0}">No tienes categorías, crea una.</a>
+            <select th:if="${usuario.getCategorias().size() != 0}" class="custom-select" id="categoria" name="categroia" required th:field="*{categoria}" type="Long">
+                <option th:each="categoria: ${usuario.getCategorias()}"
+                        th:text="${categoria.getTitulo()}"
+                        th:value="${categoria.getId()}"></option>
+            </select>
+
+            <br>
+            <label for="borrarCategoria">Borrar todas ls categorias de la tearea:</label>
+            <select class="custom-select" id="borrarCategoria" name="borrarCategoria" required th:field="*{borrarCategorias}" type="Boolean">
+                <option value=false>No borrar</option>
+                <option value=true>Si borrar todas</option>
+            </select>
+            
         </div>
         <button class="btn btn-primary" type="submit">Modificar tarea</button>
-        <a class="btn btn-link" th:href="@{/usuarios/{id}/tareas(id=${tarea.usuario.id})}">Cancelar</a>
+        <a class="btn btn-link" th:if="${tarea.proyecto == null}" th:href="@{/usuarios/{id}/tareas(id=${tarea.usuario.id})}">Cancelar</a>
+            <a class="btn btn-link" th:if="${tarea.proyecto != null}" th:href="@{/usuarios/{id}/proyectos/{proyecto}/tareas(id=${tarea.usuario.id},proyecto=${tarea.proyecto.id})}">Cancelar</a>
+
         </div>
     </form>
 </div>

@@ -32,7 +32,7 @@ public class ListarUsuariosServiceTest {
         Usuario usuario = new Usuario("atm64@alu");
         usuario.setNombre("Andres Tebar");
         usuario.setPassword("1234");
-        usuario.setId(2L);
+        usuario.setId(3L);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         usuario.setFechaNacimiento(sdf.parse("1996-12-19"));
@@ -42,15 +42,17 @@ public class ListarUsuariosServiceTest {
         List<Usuario> usuarios = usuarioService.allUsuarios();
 
         // THEN
-        assertThat(usuarios.size()).isEqualTo(2);
+        assertThat(usuarios.size()).isEqualTo(3);
         assertThat(usuarios.get(0).getNombre()).isEqualTo("Ana García");
-        assertThat(usuarios.get(1).getNombre()).isEqualTo(usuario.getNombre());
+        assertThat(usuarios.get(1).getNombre()).isEqualTo("Raul García");
+        assertThat(usuarios.get(2).getNombre()).isEqualTo(usuario.getNombre());
 
         //AND
-        usuarioRepository.delete(usuarios.get(1));
+        usuarioRepository.delete(usuarios.get(2));
         usuarios = usuarioService.allUsuarios();
-        assertThat(usuarios.size()).isEqualTo(1);
+        assertThat(usuarios.size()).isEqualTo(2);
         assertThat(usuarios.get(0).getNombre()).isEqualTo("Ana García");
+        assertThat(usuarios.get(1).getNombre()).isEqualTo("Raul García");
     }
 
 }

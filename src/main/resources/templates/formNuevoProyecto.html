@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head (titulo='Nuevo Proyecto')"></head>
+
+<body>
+<nav th:replace="fragments :: barra-menu"></nav>
+
+
+<div class="container-fluid">
+
+    <h2>Nuevo Proyecto</h2>
+
+    <form method="post" th:action="@{/equipos/{id}/proyectos/nuevo(id=${equipo.id})}" th:object="${proyecto}">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="nombre">Nombre del Proyecto:</label>
+                <input class="form-control" id="nombre" name="nombre" required th:field="*{nombre}" type="text"/>
+
+                <p></p><label>Descripción del proyecto:</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" th:field="*{descripcion}" type="text"/></textarea>
+
+                <p></p><label>Fecha del proyecto (dia-mes-año):</label>
+                <input id="fechaLimite" class="form-control" name="fechaLimite"
+                       placeholder="01-12-2020" th:field="*{fechaLimite}" type="datetime-local">
+            </div>
+            <button class="btn btn-primary" type="submit">Crear proyecto</button>
+            <a class="btn btn-link" th:href="@{/equipos/{id}(id=${equipo.id})}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="fragments::javascript"/>
+
+</body>
+</html>

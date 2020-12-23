@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: head (titulo='Nueva Categoria')"></head>
+
+<body>
+<nav th:replace="fragments :: barra-menu"></nav>
+
+
+<div class="container-fluid">
+
+    <h2>Nueva Categoria</h2>
+
+    <form method="post" th:action="@{/usuarios/{id}/categoria/nueva(id=${usuario.id})}" th:object="${categoriaData}">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="titulo">Titulo de la Categoria:</label>
+                <input class="form-control" id="titulo" name="titulo" required th:field="*{titulo}" type="text"/>
+            </div>
+            <button class="btn btn-primary" type="submit">Crear Categoria</button>
+            <a class="btn btn-link" th:action="@{/usuarios/{id}/categoria(id=${usuario.id})}">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="fragments::javascript"/>
+
+</body>
+</html>
